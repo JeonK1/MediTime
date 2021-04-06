@@ -36,4 +36,17 @@ class AlarmAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<AlarmAd
         holder.alarm_time.text = "${am_pm} ${hour}:${"%02d".format(min)}"
         holder.alarm_count.text = "1일 ${items[position].medicine_count}회 복용"
     }
+
+    fun addItem(item: AlarmInfo){
+        items.add(item)
+    }
+    fun notifyAdapter(){
+        notifyDataSetChanged()
+    }
+    fun getItem(position: Int):AlarmInfo{
+        return items[position]
+    }
+    fun deleteItem(position: Int){
+        items.removeAt(position)
+    }
 }

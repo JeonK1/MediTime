@@ -1,5 +1,6 @@
 package com.example.meditime
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -34,11 +35,16 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
         }
         btn_addmeditime_set_ok.setOnClickListener {
             // 설정 버튼
-            // Todo : recyclerView 만들 수 있도록 데이터 잘 데리고 나오기
+            val intent = Intent()
+            intent.putExtra("hour", tp_addmeditime_set_timepicker.currentHour)
+            intent.putExtra("min", tp_addmeditime_set_timepicker.currentMinute)
+            intent.putExtra("count", medicine_count)
+            setResult(Activity.RESULT_OK, intent)
             finish()
         }
         btn_addmeditime_set_cancel.setOnClickListener {
             // 취소 버튼
+            setResult(Activity.RESULT_CANCELED)
             finish()
         }
     }

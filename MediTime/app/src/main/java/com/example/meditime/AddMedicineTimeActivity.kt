@@ -1,10 +1,10 @@
 package com.example.meditime
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 
 /*********************************
@@ -13,6 +13,9 @@ import kotlinx.android.synthetic.main.activity_add_medicine_time.*
  *********************************/
 
 class AddMedicineTimeActivity : AppCompatActivity() {
+
+    val ADD_MEDICINE_TIME_SET = 201
+    lateinit var alarmAdapter:AlarmAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +26,9 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
     private fun recyclerViewInit() {
         val alarmList = getDummyAlarmItems()
-        val alarmAdatper = AlarmAdapter(alarmList)
+        alarmAdapter = AlarmAdapter(alarmList)
         rv_addmeditime_container.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        rv_addmeditime_container.adapter = alarmAdatper
+        rv_addmeditime_container.adapter = alarmAdapter
     }
 
     private fun getDummyAlarmItems(): ArrayList<AlarmInfo> {
@@ -54,7 +57,26 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         btn_addmeditime_add.setOnClickListener {
             // 추가 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeSetActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_MEDICINE_TIME_SET)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == ADD_MEDICINE_TIME_SET && resultCode == Activity.RESULT_OK){
+            // AddMedicineTimeSetActivity 에서 call back
+            val hour = data!!.getIntExtra("hour", -1)
+            val min = data!!.getIntExtra("min", -1)
+            val count = data!!.getDoubleExtra("count", -1.0)
+            if(hour!=-1 && min!=-1 && count!=-1.0) {
+                val newAlarmInfo = AlarmInfo(
+                    alarm_hour = hour,
+                    alarm_min = min,
+                    medicine_count = count
+                )
+                alarmAdapter.addItem(newAlarmInfo)
+                alarmAdapter.notifyAdapter()
+            }
         }
     }
 }
