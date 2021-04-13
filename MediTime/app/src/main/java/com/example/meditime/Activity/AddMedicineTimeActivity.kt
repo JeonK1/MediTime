@@ -1,10 +1,11 @@
-package com.example.meditime
+package com.example.meditime.Activity
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.meditime.*
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 
 /*********************************
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 class AddMedicineTimeActivity : AppCompatActivity() {
 
     val ADD_MEDICINE_TIME_SET = 201
-    lateinit var alarmAdapter:AlarmAdapter
+    lateinit var alarmAdapter: AlarmAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,34 +26,19 @@ class AddMedicineTimeActivity : AppCompatActivity() {
     }
 
     private fun recyclerViewInit() {
-        val alarmList = getDummyAlarmItems()
+        val alarmList = ArrayList<AlarmInfo>()
         alarmAdapter = AlarmAdapter(alarmList)
         rv_addmeditime_container.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_addmeditime_container.adapter = alarmAdapter
     }
 
-    private fun getDummyAlarmItems(): ArrayList<AlarmInfo> {
-        val dummy_list = ArrayList<AlarmInfo>()
-        dummy_list.add(AlarmInfo(
-            alarm_hour = 8,
-            alarm_min = 0,
-            medicine_count = 1.0
-        ))
-        dummy_list.add(AlarmInfo(
-            alarm_hour = 9,
-            alarm_min = 30,
-            medicine_count = 1.5
-        ))
-        return dummy_list
-    }
-
     private fun listenerInit() {
         btn_addmeditime_ok.setOnClickListener {
             // 완료 버튼 클릭 시
-            // Todo : 데이터베이스에 모든 값 저장하기
-            finishAffinity()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            // Todo : finish 하기 전 현재 설정값 데이터베이스에 모두 저장하기
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
         btn_addmeditime_add.setOnClickListener {
             // 추가 버튼 클릭 시
@@ -68,7 +54,8 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             val hour = data!!.getIntExtra("hour", -1)
             val min = data!!.getIntExtra("min", -1)
             val count = data!!.getDoubleExtra("count", -1.0)
-            if(hour!=-1 && min!=-1 && count!=-1.0) {
+            val type = data!!.getStringExtra("type") // Todo : DB가 확정나지 않아서 일단 활용 방안은 보류
+            if(hour!=-1 && min!=-1 && count!=-1.0 && type!=null) {
                 val newAlarmInfo = AlarmInfo(
                     alarm_hour = hour,
                     alarm_min = min,
@@ -79,4 +66,19 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             }
         }
     }
+
+//    private fun getDummyAlarmItems(): ArrayList<AlarmInfo> {
+//        val dummy_list = ArrayList<AlarmInfo>()
+//        dummy_list.add(AlarmInfo(
+//                alarm_hour = 8,
+//                alarm_min = 0,
+//                medicine_count = 1.0
+//        ))
+//        dummy_list.add(AlarmInfo(
+//                alarm_hour = 9,
+//                alarm_min = 30,
+//                medicine_count = 1.5
+//        ))
+//        return dummy_list
+//    }
 }

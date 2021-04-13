@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="medicine_type">
+        <item> 정 </item>
+        <item> 봉지 </item>
+        <item> 스푼 </item>
+    </string-array>
+</resources>

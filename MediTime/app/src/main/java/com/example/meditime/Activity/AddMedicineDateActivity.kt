@@ -1,5 +1,6 @@
-package com.example.meditime
+package com.example.meditime.Activity
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -7,10 +8,13 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
+import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_date.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_dayofweek_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_type_dialog.view.*
+import kotlinx.android.synthetic.main.custom_datepicker_dialog.view.*
+import java.util.*
 
 /*********************************
  * 화면 #3-2-1 맞춤설정
@@ -19,7 +23,7 @@ import kotlinx.android.synthetic.main.custom_cyclepicker_type_dialog.view.*
 
 class AddMedicineDateActivity : AppCompatActivity() {
 
-    lateinit var dateSetListener:DatePickerDialog.OnDateSetListener
+    val ADD_MEDICINE_TIME = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +32,6 @@ class AddMedicineDateActivity : AppCompatActivity() {
     }
 
     private fun listenerInit() {
-        dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            // 날자 설정 완료 시
-            // Todo : 데이터베이스에 넣어줄 데이터 갱신
-            // Todo : tv_addmedidate_startdate 값 날짜 형식 맞춰 갱신
-        }
         btn_addmedidate_everyday.setOnClickListener {
             // 매일 버튼 클릭 시
             setButtonType(true)
@@ -46,7 +45,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
         btn_addmedidate_next.setOnClickListener {
             // 다음 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, ADD_MEDICINE_TIME)
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
         }
         rl_addmedidate_startdate.setOnClickListener {
@@ -55,6 +54,17 @@ class AddMedicineDateActivity : AppCompatActivity() {
             val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
             val mAlertDialog = mBuilder.show()
             mAlertDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            mDialogView.btn_datepickdig_ok.setOnClickListener {
+                // 완료 버튼 누를 시
+                val cal = Calendar.getInstance() // 혹시 요일 필요하게 되면 쓰려고 calendar를 정의하였음
+                cal.set(
+                    mDialogView.dp_datepickdlg_spinner.year, // 년
+                    mDialogView.dp_datepickdlg_spinner.month+1, // 월
+                    mDialogView.dp_datepickdlg_spinner.dayOfMonth // 일
+                )
+                updateDateTextView(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
+                mAlertDialog.dismiss()
+            }
         }
         rl_addmedidate_cycletype.setOnClickListener {
             // 주기 있는 구간 클릭 시
@@ -70,9 +80,9 @@ class AddMedicineDateActivity : AppCompatActivity() {
                 val mAlertDialog = mBuilder.show()
                 mAlertDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 mDialogView.btn_cyclepickdlg_dow_ok.setOnClickListener{
+                    updateTypeTextView("특정 요일")
                     mAlertDialog.dismiss()
                     // Todo : 데이터베이스에 넣어줄 데이터 갱신
-                    // Todo : tv_addmedidate_cycletype 값 바꿔주기
                 }
             }
             cycleDialogView.btn_cyclepickdig_type2.setOnClickListener {
@@ -87,13 +97,14 @@ class AddMedicineDateActivity : AppCompatActivity() {
                 mDialogView.np_cyclepickdlg_day_numberpicker.maxValue=PICKER_MAX_VALUE
                 mDialogView.np_cyclepickdlg_day_numberpicker.minValue=PICKER_MIN_VALUE
                 mDialogView.btn_cyclepickdig_day_ok.setOnClickListener{
+                    updateTypeTextView("일 간격")
                     mAlertDialog.dismiss()
                     // Todo : 데이터베이스에 넣어줄 데이터 갱신
-                    // Todo : tv_addmedidate_cycletype 값 바꿔주기
                 }
             }
             cycleDialogView.btn_cyclepickdig_type3.setOnClickListener {
                 // 되풀이 주기 버튼 클릭 시
+                updateTypeTextView("되풀이 주기")
                 cycleAlertDialog.dismiss()
             }
         }
@@ -110,4 +121,24 @@ class AddMedicineDateActivity : AppCompatActivity() {
             btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#0000cc"))
         }
     }
+
+    fun updateDateTextView(year:Int, month:Int, day:Int){
+        val now_year = "%d".format(year)
+        val now_month = "%d".format(month)
+        val now_day = "%d".format(day)
+        tv_addmedidate_startdate.text = "${now_year}.${now_month}.${now_day}"
+    }
+
+    fun updateTypeTextView(type:String){
+        tv_addmedidate_cycletype.text = type
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == ADD_MEDICINE_TIME && resultCode == Activity.RESULT_OK){
+            // AddMedicineTimeActivity 에서 call back
+            finish()
+        }
+    }
+
 }

@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <DatePicker
+            android:id="@+id/dp_datepickdlg_spinner"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
             android:layout_width="match_parent"

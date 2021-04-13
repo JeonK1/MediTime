@@ -1,5 +1,6 @@
 package com.example.meditime_local.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.meditime.Activity.AddMedicineDateActivity
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.fragment_notice.*
 
@@ -64,7 +66,9 @@ class NoticeFragment : Fragment() {
 
     private fun clickListenerInit() {
         add_medi_btn.setOnClickListener {
-
+            // AddMedicineDateActivity 실행
+            val intent = Intent(context, AddMedicineDateActivity::class.java)
+            startActivity(intent)
         }
     }
 /**
@@ -106,7 +110,6 @@ class MediAdapter(val items: ArrayList<MediInfo>) :
         holder.title.text = items[position].alarm_name
         holder.context.text = "${is_am}${hour}:${"%02d".format(min)}"
     }
-
 
     fun getItems(position: Int): MediInfo {
         return items[position]
