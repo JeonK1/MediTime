@@ -7,5 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <style name="style_cyclepickdlg_dayofweek">
+        <item name="android:background">#cccccc</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
 </resources>

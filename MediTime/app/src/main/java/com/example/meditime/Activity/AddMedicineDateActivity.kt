@@ -2,7 +2,6 @@ package com.example.meditime.Activity
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,9 @@ import android.os.Bundle
 import android.view.*
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_date.*
+import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.*
+import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.tv_cyclepickdig_day_day
 import kotlinx.android.synthetic.main.custom_cyclepicker_dayofweek_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_type_dialog.view.*
 import kotlinx.android.synthetic.main.custom_datepicker_dialog.view.*
@@ -24,6 +25,9 @@ import java.util.*
 class AddMedicineDateActivity : AppCompatActivity() {
 
     val ADD_MEDICINE_TIME = 200
+    var custom_type = -1
+    var dayofweek_flag = arrayListOf(false, false, false, false, false, false, false) // 특정요일 반복 위한 선택여부 배열
+    var day_flag = arrayOf(0, -1) // N일, type(일간격, 주간격, 월간격)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,19 +79,54 @@ class AddMedicineDateActivity : AppCompatActivity() {
             cycleDialogView.btn_cyclepickdig_type1.setOnClickListener {
                 // 특정 요일 클릭 시
                 cycleAlertDialog.dismiss()
+                val cur_dayofweek_flag = arrayListOf(false, false, false, false, false, false, false)
                 val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_cyclepicker_dayofweek_dialog, null)
                 val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
                 val mAlertDialog = mBuilder.show()
                 mAlertDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                mDialogView.btn_cyclepickdlg_dow_ok.setOnClickListener{
-                    updateTypeTextView("특정 요일")
-                    mAlertDialog.dismiss()
-                    // Todo : 데이터베이스에 넣어줄 데이터 갱신
+                val dayofweek_tv_list = arrayListOf(
+                        mDialogView.tv_cyclepickdlg_dow_sun,
+                        mDialogView.tv_cyclepickdlg_dow_mon,
+                        mDialogView.tv_cyclepickdlg_dow_tue,
+                        mDialogView.tv_cyclepickdlg_dow_wed,
+                        mDialogView.tv_cyclepickdlg_dow_thu,
+                        mDialogView.tv_cyclepickdlg_dow_fri,
+                        mDialogView.tv_cyclepickdlg_dow_sat
+                )
+                for ((index, dayofweek_tv) in dayofweek_tv_list.withIndex()){
+                    // 저장된 값 가져오기
+                    cur_dayofweek_flag[index] = dayofweek_flag[index]
+                    if(cur_dayofweek_flag[index]){
+                        dayofweek_tv.setBackgroundColor(Color.parseColor("#4444ff")) // 버튼 눌린상태
+                    } else {
+                        dayofweek_tv.setBackgroundColor(Color.parseColor("#cccccc")) // 버튼 안눌린상태
+                    }
+                    dayofweek_tv.setOnClickListener {
+                        if(cur_dayofweek_flag[index]){
+                            // 버튼 눌러져있음
+                            dayofweek_tv.setBackgroundColor(Color.parseColor("#cccccc"))
+                        } else {
+                            // 버튼 안눌러져있음
+                            dayofweek_tv.setBackgroundColor(Color.parseColor("#4444ff"))
+                        }
+                        cur_dayofweek_flag[index] = !cur_dayofweek_flag[index]
+                    }
                 }
+                mDialogView.btn_cyclepickdlg_dow_ok.setOnClickListener{
+                    // 완료 버튼 클릭 시
+                    custom_type = 0
+                    updateTypeTextView("특정 요일")
+                    for((index, flag) in cur_dayofweek_flag.withIndex()){
+                        dayofweek_flag[index] = flag // global variable 적용하기
+                    }
+                    mAlertDialog.dismiss()
+                }
+
             }
             cycleDialogView.btn_cyclepickdig_type2.setOnClickListener {
                 // 일 간격 클릭 시
                 cycleAlertDialog.dismiss()
+                var cur_day_flag = arrayOf(day_flag[0], day_flag[1]) // N일, type(일간격, 주간격, 월간격)
                 val PICKER_MAX_VALUE = 10
                 val PICKER_MIN_VALUE = 1
                 val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_cyclepicker_day_dialog, null)
@@ -96,14 +135,35 @@ class AddMedicineDateActivity : AppCompatActivity() {
                 mAlertDialog.window!!.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 mDialogView.np_cyclepickdlg_day_numberpicker.maxValue=PICKER_MAX_VALUE
                 mDialogView.np_cyclepickdlg_day_numberpicker.minValue=PICKER_MIN_VALUE
+                if(day_flag[0] > 0)
+                    mDialogView.np_cyclepickdlg_day_numberpicker.value = day_flag[0] // 이미 저장된 값 있으면 적용
+                val daytype_tv_list = arrayListOf(
+                        mDialogView.tv_cyclepickdig_day_day,
+                        mDialogView.tv_cyclepickdig_day_week,
+                        mDialogView.tv_cyclepickdig_day_month
+                )
+                for((index, daytype_tv) in daytype_tv_list.withIndex()){
+                    if(index==cur_day_flag[1]){
+                        setDayTypeTextView(index, mDialogView)
+                    }
+                    daytype_tv.setOnClickListener {
+                        cur_day_flag[1] = index
+                        setDayTypeTextView(cur_day_flag[1], mDialogView)
+                    }
+                }
                 mDialogView.btn_cyclepickdig_day_ok.setOnClickListener{
+                    // 완료 버튼 클릭 시
+                    custom_type = 1
                     updateTypeTextView("일 간격")
+                    cur_day_flag[0] = mDialogView.np_cyclepickdlg_day_numberpicker.value
+                    day_flag[0] = cur_day_flag[0]
+                    day_flag[1] = cur_day_flag[1]
                     mAlertDialog.dismiss()
-                    // Todo : 데이터베이스에 넣어줄 데이터 갱신
                 }
             }
             cycleDialogView.btn_cyclepickdig_type3.setOnClickListener {
                 // 되풀이 주기 버튼 클릭 시
+                // TOdo : UI 완성 되면 구현하기
                 updateTypeTextView("되풀이 주기")
                 cycleAlertDialog.dismiss()
             }
@@ -121,8 +181,21 @@ class AddMedicineDateActivity : AppCompatActivity() {
             btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#0000cc"))
         }
     }
-
+    fun setDayTypeTextView(idx: Int, mDialogView: View){
+        // idx에 따라 우측 일간격, 주간격, 월간격 에 대한 색 변화
+        mDialogView.tv_cyclepickdig_day_day.setBackgroundColor(Color.parseColor("#cccccc"))
+        mDialogView.tv_cyclepickdig_day_week.setBackgroundColor(Color.parseColor("#cccccc"))
+        mDialogView.tv_cyclepickdig_day_month.setBackgroundColor(Color.parseColor("#cccccc"))
+        if(idx==0){
+            mDialogView.tv_cyclepickdig_day_day.setBackgroundColor(Color.parseColor("#3333ff"))
+        } else if(idx==1){
+            mDialogView.tv_cyclepickdig_day_week.setBackgroundColor(Color.parseColor("#3333ff"))
+        } else if(idx==2){
+            mDialogView.tv_cyclepickdig_day_month.setBackgroundColor(Color.parseColor("#3333ff"))
+        }
+    }
     fun updateDateTextView(year:Int, month:Int, day:Int){
+        // 날짜 쪽 글씨 변경 함수
         val now_year = "%d".format(year)
         val now_month = "%d".format(month)
         val now_day = "%d".format(day)
@@ -130,6 +203,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
     }
 
     fun updateTypeTextView(type:String){
+        // type 쪽 글씨 변경 함수
         tv_addmedidate_cycletype.text = type
     }
 

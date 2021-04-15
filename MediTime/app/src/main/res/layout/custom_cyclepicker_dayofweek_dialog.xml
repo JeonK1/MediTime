@@ -11,52 +11,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_sun"
         android:text="일"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_mon"
         android:text="월"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_tue"
         android:text="화"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_wed"
         android:text="수"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_thu"
         android:text="목"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_fri"
         android:text="금"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
+        style="@style/style_cyclepickdlg_dayofweek"
         android:id="@+id/tv_cyclepickdlg_dow_sat"
         android:text="토"
-        android:background="#cccccc"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
