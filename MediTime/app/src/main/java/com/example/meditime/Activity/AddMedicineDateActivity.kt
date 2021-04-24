@@ -36,6 +36,10 @@ class AddMedicineDateActivity : AppCompatActivity() {
     }
 
     private fun listenerInit() {
+        ib_addmedidate_backbtn.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시
+            finish()
+        }
         btn_addmedidate_everyday.setOnClickListener {
             // 매일 버튼 클릭 시
             setButtonType(true)
@@ -173,12 +177,16 @@ class AddMedicineDateActivity : AppCompatActivity() {
     fun setButtonType(is_everyday: Boolean){
         if(is_everyday){
             // 매일 버튼 눌렀을 때
-            btn_addmedidate_everyday.setBackgroundColor(Color.parseColor("#0000cc"))
-            btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#dddddd"))
+            btn_addmedidate_everyday.setBackgroundResource(R.drawable.btn_rect_on)
+            btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorWhite))
+            btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_off)
+            btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorBlueLight))
         } else {
             // 맞춤 버튼 눌렀을 때
-            btn_addmedidate_everyday.setBackgroundColor(Color.parseColor("#dddddd"))
-            btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#0000cc"))
+            btn_addmedidate_everyday.setBackgroundResource(R.drawable.btn_rect_off)
+            btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorBlueLight))
+            btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_on)
+            btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorWhite))
         }
     }
     fun setDayTypeTextView(idx: Int, mDialogView: View){

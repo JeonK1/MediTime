@@ -11,4 +11,36 @@
         <item name="android:background">#cccccc</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
+    <style name="style_bold_button">
+        <item name="android:background">@color/colorBlue</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">25dp</item>
+    </style>
+    <style name="style_regular_button_on">
+        <item name="android:background">@drawable/btn_rect_on</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_regular_button_off">
+        <item name="android:background">@drawable/btn_rect_off</item>
+        <item name="android:textColor">@color/colorBlueLight</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_rounded_rect_button">
+        <item name="android:background">@drawable/btn_rect_round1</item>
+        <item name="android:textColor">@color/colorBlueLight</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_title_text">
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_small_title_text">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_comment_text">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
 </resources>

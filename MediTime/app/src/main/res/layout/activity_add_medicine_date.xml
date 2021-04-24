@@ -1,139 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Activity.AddMedicineDateActivity">
-    <LinearLayout
-        android:id="@+id/ll_addmedidate_container"
-        android:orientation="vertical"
-        android:layout_above="@id/ll_addmedidate_footer"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:background="#cccccc"
+        <FrameLayout
+            android:id="@+id/fl_addmedidate_header"
             android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:text="의약품 이름"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/ib_addmedidate_backbtn"
+                android:background="@drawable/ic_back_btn"
+                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <EditText
-                android:id="@+id/et_addmedidate_name"
-                android:gravity="center"
-                android:hint="약 이름을 입력해주세요"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-        <LinearLayout
-            android:background="#cccccc"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <TextView
-                android:text="복용 주기"
+                style="@style/style_title_text"
+                android:text="약 정보 등록"
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="MissingConstraints">
-                <Button
-                    android:id="@+id/btn_addmedidate_everyday"
-                    android:background="#dddddd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="매일"
-                    app:layout_constraintRight_toLeftOf="@id/btn_addmedidate_custom"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    />
-                <Button
-                    android:id="@+id/btn_addmedidate_custom"
-                    android:background="#dddddd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="맞춤"
-                    app:layout_constraintLeft_toRightOf="@id/btn_addmedidate_everyday"
-                    app:layout_constraintRight_toRightOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ll_addmedidate_custom"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+        </FrameLayout>
+        <ScrollView
+            android:layout_above="@id/ll_addmedidate_footer"
+            android:layout_below="@id/fl_addmedidate_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:gravity="center"
-                android:text="맞춤 일정에만 알림을 받습니다"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_addmedidate_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/style_small_title_text"
+                        android:text="약품 이름"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <EditText
+                        android:id="@+id/et_addmedidate_name"
+                        android:gravity="left"
+                        android:hint="약 이름을 입력해주세요"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/style_small_title_text"
+                        android:text="복용 주기"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Button
+                            style="@style/style_regular_button_on"
+                            android:id="@+id/btn_addmedidate_everyday"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="매일" />
+                        <Button
+                            style="@style/style_regular_button_off"
+                            android:id="@+id/btn_addmedidate_custom"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="맞춤"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_addmedidate_custom"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:padding="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/rl_addmedidate_startdate"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/style_small_title_text"
+                            android:id="@+id/tv_addmedidate_start"
+                            android:text="시작 날짜"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            style="@style/style_rounded_rect_button"
+                            android:id="@+id/tv_addmedidate_startdate"
+                            android:gravity="center"
+                            android:text="2021. 03. 17."
+                            android:padding="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/rl_addmedidate_cycletype"
+                        android:orientation="vertical"
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/style_small_title_text"
+                            android:id="@+id/tv_addmedidate_cycle"
+                            android:text="반복 주기"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            style="@style/style_rounded_rect_button"
+                            android:id="@+id/tv_addmedidate_cycletype"
+                            android:gravity="center"
+                            android:text="특정 요일"
+                            android:padding="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <TextView
+                        style="@style/style_comment_text"
+                        android:gravity="center"
+                        android:text="맞춤 일정에만 알림을 받습니다"
+                        android:layout_marginTop="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <LinearLayout
+            android:id="@+id/ll_addmedidate_footer"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                style="@style/style_bold_button"
+                android:id="@+id/btn_addmedidate_next"
+                android:text="다음"
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <RelativeLayout
-                android:id="@+id/rl_addmedidate_startdate"
-                android:background="#cccccc"
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_addmedidate_start"
-                    android:text="시작"
-                    android:layout_alignParentLeft="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_addmedidate_startdate"
-                    android:gravity="center"
-                    android:text="2021. 3. 17."
-                    android:layout_toRightOf="@id/tv_addmedidate_start"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/rl_addmedidate_cycletype"
-                android:padding="10dp"
-                android:background="#cccccc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_addmedidate_cycle"
-                    android:text="주기"
-                    android:layout_alignParentLeft="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_addmedidate_cycletype"
-                    android:gravity="center"
-                    android:text="특정 요일"
-                    android:layout_toRightOf="@id/tv_addmedidate_cycle"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_addmedidate_footer"
-        android:orientation="vertical"
-        android:gravity="right"
-        android:layout_margin="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/btn_addmedidate_next"
-            android:text="다음"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
