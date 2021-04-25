@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        style="@style/style_small_title_text"
         android:id="@+id/tv_datepickdlg_header"
-        android:text="기간"
+        android:text="시작 날짜"
         android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <LinearLayout
@@ -19,11 +21,12 @@
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
     <Button
+        style="@style/style_bold_button"
         android:id="@+id/btn_datepickdig_ok"
-        android:text="완료"
+        android:text="선택"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

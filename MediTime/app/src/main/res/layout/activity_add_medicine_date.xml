@@ -49,8 +49,13 @@
                         android:layout_height="wrap_content"/>
                     <EditText
                         android:id="@+id/et_addmedidate_name"
+                        android:background="@drawable/bg_edittext_gray_rounded"
                         android:gravity="left"
                         android:hint="약 이름을 입력해주세요"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -105,7 +110,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            style="@style/style_rounded_rect_button"
+                            style="@style/style_rounded15_rect_button"
                             android:id="@+id/tv_addmedidate_startdate"
                             android:gravity="center"
                             android:text="2021. 03. 17."
@@ -127,7 +132,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
-                            style="@style/style_rounded_rect_button"
+                            style="@style/style_rounded15_rect_button"
                             android:id="@+id/tv_addmedidate_cycletype"
                             android:gravity="center"
                             android:text="특정 요일"

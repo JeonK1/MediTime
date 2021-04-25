@@ -2,12 +2,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        style="@style/style_title_text"
         android:id="@+id/tv_cyclepickdlg_day_header"
         android:text="일 간격"
         android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <LinearLayout
@@ -16,6 +20,8 @@
         android:layout_height="wrap_content">
         <NumberPicker
             android:id="@+id/np_cyclepickdlg_day_numberpicker"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -26,24 +32,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                style="@style/style_regular_button_on"
                 android:id="@+id/tv_cyclepickdig_day_day"
-                android:background="#cccccc"
                 android:text="일에 한번"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
+                style="@style/style_regular_button_off"
                 android:id="@+id/tv_cyclepickdig_day_week"
-                android:background="#cccccc"
                 android:text="주에 한번"
                 android:gravity="center"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
+                style="@style/style_regular_button_off"
                 android:id="@+id/tv_cyclepickdig_day_month"
-                android:background="#cccccc"
                 android:text="개월에 한번"
                 android:gravity="center"
                 android:layout_weight="1"
@@ -52,8 +58,10 @@
         </LinearLayout>
     </LinearLayout>
     <Button
+        style="@style/style_bold_button_round"
         android:id="@+id/btn_cyclepickdig_day_ok"
         android:text="완료"
+        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>
