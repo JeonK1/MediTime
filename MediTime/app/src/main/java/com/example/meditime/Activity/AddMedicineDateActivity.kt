@@ -27,7 +27,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
     val ADD_MEDICINE_TIME = 200
     var custom_type = -1
     var dayofweek_flag = arrayListOf(false, false, false, false, false, false, false) // 특정요일 반복 위한 선택여부 배열
-    var day_flag = arrayOf(0, -1) // N일, type(일간격, 주간격, 월간격)
+    var day_flag = arrayOf(0, 0) // N일, type(일간격, 주간격, 월간격)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +36,10 @@ class AddMedicineDateActivity : AppCompatActivity() {
     }
 
     private fun listenerInit() {
+        ib_addmedidate_backbtn.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시
+            finish()
+        }
         btn_addmedidate_everyday.setOnClickListener {
             // 매일 버튼 클릭 시
             setButtonType(true)
@@ -49,6 +53,8 @@ class AddMedicineDateActivity : AppCompatActivity() {
         btn_addmedidate_next.setOnClickListener {
             // 다음 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeActivity::class.java)
+            // Todo: 여기서의 정보 다음으로 넘기기
+            intent.putExtra("medi_name", et_addmedidate_name.text.toString())
             startActivityForResult(intent, ADD_MEDICINE_TIME)
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
         }
@@ -97,17 +103,21 @@ class AddMedicineDateActivity : AppCompatActivity() {
                     // 저장된 값 가져오기
                     cur_dayofweek_flag[index] = dayofweek_flag[index]
                     if(cur_dayofweek_flag[index]){
-                        dayofweek_tv.setBackgroundColor(Color.parseColor("#4444ff")) // 버튼 눌린상태
+                        dayofweek_tv.setBackgroundResource(R.drawable.btn_rect_on)
+                        dayofweek_tv.setTextColor(resources.getColor(R.color.colorWhite))
                     } else {
-                        dayofweek_tv.setBackgroundColor(Color.parseColor("#cccccc")) // 버튼 안눌린상태
+                        dayofweek_tv.setBackgroundResource(R.drawable.btn_rect_off)
+                        dayofweek_tv.setTextColor(resources.getColor(R.color.colorBlueLight))
                     }
                     dayofweek_tv.setOnClickListener {
                         if(cur_dayofweek_flag[index]){
                             // 버튼 눌러져있음
-                            dayofweek_tv.setBackgroundColor(Color.parseColor("#cccccc"))
+                            dayofweek_tv.setBackgroundResource(R.drawable.btn_rect_off)
+                            dayofweek_tv.setTextColor(resources.getColor(R.color.colorBlueLight))
                         } else {
                             // 버튼 안눌러져있음
-                            dayofweek_tv.setBackgroundColor(Color.parseColor("#4444ff"))
+                            dayofweek_tv.setBackgroundResource(R.drawable.btn_rect_on)
+                            dayofweek_tv.setTextColor(resources.getColor(R.color.colorWhite))
                         }
                         cur_dayofweek_flag[index] = !cur_dayofweek_flag[index]
                     }
@@ -173,26 +183,30 @@ class AddMedicineDateActivity : AppCompatActivity() {
     fun setButtonType(is_everyday: Boolean){
         if(is_everyday){
             // 매일 버튼 눌렀을 때
-            btn_addmedidate_everyday.setBackgroundColor(Color.parseColor("#0000cc"))
-            btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#dddddd"))
+            btn_addmedidate_everyday.setBackgroundResource(R.drawable.btn_rect_on)
+            btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorWhite))
+            btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_off)
+            btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorBlueLight))
         } else {
             // 맞춤 버튼 눌렀을 때
-            btn_addmedidate_everyday.setBackgroundColor(Color.parseColor("#dddddd"))
-            btn_addmedidate_custom.setBackgroundColor(Color.parseColor("#0000cc"))
+            btn_addmedidate_everyday.setBackgroundResource(R.drawable.btn_rect_off)
+            btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorBlueLight))
+            btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_on)
+            btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorWhite))
         }
     }
+
     fun setDayTypeTextView(idx: Int, mDialogView: View){
         // idx에 따라 우측 일간격, 주간격, 월간격 에 대한 색 변화
-        mDialogView.tv_cyclepickdig_day_day.setBackgroundColor(Color.parseColor("#cccccc"))
-        mDialogView.tv_cyclepickdig_day_week.setBackgroundColor(Color.parseColor("#cccccc"))
-        mDialogView.tv_cyclepickdig_day_month.setBackgroundColor(Color.parseColor("#cccccc"))
-        if(idx==0){
-            mDialogView.tv_cyclepickdig_day_day.setBackgroundColor(Color.parseColor("#3333ff"))
-        } else if(idx==1){
-            mDialogView.tv_cyclepickdig_day_week.setBackgroundColor(Color.parseColor("#3333ff"))
-        } else if(idx==2){
-            mDialogView.tv_cyclepickdig_day_month.setBackgroundColor(Color.parseColor("#3333ff"))
+        val tv_list = listOf(mDialogView.tv_cyclepickdig_day_day,
+                                            mDialogView.tv_cyclepickdig_day_week,
+                                            mDialogView.tv_cyclepickdig_day_month)
+        for (tv in tv_list){
+            tv.setBackgroundResource(R.drawable.btn_rect_off)
+            tv.setTextColor(resources.getColor(R.color.colorBlueLight))
         }
+        tv_list[idx].setBackgroundResource(R.drawable.btn_rect_on)
+        tv_list[idx].setTextColor(resources.getColor(R.color.colorWhite))
     }
     fun updateDateTextView(year:Int, month:Int, day:Int){
         // 날짜 쪽 글씨 변경 함수

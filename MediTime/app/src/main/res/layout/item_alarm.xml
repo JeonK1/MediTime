@@ -6,23 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        style="@style/style_small_title_text"
         android:text="알람 시간"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            style="@style/style_context_text"
             android:id="@+id/tv_alarmitem_time"
             android:text="오전 8:00"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            style="@style/style_context_text"
             android:id="@+id/tv_alarmitem_count"
             android:text="1복용"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+    <View
+        android:background="@color/colorGray"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 </LinearLayout>

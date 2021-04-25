@@ -33,6 +33,10 @@ class AddMedicineTimeActivity : AppCompatActivity() {
     }
 
     private fun listenerInit() {
+        ib_addmeditime_backbtn.setOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+        }
         btn_addmeditime_ok.setOnClickListener {
             // 완료 버튼 클릭 시
             // Todo : finish 하기 전 현재 설정값 데이터베이스에 모두 저장하기
@@ -40,7 +44,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-        btn_addmeditime_add.setOnClickListener {
+        ib_addmeditime_addbtn.setOnClickListener {
             // 추가 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeSetActivity::class.java)
             startActivityForResult(intent, ADD_MEDICINE_TIME_SET)
@@ -59,12 +63,19 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                 val newAlarmInfo = AlarmInfo(
                     alarm_hour = hour,
                     alarm_min = min,
-                    medicine_count = count
+                    medicine_count = count,
+                    medicin_type = type
                 )
                 alarmAdapter.addItem(newAlarmInfo)
                 alarmAdapter.notifyAdapter()
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // 뒤로가기 핸드폰 버튼 클릭 시
+        overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
     }
 
 //    private fun getDummyAlarmItems(): ArrayList<AlarmInfo> {

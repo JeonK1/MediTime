@@ -2,59 +2,79 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        style="@style/style_title_text"
         android:id="@+id/tv_cyclepickdlg_dow_header"
         android:text="특정요일"
         android:gravity="center"
+        android:padding="10dp"
+        android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_sun"
         android:text="일"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_mon"
         android:text="월"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_tue"
         android:text="화"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_wed"
         android:text="수"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_thu"
         android:text="목"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_fri"
         android:text="금"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        style="@style/style_cyclepickdlg_dayofweek"
+        style="@style/style_regular_button_off"
         android:id="@+id/tv_cyclepickdlg_dow_sat"
         android:text="토"
+        android:gravity="center"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        style="@style/style_bold_button_round"
         android:id="@+id/btn_cyclepickdlg_dow_ok"
         android:text="완료"
+        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

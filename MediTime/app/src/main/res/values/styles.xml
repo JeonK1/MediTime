@@ -7,8 +7,67 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="style_cyclepickdlg_dayofweek">
-        <item name="android:background">#cccccc</item>
-        <item name="android:layout_marginTop">10dp</item>
+
+    <style name="style_bold_button">
+        <item name="android:background">@color/colorBlue</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">25dp</item>
+    </style>
+    <style name="style_bold_button_round">
+        <item name="android:background">@drawable/btn_rect_round2_blue</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">25dp</item>
+    </style>
+    <style name="style_regular_button_on">
+        <item name="android:background">@drawable/btn_rect_on</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_regular_button_off">
+        <item name="android:background">@drawable/btn_rect_off</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorBlueLight</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_rounded15_rect_button">
+        <item name="android:background">@drawable/btn_rect_round1</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorBlueLight</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_rounded100_rect_button_fill_lightblue">
+        <item name="android:background">@drawable/btn_rect_round2_lightblue</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_rounded100_rect_button_fill_blue">
+        <item name="android:background">@drawable/btn_rect_round2_blue</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="style_title_text">
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_small_title_text">
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_context_text">
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_comment_text">
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
 </resources>
