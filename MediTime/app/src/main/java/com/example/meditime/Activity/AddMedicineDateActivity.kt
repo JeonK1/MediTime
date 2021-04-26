@@ -171,12 +171,6 @@ class AddMedicineDateActivity : AppCompatActivity() {
                     mAlertDialog.dismiss()
                 }
             }
-            cycleDialogView.btn_cyclepickdig_type3.setOnClickListener {
-                // 되풀이 주기 버튼 클릭 시
-                // TOdo : UI 완성 되면 구현하기
-                updateTypeTextView("되풀이 주기")
-                cycleAlertDialog.dismiss()
-            }
         }
     }
 
