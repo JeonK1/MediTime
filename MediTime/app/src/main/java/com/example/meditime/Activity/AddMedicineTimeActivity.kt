@@ -17,15 +17,26 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
     val ADD_MEDICINE_TIME_SET = 201
     lateinit var alarmAdapter: AlarmAdapter
+    lateinit var medi_name:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medicine_time)
+        getIntentData()
         recyclerViewInit()
         listenerInit()
     }
 
+    private fun getIntentData() {
+        // AddMedicineDataActivity로부터 받은 데이터 적용하기
+        medi_name = intent.getStringExtra("medi_name")
+        if(medi_name!="") {
+            tv_addmeditime_name.text = medi_name
+        }
+    }
+
     private fun recyclerViewInit() {
+        // recyclerView 초기설정
         val alarmList = ArrayList<AlarmInfo>()
         alarmAdapter = AlarmAdapter(alarmList)
         rv_addmeditime_container.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -34,6 +45,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
     private fun listenerInit() {
         ib_addmeditime_backbtn.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시
             finish()
             overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
         }
@@ -44,7 +56,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-        ib_addmeditime_addbtn.setOnClickListener {
+        tv_addmeditime_addbtn.setOnClickListener {
             // 추가 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeSetActivity::class.java)
             startActivityForResult(intent, ADD_MEDICINE_TIME_SET)
@@ -58,7 +70,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             val hour = data!!.getIntExtra("hour", -1)
             val min = data!!.getIntExtra("min", -1)
             val count = data!!.getDoubleExtra("count", -1.0)
-            val type = data!!.getStringExtra("type") // Todo : DB가 확정나지 않아서 일단 활용 방안은 보류
+            val type = data!!.getStringExtra("type")
             if(hour!=-1 && min!=-1 && count!=-1.0 && type!=null) {
                 val newAlarmInfo = AlarmInfo(
                     alarm_hour = hour,
@@ -77,19 +89,4 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         // 뒤로가기 핸드폰 버튼 클릭 시
         overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
     }
-
-//    private fun getDummyAlarmItems(): ArrayList<AlarmInfo> {
-//        val dummy_list = ArrayList<AlarmInfo>()
-//        dummy_list.add(AlarmInfo(
-//                alarm_hour = 8,
-//                alarm_min = 0,
-//                medicine_count = 1.0
-//        ))
-//        dummy_list.add(AlarmInfo(
-//                alarm_hour = 9,
-//                alarm_min = 30,
-//                medicine_count = 1.5
-//        ))
-//        return dummy_list
-//    }
 }

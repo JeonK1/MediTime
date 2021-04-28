@@ -34,9 +34,11 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
-                <ImageButton
-                    android:id="@+id/ib_addmeditime_addbtn"
-                    android:background="@drawable/ic_add_btn"
+                <TextView
+                    style="@style/style_small_title_text"
+                    android:id="@+id/tv_addmeditime_addbtn"
+                    android:text="추가"
+                    android:textColor="@color/colorBlue"
                     android:layout_gravity="right|center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -44,7 +46,7 @@
             <TextView
                 style="@style/style_small_title_text"
                 android:id="@+id/tv_addmeditime_name"
-                android:text="약품 이름"
+                android:text="약품 이름을 설정해주세요"
                 android:gravity="center"
                 android:padding="10dp"
                 android:layout_width="match_parent"

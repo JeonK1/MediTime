@@ -2,7 +2,7 @@
 <resources>
     <string-array name="medicine_type">
         <item> 정 </item>
-        <item> 봉지 </item>
         <item> 스푼 </item>
+        <item> 봉지 </item>
     </string-array>
 </resources>
