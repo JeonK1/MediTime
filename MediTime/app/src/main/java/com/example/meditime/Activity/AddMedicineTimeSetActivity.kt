@@ -35,7 +35,7 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
     private fun spinnerInit() {
         // spinner 초기화
         val medicine_type_list = resources.getStringArray(R.array.medicine_type) // spinner를 위한 목록 가져오기
-        val arrayAdapter = ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, medicine_type_list)
+        val arrayAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, medicine_type_list)
         sp_addmeditime_set_spinner.adapter = arrayAdapter
     }
 
@@ -81,7 +81,7 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-        btn_addmeditime_set_cancel.setOnClickListener {
+        ib_addmeditime_set_cancel.setOnClickListener {
             // 취소 버튼
             setResult(Activity.RESULT_CANCELED)
             finish()
