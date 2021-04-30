@@ -1,5 +1,9 @@
 package com.example.meditime.Activity
 
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,11 +17,23 @@ class MainActivity : AppCompatActivity() {
     val NoticeFragment = com.example.meditime_local.Fragment.NoticeFragment()
     val TodayFragment = com.example.meditime_local.Fragment.TodayFragment()
 
+    //DB 및 table 관련 변수
+    lateinit var dbHelper : DBHelper
+    lateinit var database : SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigatorInit()
         fragmentInit()
+
+        //DB 및 table 생성, 예시 삽입
+        dbHelper = DBHelper(this, "MediDB.db", null, 1)
+        database = dbHelper.writableDatabase
+        var dbCreater: DBCreater
+        dbCreater = DBCreater(dbHelper, database)
+        dbCreater.createTable()
+        dbCreater.putExample()
     }
 
     private fun navigatorInit() {
