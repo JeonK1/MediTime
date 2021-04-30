@@ -15,14 +15,9 @@ class DBHelper(
 
     //테이블 생성
     override fun onCreate(db: SQLiteDatabase) {
-        var sql : String = "CREATE TABLE " + mytable + " (" +
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT," + // id 인덱스 integer(100)
-                "mediname VARCHAR(50)" + // mediname 약 이름 varchar(50)
-                "medialart DATETIME " + // medialart 알림 설정 시간 datetime
-                "meditake DATETIME" + // meditake 약 먹은 시간 datetime
-                "call INTEGER" + // call 전화 알림 : INTEGER 1=켜짐, 0=꺼짐
-                "medicycle INTEGER" + // medicycle : 복용 주기, INTEGER 1=켜짐, 0=꺼짐
-                " );"
+        var sql : String = "CREATE TABLE if not exists mytable (" +
+                "_id integer primary key autoincrement," +
+                "txt text);";
         db.execSQL(sql)
     }
 
