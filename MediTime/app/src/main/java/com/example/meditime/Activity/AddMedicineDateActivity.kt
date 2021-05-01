@@ -3,14 +3,11 @@ package com.example.meditime.Activity
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_date.*
-import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.tv_cyclepickdig_day_day
 import kotlinx.android.synthetic.main.custom_cyclepicker_dayofweek_dialog.view.*
