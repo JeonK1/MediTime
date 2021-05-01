@@ -1,6 +1,7 @@
 package com.example.meditime.Activity
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
@@ -12,7 +13,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
                 "medi_name CHAR(50), "+ //약 이름
                 "set_cycle INTEGER, "+ //복용 주기 : 0, 1
                 "start_date DATE, "+ //시작 날짜 : yy.mm.dd
-                "re_type INTEGER, "+ //반복 타입 : 0, 1, 2
+                "re_type INTEGER, "+ //반복 타입 : 0(요일), 1(일), 2(개월)
                 "re_cycle INTEGER, "+ //반복 주기 : 2진수 변환
                 "call_alart INTEGER, "+ //전화 알람 : 0, 1
                 "normal_alart INTEGER "+ //일반 알람 : 0, 1
@@ -37,25 +38,25 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     }
 
     fun putExample(){
-        insertColumn_table1("1", "영양제1", "1", "2021-03-17", "1", "1", "0", "1")
-        insertColumn_table1("2", "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
-        insertColumn_table1("3", "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
-        insertColumn_table1("4", "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
-        insertColumn_table1("5", "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
-        insertColumn_table2("1", "1", "1.25", "정", "2021-03-17-13-30-00", "2021-03-13-30-00", "0")
-        insertColumn_table2("2", "2", "1", "봉지", "2021-04-16-09-00-00", "2021-04-16-09-00-00", "0")
-        insertColumn_table2("3", "2", "2", "봉지", "2021-04-16-21-00-00", "2021-04-16-21-00-00", "0")
+        insertColumn_table1("영양제1", "1", "2021-03-17", "1", "1", "0", "1")
+        insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
+        insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
+        insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
+        insertColumn_table1( "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
+        insertColumn_table2( "1", "1.25", "정", "2021-03-17-13-30-00", "2021-03-13-30-00", "0")
+        insertColumn_table2( "2", "1", "봉지", "2021-04-16-09-00-00", "2021-04-16-09-00-00", "0")
+        insertColumn_table2( "2", "2", "봉지", "2021-04-16-21-00-00", "2021-04-16-21-00-00", "0")
     }
 
     //데이터 추가
-    fun insertColumn_table1(medi_no:String, medi_name:String, set_cycle:String, start_date:String, re_type:String, re_cycle:String, call_alart:String, normal_alart:String){
+    fun insertColumn_table1(medi_name:String, set_cycle:String, start_date:String, re_type:String, re_cycle:String, call_alart:String, normal_alart:String){
         //(medi_no:Int, medi_name:String, set_cycle:Int, start_date:Date, re_type:Int, re_cycle:Int, call_alart:Int, normal_alart:Int)
         var query = "INSERT INTO table1 (medi_name, set_cycle, start_date, re_type, re_cycle, call_alart, normal_alart) " +
                 "VALUES ( \"${medi_name}\", ${set_cycle}, ${start_date}, ${re_type}, ${re_cycle}, ${call_alart}, ${normal_alart} );"
         db.execSQL(query)
     }
 
-    fun insertColumn_table2(time_no:String, medi_no:String, set_amount:String, set_type:String, set_date:String, take_date:String, set_check:String){
+    fun insertColumn_table2(medi_no:String, set_amount:String, set_type:String, set_date:String, take_date:String, set_check:String){
         //(time_no:Int, medi_no:Int, set_amount:Double, set_type:Int, set_date:Datetime, take_date:Datetime, set_check:Int)
         var query = "INSERT INTO table2 (medi_no, set_amount, set_type, set_date, take_date, set_check) " +
                 "VALUES (${medi_no}, ${set_amount}, \"${set_type}\", ${set_date}, ${take_date}, ${set_check} );"
@@ -63,17 +64,17 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     }
 
     //데이터 검색
-    fun selectColumn(mytable: String, select:String, condition:String){
+    fun selectColumn(mytable: String, select:String, condition:String): Cursor? {
         //select : 찾고자 하는 정보 ex) "id" 또는 "id, mediname" 의 형식으로 작성
         //condition : 찾고자 하는 조건 ex) "id='1'" 또는 "id='1' AND mediname='비타민'" 의 형식으로 작성
         var query = "SELECT " + select + " FROM " + mytable + " WHERE " + condition
-        db.execSQL(query)
+        return db.rawQuery(query, null)
     }
 
     //데이터 전체 출력
-    fun selectAllColumn(mytable: String){
+    fun selectAllColumn(mytable: String): Cursor? {
         var query = "SELECT * FROM " + mytable
-        db.execSQL(query)
+        return db.rawQuery(query, null)
     }
 
     //데이터 수정

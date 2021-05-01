@@ -25,7 +25,7 @@ class AlarmAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<AlarmAd
         var am_pm = ""
         var hour = items[position].alarm_hour
         var min = items[position].alarm_min
-        var type = items[position].medicin_type
+        var type = items[position].medicine_type
 
         if(items[position].alarm_hour>12){
             am_pm = "오후"
