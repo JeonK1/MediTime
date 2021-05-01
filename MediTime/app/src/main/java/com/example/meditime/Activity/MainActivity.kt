@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         var dbCreater: DBCreater
         dbCreater = DBCreater(dbHelper, database)
         dbCreater.createTable()
+        dbCreater.deleteAllColumns_table("table1") // example data 중복 삽입 방지
+        dbCreater.deleteAllColumns_table("table2") // example data 중복 삽입 방지
         dbCreater.putExample()
     }
 

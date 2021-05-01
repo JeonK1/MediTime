@@ -17,7 +17,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
     val ADD_MEDICINE_TIME_SET = 201
     lateinit var alarmAdapter: AlarmAdapter
-    lateinit var medi_name:String
+    var medi_name:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
     private fun getIntentData() {
         // AddMedicineDataActivity로부터 받은 데이터 적용하기
         medi_name = intent.getStringExtra("medi_name")
-        if(medi_name!="") {
+        if(medi_name!=null) {
             tv_addmeditime_name.text = medi_name
         }
     }
