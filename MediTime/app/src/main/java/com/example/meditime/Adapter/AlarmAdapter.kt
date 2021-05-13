@@ -1,10 +1,12 @@
-package com.example.meditime
+package com.example.meditime.Adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.meditime.Model.AlarmInfo
+import com.example.meditime.R
 
 class AlarmAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<AlarmAdapter.MyViewHolder>() {
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
@@ -44,7 +46,7 @@ class AlarmAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<AlarmAd
     fun notifyAdapter(){
         notifyDataSetChanged()
     }
-    fun getItem(position: Int):AlarmInfo{
+    fun getItem(position: Int): AlarmInfo {
         return items[position]
     }
     fun deleteItem(position: Int){

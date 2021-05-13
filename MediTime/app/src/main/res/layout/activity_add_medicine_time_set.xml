@@ -1,96 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Activity.AddMedicineTimeSetActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/ll_addmeditime_set_header"
-            android:background="@color/colorWhite"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:elevation="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorWhite"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:paddingBottom="15dp">
+
             <FrameLayout
-                android:orientation="vertical"
-                android:padding="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
                 <ImageButton
                     android:id="@+id/ib_addmeditime_set_cancel"
-                    android:background="@drawable/ic_delete_btn"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_delete_btn" />
+
                 <TextView
                     style="@style/style_title_text"
-                    android:text="약 알람 추가"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="약 알람 추가" />
             </FrameLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_addmeditime_set_container"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_below="@id/ll_addmeditime_set_header"
-            android:layout_above="@id/ll_addmeditime_set_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ll_addmeditime_set_footer"
+            android:layout_below="@id/ll_addmeditime_set_header"
+            android:orientation="vertical"
+            android:padding="20dp">
+
             <TextView
                 style="@style/style_small_title_text"
-                android:text="알람 시간"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="알람 시간" />
+
             <TimePicker
                 android:id="@+id/tp_addmeditime_set_timepicker"
-                android:timePickerMode="spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner" />
+
             <TextView
                 style="@style/style_small_title_text"
-                android:text="1회 복용량"
-                android:layout_marginTop="30dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="1회 복용량" />
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
                 <LinearLayout
-                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:gravity="right">
+
                     <Spinner
                         android:id="@+id/sp_addmeditime_set_spinner"
-                        android:entries="@array/medicine_type"
-                        android:gravity="center"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:entries="@array/medicine_type"
+                        android:gravity="center" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_weight="2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
                     <ImageButton
                         android:id="@+id/tv_addmeditime_set_minus"
-                        android:background="@drawable/ic_down_triangle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_down_triangle" />
 
                     <EditText
                         android:id="@+id/et_addmeditime_set_count"
@@ -102,29 +115,31 @@
                         android:ems="3"
                         android:gravity="center"
                         android:text="1.0" />
+
                     <ImageButton
                         android:id="@+id/tv_addmeditime_set_plus"
-                        android:background="@drawable/ic_up_triangle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_up_triangle" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_addmeditime_set_footer"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                style="@style/style_bold_button"
-                android:id="@+id/btn_addmeditime_set_ok"
-                android:text="저장"
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/btn_addmeditime_set_ok"
+                style="@style/style_bold_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="저장" />
+        </LinearLayout>
 
 
     </RelativeLayout>

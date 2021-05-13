@@ -52,6 +52,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
         }
         btn_addmedidate_next.setOnClickListener {
             // 다음 버튼 클릭 시
+            //
             var re_cycle = when {
                 re_type==0 -> convert_arrayList_to_Int(dayofweek_flag) // 요일 반복
                 re_type==1 && day_flag[1]==0 -> day_flag[0] // 일 반복

@@ -1,4 +1,4 @@
-package com.example.meditime.Activity
+package com.example.meditime.Database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

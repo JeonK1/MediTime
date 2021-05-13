@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="20dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
     <TextView
-        style="@style/style_title_text"
         android:id="@+id/tv_cyclepickdlg_header"
-        android:text="반복 주기"
-        android:gravity="center"
+        style="@style/style_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:gravity="center"
+        android:text="반복 주기" />
+
     <Button
-        style="@style/style_rounded100_rect_button_fill_lightblue"
         android:id="@+id/btn_cyclepickdig_type1"
-        android:text="특정 요일"
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
         style="@style/style_rounded100_rect_button_fill_lightblue"
-        android:id="@+id/btn_cyclepickdig_type2"
-        android:text="일 간격"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="특정 요일" />
+
+    <Button
+        android:id="@+id/btn_cyclepickdig_type2"
+        style="@style/style_rounded100_rect_button_fill_lightblue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="일 간격" />
 </LinearLayout>

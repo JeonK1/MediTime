@@ -1,170 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".Activity.AddMedicineDateActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <FrameLayout
             android:id="@+id/fl_addmedidate_header"
-            android:orientation="vertical"
-            android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
             <ImageButton
                 android:id="@+id/ib_addmedidate_backbtn"
-                android:background="@drawable/ic_back_btn"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_back_btn" />
+
             <TextView
                 style="@style/style_title_text"
-                android:text="약 정보 등록"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="약 정보 등록" />
         </FrameLayout>
+
         <ScrollView
-            android:layout_above="@id/ll_addmedidate_footer"
-            android:layout_below="@id/fl_addmedidate_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ll_addmedidate_footer"
+            android:layout_below="@id/fl_addmedidate_header">
+
             <LinearLayout
                 android:id="@+id/ll_addmedidate_container"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
                     <TextView
                         style="@style/style_small_title_text"
-                        android:text="약품 이름"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="약품 이름" />
+
                     <EditText
                         android:id="@+id/et_addmedidate_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/bg_edittext_gray_rounded"
                         android:gravity="left"
                         android:hint="약 이름을 입력해주세요"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="15dp"
+                        android:paddingTop="10dp"
                         android:paddingRight="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:paddingBottom="10dp" />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
                     <TextView
                         style="@style/style_small_title_text"
-                        android:text="복용 주기"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="복용 주기" />
+
                     <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
                         <Button
-                            style="@style/style_regular_button_on"
                             android:id="@+id/btn_addmedidate_everyday"
-                            android:layout_weight="1"
+                            style="@style/style_regular_button_on"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="매일" />
+
                         <Button
-                            style="@style/style_regular_button_off"
                             android:id="@+id/btn_addmedidate_custom"
-                            android:layout_weight="1"
+                            style="@style/style_regular_button_off"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="맞춤"/>
+                            android:layout_weight="1"
+                            android:text="맞춤" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/ll_addmedidate_custom"
-                    android:orientation="vertical"
-                    android:visibility="visible"
-                    android:padding="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:visibility="visible">
+
                     <LinearLayout
                         android:id="@+id/rl_addmedidate_startdate"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                         <TextView
-                            style="@style/style_small_title_text"
                             android:id="@+id/tv_addmedidate_start"
-                            android:text="시작 날짜"
+                            style="@style/style_small_title_text"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="시작 날짜" />
+
                         <TextView
-                            style="@style/style_rounded15_rect_button"
                             android:id="@+id/tv_addmedidate_startdate"
-                            android:gravity="center"
-                            android:text="2021. 03. 17."
-                            android:padding="10dp"
-                            android:layout_marginTop="10dp"
+                            style="@style/style_rounded15_rect_button"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="2021. 03. 17." />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/rl_addmedidate_cycletype"
-                        android:orientation="vertical"
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
                         <TextView
-                            style="@style/style_small_title_text"
                             android:id="@+id/tv_addmedidate_cycle"
-                            android:text="반복 주기"
+                            style="@style/style_small_title_text"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:text="반복 주기" />
+
                         <TextView
-                            style="@style/style_rounded15_rect_button"
                             android:id="@+id/tv_addmedidate_cycletype"
-                            android:gravity="center"
-                            android:text="특정 요일"
-                            android:padding="10dp"
-                            android:layout_marginTop="10dp"
+                            style="@style/style_rounded15_rect_button"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="특정 요일" />
                     </LinearLayout>
+
                     <TextView
                         style="@style/style_comment_text"
-                        android:gravity="center"
-                        android:text="맞춤 일정에만 알림을 받습니다"
-                        android:layout_marginTop="15dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="맞춤 일정에만 알림을 받습니다" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
+
         <LinearLayout
             android:id="@+id/ll_addmedidate_footer"
-            android:orientation="vertical"
-            android:gravity="right"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="right"
+            android:orientation="vertical">
+
             <Button
-                style="@style/style_bold_button"
                 android:id="@+id/btn_addmedidate_next"
-                android:text="다음"
-                android:padding="10dp"
+                style="@style/style_bold_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="다음" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

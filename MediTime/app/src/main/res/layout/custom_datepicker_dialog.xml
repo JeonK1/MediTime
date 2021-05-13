@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <TextView
-        style="@style/style_small_title_text"
         android:id="@+id/tv_datepickdlg_header"
-        android:text="시작 날짜"
+        style="@style/style_small_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:text="시작 날짜" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <DatePicker
             android:id="@+id/dp_datepickdlg_spinner"
-            android:datePickerMode="spinner"
-            android:calendarViewShown="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
     </LinearLayout>
+
     <Button
-        style="@style/style_bold_button"
         android:id="@+id/btn_datepickdig_ok"
-        android:text="선택"
+        style="@style/style_bold_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="선택" />
 </LinearLayout>

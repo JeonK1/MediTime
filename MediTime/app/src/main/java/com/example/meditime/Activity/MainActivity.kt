@@ -1,13 +1,12 @@
 package com.example.meditime.Activity
 
-import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.meditime.Database.DBCreater
+import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_main.*
 
