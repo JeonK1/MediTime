@@ -1,8 +1,8 @@
-package com.example.meditime.Activity
+package com.example.meditime.Database
 
-import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import com.example.meditime.Database.DBHelper
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -43,13 +43,18 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
         insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
         insertColumn_table1( "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
+        insertColumn_table1( "영양제6", "0", "2021-05-05", null, null, "0", "1")
         insertColumn_table2( "1", "1.25", "정", "2021-03-17 13:30:00", "2021-03-17 13:30:00", "0")
         insertColumn_table2( "2", "1", "봉지", "2021-04-16 09:00:00", "2021-04-16 09:00:00", "0")
         insertColumn_table2( "2", "2", "봉지", "2021-04-16 21:00:00", "2021-04-16 21:00:00", "0")
+        insertColumn_table2( "3", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
+        insertColumn_table2( "4", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
+        insertColumn_table2( "5", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
+        insertColumn_table2( "6", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
     }
 
     //데이터 추가
-    fun insertColumn_table1(medi_name:String, set_cycle:String, start_date:String, re_type:String, re_cycle:String, call_alart:String, normal_alart:String){
+    fun insertColumn_table1(medi_name:String, set_cycle:String, start_date:String, re_type:String?, re_cycle:String?, call_alart:String, normal_alart:String){
         //(medi_no:Int, medi_name:String, set_cycle:Int, start_date:Date, re_type:Int, re_cycle:Int, call_alart:Int, normal_alart:Int)
         var query = "INSERT INTO table1 (medi_name, set_cycle, start_date, re_type, re_cycle, call_alart, normal_alart) " +
                 "VALUES ( \"${medi_name}\", ${set_cycle}, \"${start_date}\", ${re_type}, ${re_cycle}, ${call_alart}, ${normal_alart} );"

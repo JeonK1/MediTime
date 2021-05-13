@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meditime.*
-import kotlinx.android.synthetic.main.activity_add_medicine_date.*
+import com.example.meditime.Adapter.AlarmAdapter
+import com.example.meditime.Database.DBCreater
+import com.example.meditime.Database.DBHelper
+import com.example.meditime.Model.AlarmInfo
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -65,8 +68,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         }
         btn_addmeditime_ok.setOnClickListener {
             // 완료 버튼 클릭 시
-            // Todo : finish 하기 전 현재 설정값 데이터베이스에 모두 저장하기
-            //데이터베이스에 저장
+            // 데이터베이스에 저장
             val dbHelper = DBHelper(this, "MediDB.db", null, 1)
             val database = dbHelper.writableDatabase
             var dbCreater: DBCreater
@@ -130,9 +132,9 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         if(requestCode == ADD_MEDICINE_TIME_SET && resultCode == Activity.RESULT_OK){
             // AddMedicineTimeSetActivity 에서 call back
             val hour = data!!.getIntExtra("hour", -1)
-            val min = data!!.getIntExtra("min", -1)
-            val count = data!!.getDoubleExtra("count", -1.0)
-            val type = data!!.getStringExtra("type")
+            val min = data.getIntExtra("min", -1)
+            val count = data.getDoubleExtra("count", -1.0)
+            val type = data.getStringExtra("type")
             if(hour!=-1 && min!=-1 && count!=-1.0 && type!=null) {
                 val newAlarmInfo = AlarmInfo(
                     alarm_hour = hour,
