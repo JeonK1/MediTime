@@ -12,7 +12,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
                 "medi_no INTEGER PRIMARY KEY, "+ //약 인덱스
                 "medi_name CHAR(50), "+ //약 이름
                 "set_cycle INTEGER, "+ //복용 주기 : 0, 1
-                "start_date DATE, "+ //시작 날짜 : yy.mm.dd
+                "start_date DATE, "+ //시작 날짜 : yy-mm-dd
                 "re_type INTEGER, "+ //반복 타입 : 0(요일), 1(일), 2(개월)
                 "re_cycle INTEGER, "+ //반복 주기 : 2진수 변환
                 "call_alart INTEGER, "+ //전화 알람 : 0, 1
@@ -28,8 +28,8 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
                 "medi_no INTEGER, "+ //table1과 비교해서 사용
                 "set_amount DOUBLE, "+ //복용량
                 "set_type CHAR(50), "+ //복용 타입 : 정, 봉지, ...
-                "set_date DATETIME, "+ //복용 시간 : yy.mm.dd.hh.mm
-                "take_date DATETIME, "+ //섭취 시간 : yy.mm.dd.hh.mm
+                "set_date DATETIME, "+ //복용 시간 : yy-mm-dd hh:mm:ss
+                "take_date DATETIME, "+ //섭취 시간 : yy-mm-dd hh:mm:ss
                 "set_check INTEGER "+ //복용 여부 : 0, 1
                 " );"
         //섭취 시간의 default 값 생각해보기
@@ -38,14 +38,14 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     }
 
     fun putExample(){
-        insertColumn_table1("영양제1", "1", "2021-03-17", "1", "1", "0", "1")
-        insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
-        insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
-        insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
-        insertColumn_table1( "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
-        insertColumn_table2( "1", "1.25", "정", "2021-03-17-13-30-00", "2021-03-13-30-00", "0")
-        insertColumn_table2( "2", "1", "봉지", "2021-04-16-09-00-00", "2021-04-16-09-00-00", "0")
-        insertColumn_table2( "2", "2", "봉지", "2021-04-16-21-00-00", "2021-04-16-21-00-00", "0")
+        insertColumn_table1("영양제1", "1", "'2021-03-17'", "1", "1", "0", "1")
+        insertColumn_table1( "영양제2", "1", "'2021-04-16'", "1", "5", "0", "1")
+        insertColumn_table1( "영양제3", "1", "'2021-05-22'", "2", "21", "0", "1")
+        insertColumn_table1( "영양제4", "1", "'2021-03-15'", "1", "14", "0", "1")
+        insertColumn_table1( "영양제5", "1", "'2021-03-03'", "0", "65", "0", "1")
+        insertColumn_table2( "1", "1.25", "정", "'2021-03-17 13:30:00'", "'2021-03-17 13:30:00'", "0")
+        insertColumn_table2( "2", "1", "봉지", "'2021-04-16 09:00:00'", "'2021-04-16 09:00:00'", "0")
+        insertColumn_table2( "2", "2", "봉지", "'2021-04-16 21:00:00'", "'2021-04-16 21:00:00'", "0")
     }
 
     //데이터 추가
