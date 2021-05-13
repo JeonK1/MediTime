@@ -38,28 +38,28 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     }
 
     fun putExample(){
-        insertColumn_table1("영양제1", "1", "'2021-03-17'", "1", "1", "0", "1")
-        insertColumn_table1( "영양제2", "1", "'2021-04-16'", "1", "5", "0", "1")
-        insertColumn_table1( "영양제3", "1", "'2021-05-22'", "2", "21", "0", "1")
-        insertColumn_table1( "영양제4", "1", "'2021-03-15'", "1", "14", "0", "1")
-        insertColumn_table1( "영양제5", "1", "'2021-03-03'", "0", "65", "0", "1")
-        insertColumn_table2( "1", "1.25", "정", "'2021-03-17 13:30:00'", "'2021-03-17 13:30:00'", "0")
-        insertColumn_table2( "2", "1", "봉지", "'2021-04-16 09:00:00'", "'2021-04-16 09:00:00'", "0")
-        insertColumn_table2( "2", "2", "봉지", "'2021-04-16 21:00:00'", "'2021-04-16 21:00:00'", "0")
+        insertColumn_table1("영양제1", "1", "2021-03-17", "1", "1", "0", "1")
+        insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
+        insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
+        insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
+        insertColumn_table1( "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
+        insertColumn_table2( "1", "1.25", "정", "2021-03-17 13:30:00", "2021-03-17 13:30:00", "0")
+        insertColumn_table2( "2", "1", "봉지", "2021-04-16 09:00:00", "2021-04-16 09:00:00", "0")
+        insertColumn_table2( "2", "2", "봉지", "2021-04-16 21:00:00", "2021-04-16 21:00:00", "0")
     }
 
     //데이터 추가
     fun insertColumn_table1(medi_name:String, set_cycle:String, start_date:String, re_type:String, re_cycle:String, call_alart:String, normal_alart:String){
         //(medi_no:Int, medi_name:String, set_cycle:Int, start_date:Date, re_type:Int, re_cycle:Int, call_alart:Int, normal_alart:Int)
         var query = "INSERT INTO table1 (medi_name, set_cycle, start_date, re_type, re_cycle, call_alart, normal_alart) " +
-                "VALUES ( \"${medi_name}\", ${set_cycle}, ${start_date}, ${re_type}, ${re_cycle}, ${call_alart}, ${normal_alart} );"
+                "VALUES ( \"${medi_name}\", ${set_cycle}, \"${start_date}\", ${re_type}, ${re_cycle}, ${call_alart}, ${normal_alart} );"
         db.execSQL(query)
     }
 
     fun insertColumn_table2(medi_no:String, set_amount:String, set_type:String, set_date:String, take_date:String, set_check:String){
         //(time_no:Int, medi_no:Int, set_amount:Double, set_type:Int, set_date:Datetime, take_date:Datetime, set_check:Int)
         var query = "INSERT INTO table2 (medi_no, set_amount, set_type, set_date, take_date, set_check) " +
-                "VALUES (${medi_no}, ${set_amount}, \"${set_type}\", ${set_date}, ${take_date}, ${set_check} );"
+                "VALUES (${medi_no}, ${set_amount}, \"${set_type}\", \"${set_date}\", \"${take_date}\", ${set_check} );"
         db.execSQL(query)
     }
 
