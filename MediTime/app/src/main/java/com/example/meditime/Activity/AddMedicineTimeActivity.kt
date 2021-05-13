@@ -77,7 +77,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                 dbCreater.insertColumn_table1(
                     medi_name = medi_name!!,
                     set_cycle = set_cycle.toString(),
-                    start_date = "${start_date_split[0]}-${start_date_split[1]}-${start_date_split[2]}",
+                    start_date = "${start_date_split[0]}-${start_date_split[1]}-${start_date_split[2].substring(0, start_date_split[2].length-1)}",
                     re_type = "null",
                     re_cycle = "null",
                     call_alart = "0",
@@ -101,13 +101,13 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
             // table2 insert
             val medi_no = cursor.getInt(cursor.getColumnIndex("medi_no"))
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd-hh-mm-ss")
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             for (item in alarmAdapter.items){
                 dbCreater.insertColumn_table2(
                     medi_no = medi_no.toString(),
                     set_amount = item.medicine_count.toString(),
                     set_type = item.medicine_type,
-                    set_date = simpleDateFormat.format(Date()),
+                    set_date = "${simpleDateFormat.format(Date())}",
                     take_date = "null",
                     set_check = "0"
                 )
