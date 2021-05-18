@@ -33,7 +33,7 @@ class NoticeFragment : Fragment() {
         return root
     }
 
-
+    //commit test
     //DataBase에서 약품 알림에 대한 정보를 받아와 List를 만들고 화면에 뿌려주어야 합니다.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
