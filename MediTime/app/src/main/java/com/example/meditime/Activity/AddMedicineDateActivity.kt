@@ -247,6 +247,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == ADD_MEDICINE_TIME && resultCode == Activity.RESULT_OK){
             // AddMedicineTimeActivity 에서 call back
+            setResult(Activity.RESULT_OK)
             finish()
         }
     }

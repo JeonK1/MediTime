@@ -3,6 +3,10 @@ package com.example.meditime.Database
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.example.meditime.Database.DBHelper
+import com.example.meditime.Model.AlarmInfo
+import com.example.meditime.NoticeInfo
+import com.example.meditime_local.Fragment.NoticeFragment
+import kotlin.properties.Delegates
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -63,7 +67,6 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         insertColumn_table1("영양제1", "1", "2021-03-17", "1", "1", "0", "1")
         insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
         insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
-        insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
         insertColumn_table2( "1", "1.25", "정", "2021-03-17 13:30:00", "2021-03-17 13:30:00", "0")
         insertColumn_table2( "2", "1", "봉지", "2021-04-16 09:00:00", "2021-04-16 09:00:00", "0")
         insertColumn_table2( "2", "2", "봉지", "2021-04-16 21:00:00", "2021-04-16 21:00:00", "0")
@@ -123,7 +126,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         //condition : 수정하고자 하는 column의 id ex) "3" 의 형식으로 작성
         // **정수형이 아님**
         // **문자열로 작성**
-        var query = "UPDATE " + mytable + " SET " + update + " WHERE id = " + condition
+        var query = "UPDATE " + mytable + " SET " + update + " WHERE " + condition
         db.execSQL(query)
     }
 
@@ -132,7 +135,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         //condition : 삭제하고자 하는 column의 id ex) "3" 의 형식으로 작성
         // **정수형이 아님**
         // **문자열로 작성**
-        var query = "DELETE FROM " + mytable + " WHERE id = " + condition
+        var query = "DELETE FROM " + mytable + " WHERE " + condition
         db.execSQL(query)
     }
 
@@ -146,6 +149,49 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     fun deleteAllColumns_DB(){
         var query = "DELETE FROM mediDB"
         db.execSQL(query)
+    }
+
+    // medi_no 에 해당하는 alarm의 개수 반환
+    fun get_alarm_cnt_by_medi_no(no: Int): Int {
+        var query = "SELECT * FROM table2 WHERE medi_no = ${no}"
+        val cursor =  db.rawQuery(query, null)
+        return cursor.count
+    }
+
+    // medi_no 에 해당하는 alarm 모두 반환
+    fun get_alarm_by_medi_no(no: Int): ArrayList<AlarmInfo> {
+        var cursor = selectColumn("table2", "*", "medi_no=${no}")
+        val alarm_list = ArrayList<AlarmInfo>()
+        cursor.moveToFirst()
+        do {
+            //알람 데이터들을 위한 변수들
+            val set_time = cursor.getString(cursor.getColumnIndex("set_date")).split(" ")[1]
+            alarm_list.add(
+                AlarmInfo(
+                    alarm_hour = set_time.split(":")[0].toInt(),
+                    alarm_min = set_time.split(":")[1].toInt(),
+                    medicine_count = cursor.getDouble(cursor.getColumnIndex("set_amount")),
+                    medicine_type = cursor.getString(cursor.getColumnIndex("set_type"))
+            ))
+        }while (cursor.moveToNext())
+        cursor.close()
+        return alarm_list
+    }
+
+    // table1의 전화알람 정보 업데이트
+    fun set_call_state(medi_no:Int, flag:Boolean) {
+        if(flag)
+            updateColumn("table1","call_alart=1", "medi_no=${medi_no}")
+        else
+            updateColumn("table1","call_alart=0", "medi_no=${medi_no}")
+    }
+
+    // table1의 문자알람 정보 업데이트
+    fun set_normal_state(medi_no:Int, flag:Boolean) {
+        if(flag)
+            updateColumn("table1","normal_alart=1", "medi_no=${medi_no}")
+        else
+            updateColumn("table1","normal_alart=0", "medi_no=${medi_no}")
     }
 
 }
