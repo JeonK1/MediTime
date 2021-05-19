@@ -2,18 +2,23 @@ package com.example.meditime.Activity
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meditime.*
 import com.example.meditime.Adapter.AlarmAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.Model.AlarmInfo
+import com.example.meditime_local.Fragment.NoticeFragment
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 /*********************************
  * 화면 #3-2-2 시간설정
@@ -22,6 +27,7 @@ import kotlin.collections.ArrayList
 
 class AddMedicineTimeActivity : AppCompatActivity() {
 
+    val NoticeFragment = com.example.meditime_local.Fragment.NoticeFragment()
     val ADD_MEDICINE_TIME_SET = 201
     lateinit var alarmAdapter: AlarmAdapter
 
@@ -115,6 +121,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                 )
             }
 
+
             // 이전화면으로 되돌아가기
             val intent = Intent()
             setResult(Activity.RESULT_OK, intent)
@@ -153,4 +160,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         // 뒤로가기 핸드폰 버튼 클릭 시
         overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
     }
+
+
+
 }

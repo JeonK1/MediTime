@@ -35,6 +35,28 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         //섭취 시간의 default 값 생각해보기
         //복용 여부의 default 값을 0으로 하는 것 고려해보기
         db.execSQL(query2)
+
+        //table3 생성
+        var query3 = "CREATE TABLE IF NOT EXISTS table3 ( " +
+                "medi_name CHAR(50), "+ //약 이름
+                "medi_no INTEGER, "+ //table1과 비교해서 사용
+                "time_no INTEGER, "+ //시간 인덱스
+                "set_cycle INTEGER, "+ //복용 주기 : 0, 1
+                "start_date DATE, "+ //시작 날짜 : yy-mm-dd
+                "re_type INTEGER, "+ //반복 타입 : 0(요일), 1(일), 2(개월)
+                "re_cycle INTEGER, "+ //반복 주기 : 2진수 변환
+                "set_amount DOUBLE, "+ //복용량
+                "set_type CHAR(50), "+ //복용 타입 : 정, 봉지, ...
+                "set_date DATETIME, "+ //복용 시간 : yy-mm-dd hh:mm:ss
+                "take_date DATETIME, "+ //섭취 시간 : yy-mm-dd hh:mm:ss
+                "set_check INTEGER, "+ //복용 여부 : 0, 1
+                "call_alart INTEGER, "+ //전화 알람 : 0, 1
+                "normal_alart INTEGER, "+ //일반 알람 : 0, 1
+                "PRIMARY KEY (medi_no, time_no)"+
+                " );"
+        //섭취 시간의 default 값 생각해보기
+        //복용 여부의 default 값을 0으로 하는 것 고려해보기
+        db.execSQL(query3)
     }
 
     fun putExample(){
@@ -42,15 +64,13 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
         insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
         insertColumn_table1( "영양제4", "1", "2021-03-15", "1", "14", "0", "1")
-        insertColumn_table1( "영양제5", "1", "2021-03-03", "0", "65", "0", "1")
-        insertColumn_table1( "영양제6", "0", "2021-05-05", null, null, "0", "1")
         insertColumn_table2( "1", "1.25", "정", "2021-03-17 13:30:00", "2021-03-17 13:30:00", "0")
         insertColumn_table2( "2", "1", "봉지", "2021-04-16 09:00:00", "2021-04-16 09:00:00", "0")
         insertColumn_table2( "2", "2", "봉지", "2021-04-16 21:00:00", "2021-04-16 21:00:00", "0")
         insertColumn_table2( "3", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
-        insertColumn_table2( "4", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
-        insertColumn_table2( "5", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
-        insertColumn_table2( "6", "1", "정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "0")
+        //insertColumn_table3( "영양제1", "1", "1", "1", "2021-03-17","1", "5","1","정", "2021-03-17 09:30:00", "2021-03-17 13:33:33", "1", "0","1")
+        //insertColumn_table3( "영양제1",  "1", "2","1", "2021-03-17","1", "5","1","정", "2021-03-17 13:30:00", "2021-03-17 13:33:33", "1", "0","1")
+        //insertColumn_table3( "영양제2", "2", "1", "0", "2021-04-16","1", "1","1","정", "2021-04-16 13:30:00", "2021-04-16 13:33:33", "1", "0","1")
     }
 
     //데이터 추가
@@ -66,10 +86,25 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         var query = "INSERT INTO table2 (medi_no, set_amount, set_type, set_date, take_date, set_check) " +
                 "VALUES (${medi_no}, ${set_amount}, \"${set_type}\", \"${set_date}\", \"${take_date}\", ${set_check} );"
         db.execSQL(query)
+
     }
 
+    fun insertColumn_table3(medi_name:String, medi_no:String, time_no:String, set_cycle:String, start_date:String, re_type:String?, re_cycle:String?, set_amount:String, set_type:String, set_date:String, take_date:String, set_check:String, call_alart:String, normal_alart:String){
+        //(time_no:Int, medi_no:Int, set_amount:Double, set_type:Int, set_date:Datetime, take_date:Datetime, set_check:Int)
+        var query = "INSERT INTO table3 (medi_name, medi_no, set_cycle, start_date, re_type, re_cycle, set_amount, set_type, set_date, take_date, set_check, call_alart, normal_alart) " +
+                "VALUES (\"${medi_name}\", ${medi_no}, ${set_cycle}, \"${start_date}\", ${re_type}, ${re_cycle}, ${set_amount}, \"${set_type}\", \"${set_date}\", \"${take_date}\", ${set_check}, ${call_alart}, ${normal_alart} );"
+        db.execSQL(query)
+    }
+
+    //테이블1,2 join&Select
+    fun JoinAndSelectAll(): Cursor{
+        var query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
+        return db.rawQuery(query, null)
+    }
+
+
     //데이터 검색
-    fun selectColumn(mytable: String, select:String, condition:String): Cursor? {
+    fun selectColumn(mytable: String, select:String, condition:String): Cursor {
         //select : 찾고자 하는 정보 ex) "id" 또는 "id, mediname" 의 형식으로 작성
         //condition : 찾고자 하는 조건 ex) "id='1'" 또는 "id='1' AND mediname='비타민'" 의 형식으로 작성
         var query = "SELECT " + select + " FROM " + mytable + " WHERE " + condition
@@ -77,7 +112,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     }
 
     //데이터 전체 출력
-    fun selectAllColumn(mytable: String): Cursor? {
+    fun selectAllColumn(mytable: String): Cursor {
         var query = "SELECT * FROM " + mytable
         return db.rawQuery(query, null)
     }
