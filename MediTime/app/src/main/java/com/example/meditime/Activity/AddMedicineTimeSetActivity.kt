@@ -11,6 +11,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
+import com.example.meditime.Model.AlarmInfo
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_time_set.*
 
@@ -74,10 +75,14 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
         btn_addmeditime_set_ok.setOnClickListener {
             // 설정 버튼
             val intent = Intent()
-            intent.putExtra("hour", tp_addmeditime_set_timepicker.currentHour)
-            intent.putExtra("min", tp_addmeditime_set_timepicker.currentMinute)
-            intent.putExtra("count", medicine_count)
-            intent.putExtra("type", sp_addmeditime_set_spinner.selectedItem.toString())
+            val bundle = Bundle()
+            bundle.putSerializable("alarmInfo", AlarmInfo(
+                alarm_hour = tp_addmeditime_set_timepicker.currentHour,
+                alarm_min = tp_addmeditime_set_timepicker.currentMinute,
+                medicine_count = medicine_count,
+                medicine_type = sp_addmeditime_set_spinner.selectedItem.toString()
+            ))
+            intent.putExtras(bundle)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }

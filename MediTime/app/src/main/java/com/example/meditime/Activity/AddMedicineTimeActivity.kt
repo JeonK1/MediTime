@@ -69,8 +69,9 @@ class AddMedicineTimeActivity : AppCompatActivity() {
     private fun listenerInit() {
         ib_addmeditime_backbtn.setOnClickListener {
             // 뒤로가기 버튼 클릭 시
-            finish()
             overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+            setResult(Activity.RESULT_CANCELED)
+            finish()
         }
         btn_addmeditime_ok.setOnClickListener {
             // 완료 버튼 클릭 시
@@ -111,20 +112,23 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             val medi_no = cursor.getInt(cursor.getColumnIndex("medi_no"))
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             for (item in alarmAdapter.items){
+                val curDate = Date()
+                curDate.hours = item.alarm_hour
+                curDate.minutes = item.alarm_min
+                curDate.seconds = 0
                 dbCreater.insertColumn_table2(
                     medi_no = medi_no.toString(),
                     set_amount = item.medicine_count.toString(),
                     set_type = item.medicine_type,
-                    set_date = "${simpleDateFormat.format(Date())}",
+                    set_date = "${simpleDateFormat.format(curDate)}",
                     take_date = "null",
                     set_check = "0"
                 )
             }
 
-
             // 이전화면으로 되돌아가기
-            val intent = Intent()
-            setResult(Activity.RESULT_OK, intent)
+            // todo : putextra로 Activity까지 전달하는 방법 고려
+            setResult(Activity.RESULT_OK)
             finish()
         }
         tv_addmeditime_addbtn.setOnClickListener {
@@ -138,17 +142,8 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == ADD_MEDICINE_TIME_SET && resultCode == Activity.RESULT_OK){
             // AddMedicineTimeSetActivity 에서 call back
-            val hour = data!!.getIntExtra("hour", -1)
-            val min = data.getIntExtra("min", -1)
-            val count = data.getDoubleExtra("count", -1.0)
-            val type = data.getStringExtra("type")
-            if(hour!=-1 && min!=-1 && count!=-1.0 && type!=null) {
-                val newAlarmInfo = AlarmInfo(
-                    alarm_hour = hour,
-                    alarm_min = min,
-                    medicine_count = count,
-                    medicine_type = type
-                )
+            val newAlarmInfo = data?.getSerializableExtra("alarmInfo") as AlarmInfo
+            if(newAlarmInfo!=null){
                 alarmAdapter.addItem(newAlarmInfo)
                 alarmAdapter.notifyAdapter()
             }
@@ -159,6 +154,8 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         super.onBackPressed()
         // 뒤로가기 핸드폰 버튼 클릭 시
         overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+        setResult(Activity.RESULT_CANCELED, intent)
+        finish()
     }
 
 
