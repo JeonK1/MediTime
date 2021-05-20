@@ -33,7 +33,8 @@ import kotlin.properties.Delegates
 
 class NoticeFragment : Fragment() {
 
-    val ADD_MEDICINE = 103;
+    val ADD_MEDICINE = 103
+    val ADD_MEDICINE_MODIFY = 104
 
     //알람 Fragment RecyclerView를 위한 변수들
     lateinit var recyclerView: RecyclerView
@@ -62,6 +63,10 @@ class NoticeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dbHelperInit()
+        fragment_init()
+    }
+
+    fun fragment_init(){
         updateNoticeItems()
         recyclerViewInit()
         clickListenerInit()
@@ -127,6 +132,7 @@ class NoticeFragment : Fragment() {
         add_medi_btn.setOnClickListener {
             // 약품추가 버튼 클릭 시, AddMedicineDateActivity 실행
             val intent = Intent(context, AddMedicineDateActivity::class.java)
+            intent.putExtra("type", "add")
             startActivityForResult(intent, ADD_MEDICINE)
         }
         mediAdapter.itemClickListener = object : NoticeAdapter.OnItemClickListener {
@@ -162,6 +168,30 @@ class NoticeFragment : Fragment() {
                 if (set_cycle == 0)
                     mDialogView.tv_alarmsetdlg_cycle_type.text = "매일"
                 else {
+                    when {
+                        re_type == 0 && re_cycle != null -> {
+                            // 요일 반복
+                            val dayofweek_info = arrayListOf("일", "월", "화", "수", "목", "금", "토")
+                            val dayofweek_flag = convert_Int_to_arrayList(re_cycle)
+                            // 매주 무슨요일 반복인지 문자열 만들어주기
+                            var tmp_str = "매주["
+                            var cnt = 0
+                            for (i in 0 until 7) {
+                                if (dayofweek_flag[i]) {
+                                    if (cnt++ == 0)
+                                        tmp_str += dayofweek_info[i]
+                                    else
+                                        tmp_str += ", ${dayofweek_info[i]}"
+                                }
+                            }
+                            tmp_str += "]"
+                            mDialogView.tv_alarmsetdlg_cycle_type.text = tmp_str
+                        }
+                        re_type == 1 -> mDialogView.tv_alarmsetdlg_cycle_type.text =
+                            "${re_cycle}일 간격" // 일 반복
+                        re_type == 2 -> mDialogView.tv_alarmsetdlg_cycle_type.text =
+                            "${re_cycle}개월 간격" // 개월 반복
+                    }
                     when {
                         re_type == 0 && re_cycle != null -> {
                             // 요일 반복
@@ -255,7 +285,6 @@ class NoticeFragment : Fragment() {
                 }
 
                 mDialogView.btn_alarmsetdlg_save.setOnClickListener {
-                    // todo : dialog 끄는거 추가해야함
                     // recyclerview item에 적용
                     holder.call_flag = cur_call_flag
                     holder.bell_flag = cur_bell_flag
@@ -280,18 +309,26 @@ class NoticeFragment : Fragment() {
                     val medi_no = item[position].medi_no
                     dbCreater.set_call_state(medi_no, holder.call_flag)
                     dbCreater.set_normal_state(medi_no, holder.bell_flag)
-
                     mAlertDialog.cancel() // dialog 종료
                 }
 
                 mDialogView.tv_alarmsetdlg_delete.setOnClickListener {
-                    // todo : 삭제 기능
-                    Toast.makeText(context, "삭제 버튼 눌렀군요. 아직 개발중입니다.", Toast.LENGTH_SHORT).show()
+                    // 삭제 버튼 클릭 시
+                    val medi_no = item[position].medi_no
+                    val medi_name = item[position].medi_name
+                    dbCreater.delete_medicine_by_id(medi_no)
+                    Toast.makeText(context, "${medi_name} 알람이 제거되었습니다.", Toast.LENGTH_SHORT).show()
+                    fragment_init()
+                    mAlertDialog.cancel() // dialog 종료
                 }
 
                 mDialogView.tv_alarmsetdlg_modify.setOnClickListener {
-                    // todo : 수정 기능
-                    Toast.makeText(context, "수정 버튼 눌렀군요. 아직 개발중입니다.", Toast.LENGTH_SHORT).show()
+                    // 수정 버튼 클릭 시
+                    mAlertDialog.cancel() // dialog 종료
+                    val intent = Intent(context, AddMedicineDateActivity::class.java)
+                    intent.putExtra("type", "modify")
+                    intent.putExtra("medi_no", medi_no)
+                    startActivityForResult(intent, ADD_MEDICINE_MODIFY)
                 }
             }
 
@@ -391,10 +428,17 @@ class NoticeFragment : Fragment() {
             // 약품 추가 버튼
             if (resultCode == Activity.RESULT_OK) {
                 // 완료버튼을 눌러서 나온 경우
-                updateNoticeItems()
-                recyclerViewInit()
+                fragment_init()
                 Toast.makeText(context, "새로운 알림이 등록되었습니다", Toast.LENGTH_SHORT).show()
+            }
+        } else if(requestCode == ADD_MEDICINE_MODIFY){
+            // 약품 수정 버튼
+            if (resultCode == Activity.RESULT_OK) {
+                // 완료버튼을 눌러서 나온 경우
+                fragment_init()
+                Toast.makeText(context, "알림이 정상적으로 수정되었습니다", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 }

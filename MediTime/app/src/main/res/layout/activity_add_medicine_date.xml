@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="20dp"
-                    android:visibility="visible">
+                    android:visibility="invisible">
 
                     <LinearLayout
                         android:id="@+id/rl_addmedidate_startdate"

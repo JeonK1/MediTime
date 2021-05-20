@@ -66,7 +66,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
     fun putExample(){
         insertColumn_table1("영양제1", "1", "2021-03-17", "1", "1", "0", "1")
         insertColumn_table1( "영양제2", "1", "2021-04-16", "1", "5", "0", "1")
-        insertColumn_table1( "영양제3", "1", "2021-05-22", "2", "21", "0", "1")
+        insertColumn_table1( "영양제3", "1", "2021-05-22", "0", "21", "0", "1")
         insertColumn_table2( "1", "1.25", "정", "2021-03-17 13:30:00", "2021-03-17 13:30:00", "0")
         insertColumn_table2( "2", "1", "봉지", "2021-04-16 09:00:00", "2021-04-16 09:00:00", "0")
         insertColumn_table2( "2", "2", "봉지", "2021-04-16 21:00:00", "2021-04-16 21:00:00", "0")
@@ -151,6 +151,11 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         db.execSQL(query)
     }
 
+    // medi_no 에 해당하는 alarm 모두 제거
+    fun delete_alarm_all_by_medi_no(no: Int){
+        deleteColumn("table2", "medi_no=${no}")
+    }
+
     // medi_no 에 해당하는 alarm의 개수 반환
     fun get_alarm_cnt_by_medi_no(no: Int): Int {
         var query = "SELECT * FROM table2 WHERE medi_no = ${no}"
@@ -194,4 +199,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
             updateColumn("table1","normal_alart=0", "medi_no=${medi_no}")
     }
 
+    fun delete_medicine_by_id(medi_no: Int){
+        deleteColumn("table1", "medi_no=${medi_no}")
+    }
 }
