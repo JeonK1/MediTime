@@ -5,14 +5,22 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
+import androidx.core.content.ContextCompat
+import com.example.meditime.Database.DBCreater
+import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_date.*
+import kotlinx.android.synthetic.main.activity_add_medicine_time.*
+import kotlinx.android.synthetic.main.alarm_set_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_day_dialog.view.tv_cyclepickdig_day_day
 import kotlinx.android.synthetic.main.custom_cyclepicker_dayofweek_dialog.view.*
 import kotlinx.android.synthetic.main.custom_cyclepicker_type_dialog.view.*
 import kotlinx.android.synthetic.main.custom_datepicker_dialog.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 
@@ -24,18 +32,110 @@ import kotlin.math.pow
 class AddMedicineDateActivity : AppCompatActivity() {
 
     val ADD_MEDICINE_TIME = 200
+
+    var simpleDateFormat = SimpleDateFormat("yyyy. MM. dd. ")
+    var start_date = "${simpleDateFormat.format(Date())}"
+    var medi_name = ""
     var set_cycle = 0
     var re_type = 0 // 특정요일(0), 일간격(1), 주간격(1), 개월간격(2)
     var dayofweek_flag = arrayListOf(false, false, false, false, false, false, false) // 특정요일 반복 위한 선택여부 배열 (일 ~ 토)
     var day_flag = arrayOf(0, 0) // N일, type(일간격, 주간격, 월간격)
 
+    var type = "" // modify(수정) | add(추가)
+    var medi_no:Int = -1 // 수정 하러 넘어온 것 일 때의 medi_no 값
+
+    //데이터 베이스 사용
+    lateinit var dbHelper: DBHelper
+    lateinit var dbCreater: DBCreater
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medicine_date)
+        dbHelperInit()
+        getIntentData()
+        if(type=="modify")
+            setDesignInit() // 수정하기로 넘어온 것이면, 넘어온 데이터 바탕으로 재구성
+        okButtonInit()
         listenerInit()
     }
 
+    private fun okButtonInit() {
+        // OK 버튼, 약품 이름을 작성 안했으면 비활성화하기
+        if(et_addmedidate_name.text.length==0) {
+            btn_addmedidate_next.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.colorGrayDark2)
+            btn_addmedidate_next.isEnabled = false
+        } else {
+            btn_addmedidate_next.backgroundTintList =
+                ContextCompat.getColorStateList(this, R.color.colorBlue)
+            btn_addmedidate_next.isEnabled = true
+        }
+    }
+
+    private fun setDesignInit() {
+        et_addmedidate_name.setText(medi_name) // 약품 이름
+        setButtonType(set_cycle==0) // 매일, 맞춤 버튼
+        val tmp_list = start_date.split(". ")
+        updateDateTextView(tmp_list[0].toInt(), tmp_list[1].toInt(), tmp_list[2].toInt()) // 시작 날짜
+        if (re_type==0)
+            updateTypeTextView("특정 요일")
+        else
+            updateTypeTextView("일 간격")
+    }
+
+    private fun dbHelperInit() {
+        dbHelper = DBHelper(this, "MediDB.db", null, 1)
+        dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
+    }
+
+    private fun getIntentData() {
+        type = intent.getStringExtra("type").toString()
+        if(type=="modify"){
+            // 수정을 위한 화면 일 때
+            medi_no = intent.getIntExtra("medi_no", -1)
+            val cursor = dbCreater.selectColumn("table1", "*", "medi_no=${medi_no}")
+            cursor.moveToFirst()
+            medi_name = cursor.getString(cursor.getColumnIndex("medi_name"))
+            set_cycle = cursor.getInt(cursor.getColumnIndex("set_cycle"))
+            val tmp_list = cursor.getString(cursor.getColumnIndex("start_date")).split("-")
+            start_date = "${tmp_list[0]}. ${tmp_list[1]}. ${tmp_list[2]}. "
+            re_type = cursor.getInt(cursor.getColumnIndex("re_type"))
+            val re_cycle = cursor.getInt(cursor.getColumnIndex("re_cycle"))
+            when {
+                re_type == 0 && re_cycle != null -> {
+                    // 요일 반복
+                    dayofweek_flag = convert_Int_to_arrayList(re_cycle)
+                }
+                re_type == 1 && re_cycle%7!=0 -> {
+                    // 일 반복
+                    day_flag[0] = re_cycle
+                    day_flag[1] = 0
+                }
+                re_type == 1 && re_cycle%7==0 -> {
+                    // 주 반복
+                    day_flag[0] = re_cycle/7
+                    day_flag[1] = 1
+                }
+                re_type == 2 -> {
+                    // 개월 반복
+                    day_flag[0] = re_cycle
+                    day_flag[1] = 2
+                }
+            }
+        }
+    }
+
     private fun listenerInit() {
+        et_addmedidate_name.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun afterTextChanged(p0: Editable?) {
+                okButtonInit()
+            }
+
+        })
         ib_addmedidate_backbtn.setOnClickListener {
             // 뒤로가기 버튼 클릭 시
             finish()
@@ -43,12 +143,10 @@ class AddMedicineDateActivity : AppCompatActivity() {
         btn_addmedidate_everyday.setOnClickListener {
             // 매일 버튼 클릭 시
             setButtonType(true)
-            ll_addmedidate_custom.visibility = View.INVISIBLE
         }
         btn_addmedidate_custom.setOnClickListener {
             // 맞춤 버튼 클릭 시
             setButtonType(false)
-            ll_addmedidate_custom.visibility = View.VISIBLE
         }
         btn_addmedidate_next.setOnClickListener {
             // 다음 버튼 클릭 시
@@ -63,9 +161,12 @@ class AddMedicineDateActivity : AppCompatActivity() {
 
             // AddMedicineTimeActivity로 넘길 정보 구성하기
             val intent = Intent(this, AddMedicineTimeActivity::class.java)
-            intent.putExtra("medi_name", et_addmedidate_name.text.toString())
+            medi_name = et_addmedidate_name.text.toString()
+            intent.putExtra("type", type)
+            intent.putExtra("medi_no", medi_no)
+            intent.putExtra("medi_name", medi_name)
             intent.putExtra("set_cycle", set_cycle)
-            intent.putExtra("start_date", tv_addmedidate_startdate.text.toString())
+            intent.putExtra("start_date", start_date)
             intent.putExtra("re_type", re_type)
             intent.putExtra("re_cycle", re_cycle)
             startActivityForResult(intent, ADD_MEDICINE_TIME)
@@ -198,6 +299,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
             btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorWhite))
             btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_off)
             btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorBlueLight))
+            ll_addmedidate_custom.visibility = View.INVISIBLE
         } else {
             // 맞춤 버튼 눌렀을 때
             set_cycle = 1
@@ -205,6 +307,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
             btn_addmedidate_everyday.setTextColor(resources.getColor(R.color.colorBlueLight))
             btn_addmedidate_custom.setBackgroundResource(R.drawable.btn_rect_on)
             btn_addmedidate_custom.setTextColor(resources.getColor(R.color.colorWhite))
+            ll_addmedidate_custom.visibility = View.VISIBLE
         }
     }
 
@@ -226,7 +329,8 @@ class AddMedicineDateActivity : AppCompatActivity() {
         val now_year = "%d".format(year)
         val now_month = "%02d".format(month)
         val now_day = "%02d".format(day)
-        tv_addmedidate_startdate.text = "${now_year}. ${now_month}. ${now_day}"
+        start_date = "${now_year}. ${now_month}. ${now_day}. "
+        tv_addmedidate_startdate.text = start_date
     }
 
     fun updateTypeTextView(type:String){
@@ -250,6 +354,25 @@ class AddMedicineDateActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    fun convert_Int_to_arrayList(re_cycle: Int): ArrayList<Boolean> {
+        var dayofweek_flag = arrayListOf(
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        ) // 특정요일 반복 위한 선택여부 배열 (일 ~ 토)
+        var re_cycle_cpy = re_cycle
+        for (i in 0 until 7) {
+            if (re_cycle_cpy % 2 == 1)
+                dayofweek_flag[6 - i] = true
+            re_cycle_cpy /= 2
+        }
+        return dayofweek_flag
     }
 
 }

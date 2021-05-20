@@ -32,11 +32,11 @@
         <FrameLayout
             android:id="@+id/mainFragment"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="match_parent"
             android:layout_above="@id/bottomNavigationView"
             android:layout_below="@id/tv_topMenu_wrapper" />
 
-        
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
