@@ -112,7 +112,7 @@ class NoticeFragment : Fragment() {
 
                 // 내용 적용
                 mDialogView.tv_alarmsetdlg_name.text = holder.medi_name.text
-                mDialogView.tv_alarmsetdlg_cycle_cnt.text = "1일 ${alarm_cnt}회 복용"
+                mDialogView.tv_alarmsetdlg_cycle_cnt.text = "1회 ${alarm_cnt}번 복용"
                 if (set_cycle == 0)
                     mDialogView.tv_alarmsetdlg_cycle_type.text = "매일"
                 else {
