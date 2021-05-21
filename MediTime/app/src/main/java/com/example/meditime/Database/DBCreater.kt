@@ -2,11 +2,8 @@ package com.example.meditime.Database
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.example.meditime.Database.DBHelper
-import com.example.meditime.Model.AlarmInfo
-import com.example.meditime.NoticeInfo
-import com.example.meditime_local.Fragment.NoticeFragment
-import kotlin.properties.Delegates
+import com.example.meditime.Model.NoticeInfo
+import com.example.meditime.Model.NoticeAlarmInfo
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -105,6 +102,45 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         return db.rawQuery(query, null)
     }
 
+    fun get_noticeinfo2_all(): ArrayList<NoticeInfo>{
+        val noticeinfo2_list = ArrayList<NoticeInfo>()
+        val query = "SELECT * FROM table1"
+        val tb1_cursor = db.rawQuery(query, null)
+        tb1_cursor.moveToFirst()
+        do {
+            // medi_no 에 해당하는 모든 table2 데이터 가져오기
+            val time_list = ArrayList<NoticeAlarmInfo>()
+            val query2 = "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
+            val tb2_cursor = db.rawQuery(query2, null)
+            tb2_cursor.moveToFirst()
+            do {
+                time_list.add(
+                    NoticeAlarmInfo(
+                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
+                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
+                        set_amount = tb2_cursor.getDouble(tb2_cursor.getColumnIndex("set_amount")),
+                        set_type = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_type")),
+                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
+                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
+                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+                ))
+            }while (tb2_cursor.moveToNext())
+            noticeinfo2_list.add(
+                NoticeInfo(
+                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
+                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
+                    set_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("set_cycle")),
+                    start_date = tb1_cursor.getString(tb1_cursor.getColumnIndex("start_date")),
+                    re_type = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_type")),
+                    re_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_cycle")),
+                    call_alart = tb1_cursor.getInt(tb1_cursor.getColumnIndex("call_alart")),
+                    normal_alart =  tb1_cursor.getInt(tb1_cursor.getColumnIndex("normal_alart")),
+                    time_list = time_list
+
+            ))
+        }while (tb1_cursor.moveToNext())
+        return noticeinfo2_list
+    }
 
     //데이터 검색
     fun selectColumn(mytable: String, select:String, condition:String): Cursor {
@@ -163,26 +199,6 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         return cursor.count
     }
 
-    // medi_no 에 해당하는 alarm 모두 반환
-    fun get_alarm_by_medi_no(no: Int): ArrayList<AlarmInfo> {
-        var cursor = selectColumn("table2", "*", "medi_no=${no}")
-        val alarm_list = ArrayList<AlarmInfo>()
-        cursor.moveToFirst()
-        do {
-            //알람 데이터들을 위한 변수들
-            val set_time = cursor.getString(cursor.getColumnIndex("set_date")).split(" ")[1]
-            alarm_list.add(
-                AlarmInfo(
-                    alarm_hour = set_time.split(":")[0].toInt(),
-                    alarm_min = set_time.split(":")[1].toInt(),
-                    medicine_count = cursor.getDouble(cursor.getColumnIndex("set_amount")),
-                    medicine_type = cursor.getString(cursor.getColumnIndex("set_type"))
-            ))
-        }while (cursor.moveToNext())
-        cursor.close()
-        return alarm_list
-    }
-
     // table1의 전화알람 정보 업데이트
     fun set_call_state(medi_no:Int, flag:Boolean) {
         if(flag)
@@ -201,5 +217,6 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
     fun delete_medicine_by_id(medi_no: Int){
         deleteColumn("table1", "medi_no=${medi_no}")
+        deleteColumn("table2", "medi_no=${medi_no}")
     }
 }

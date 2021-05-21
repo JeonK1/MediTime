@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meditime.Model.AlarmInfo
+import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.R
 
-class AlarmSetDlgAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<AlarmSetDlgAdapter.MyViewHolder>() {
+class AlarmSetDlgAdapter(val items:ArrayList<NoticeAlarmInfo>): RecyclerView.Adapter<AlarmSetDlgAdapter.MyViewHolder>() {
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         var alarm_time: TextView = itemView.findViewById(R.id.tv_alarmitem_time)
         var alarm_count: TextView = itemView.findViewById(R.id.tv_alarmitem_count)
@@ -24,12 +24,13 @@ class AlarmSetDlgAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<A
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val time_list = items[position].set_date.split(" ")[1].split(":")
         var am_pm = ""
-        var hour = items[position].alarm_hour
-        var min = items[position].alarm_min
-        var type = items[position].medicine_type
+        var hour = time_list[0].toInt()
+        var min = time_list[1].toInt()
+        var type = items[position].set_type
 
-        if(items[position].alarm_hour>12){
+        if(hour>12){
             am_pm = "오후"
             hour -= 12
         } else {
@@ -37,16 +38,16 @@ class AlarmSetDlgAdapter(val items:ArrayList<AlarmInfo>): RecyclerView.Adapter<A
         }
 
         holder.alarm_time.text = "${am_pm} ${hour}:${"%02d".format(min)}"
-        holder.alarm_count.text = "1일 ${items[position].medicine_count}${type} 복용"
+        holder.alarm_count.text = "1일 ${items[position].set_amount}${type} 복용"
     }
 
-    fun addItem(item: AlarmInfo){
+    fun addItem(item: NoticeAlarmInfo){
         items.add(item)
     }
     fun notifyAdapter(){
         notifyDataSetChanged()
     }
-    fun getItem(position: Int): AlarmInfo {
+    fun getItem(position: Int): NoticeAlarmInfo {
         return items[position]
     }
     fun deleteItem(position: Int){

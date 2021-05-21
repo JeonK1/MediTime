@@ -5,15 +5,13 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import androidx.core.widget.addTextChangedListener
-import com.example.meditime.Model.AlarmInfo
+import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_add_medicine_time_set.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /*********************************
  * 화면 #3-2-2 시간설정
@@ -74,13 +72,19 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
         }
         btn_addmeditime_set_ok.setOnClickListener {
             // 설정 버튼
+            // set_date 설정
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val curDate = Date()
+            curDate.hours = tp_addmeditime_set_timepicker.currentHour
+            curDate.minutes = tp_addmeditime_set_timepicker.currentMinute
+            curDate.seconds = 0
+            
             val intent = Intent()
             val bundle = Bundle()
-            bundle.putSerializable("alarmInfo", AlarmInfo(
-                alarm_hour = tp_addmeditime_set_timepicker.currentHour,
-                alarm_min = tp_addmeditime_set_timepicker.currentMinute,
-                medicine_count = medicine_count,
-                medicine_type = sp_addmeditime_set_spinner.selectedItem.toString()
+            bundle.putSerializable("noticeInfo3", NoticeAlarmInfo(
+                set_amount = medicine_count,
+                set_type = sp_addmeditime_set_spinner.selectedItem.toString(),
+                set_date = simpleDateFormat.format(curDate)
             ))
             intent.putExtras(bundle)
             setResult(Activity.RESULT_OK, intent)
