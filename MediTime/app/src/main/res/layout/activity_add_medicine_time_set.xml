@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="약 알람 추가" />
+                    android:text="알림 정보 추가" />
             </FrameLayout>
         </LinearLayout>
 
