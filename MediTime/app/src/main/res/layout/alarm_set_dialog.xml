@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            tools:text="1일 2회 복용" />
+            tools:text="1회 2번 복용" />
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_cycle_type"

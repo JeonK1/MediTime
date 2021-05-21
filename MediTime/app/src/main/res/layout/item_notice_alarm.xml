@@ -45,11 +45,11 @@
         android:layout_marginTop="10dp">
 
         <TextView
-            android:id="@+id/tv_time"
+            android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            tools:text="오전 8:00" />
+            tools:text="1일 2회 복용" />
 
         <TextView
             android:id="@+id/tv_cycle"

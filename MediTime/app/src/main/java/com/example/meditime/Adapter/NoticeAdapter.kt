@@ -7,8 +7,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meditime.NoticeInfo
+import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.R
+import com.example.meditime.Util.DowConverterFactory
 
 class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
     RecyclerView.Adapter<NoticeAdapter.MyViewHolder>() {
@@ -22,13 +23,9 @@ class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
     var itemClickListener: NoticeAdapter.OnItemClickListener?=null // 버튼클릭 listener
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        var title: TextView = itemView.findViewById(R.id.item_title)
-//        var context: TextView = itemView.findViewById(R.id.item_context)
-//        var icon: ImageView = itemView.findViewById(R.id.item_icon)
-
         var medi_name: TextView = itemView.findViewById(R.id.tv_name)
-        var medi_time: TextView = itemView.findViewById(R.id.tv_time)
         var medi_cycle: TextView = itemView.findViewById(R.id.tv_cycle)
+        var medi_count:TextView = itemView.findViewById(R.id.tv_count)
         var medi_bell: ImageButton = itemView.findViewById(R.id.ib_bell)
         var medi_call: ImageButton = itemView.findViewById(R.id.ib_call)
         var bell_flag = false
@@ -61,26 +58,16 @@ class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
     }
 
     override fun onBindViewHolder(holder: NoticeAdapter.MyViewHolder, position: Int) {
-        var set_time = items[position].set_date.split(" ")[1]
-        var hour = set_time.split(":")[0].toInt()
-        var min = set_time.split(":")[1].toInt()
-        var am_pm = ""
         var name = items[position].medi_name
         var set_cycle = items[position].set_cycle
         var re_type = items[position].re_type
         var re_cycle = items[position].re_cycle
         var call_alart = items[position].call_alart
         var normal_alart = items[position].normal_alart
+        var day_of_count = items[position].time_list.size
 
-        if (hour > 12) {
-            am_pm = "오후"
-            hour -= 12
-        } else {
-            am_pm = "오전"
-        }
-
-        holder.medi_time.text = "${am_pm} ${hour}:${"%02d".format(min)}"
         holder.medi_name.text = name
+        holder.medi_count.text = "1일 ${day_of_count}회 복용"
         if (call_alart == 0) {
             holder.medi_call.backgroundTintList =
                 ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
@@ -107,7 +94,7 @@ class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
                 re_type==0 && re_cycle!=null -> {
                     // 요일 반복
                     val dayofweek_info = arrayListOf("일", "월", "화", "수", "목", "금", "토")
-                    val dayofweek_flag =  convert_Int_to_arrayList(re_cycle)
+                    val dayofweek_flag = DowConverterFactory.convert_int_to_arrayList(re_cycle)
                     // 매주 무슨요일 반복인지 문자열 만들어주기
                     var tmp_str = "매주["
                     var cnt=0
@@ -128,17 +115,6 @@ class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
         }
     }
 
-    fun convert_Int_to_arrayList(re_cycle: Int): ArrayList<Boolean> {
-        var dayofweek_flag = arrayListOf(false, false, false, false, false, false, false) // 특정요일 반복 위한 선택여부 배열 (일 ~ 토)
-        var re_cycle_cpy = re_cycle
-        for (i in 0 until 7){
-            if(re_cycle_cpy%2==1)
-                dayofweek_flag[6-i]=true
-            re_cycle_cpy/=2
-        }
-        return dayofweek_flag
-    }
-
     fun getItems(position: Int): NoticeInfo {
         return items[position]
     }
@@ -147,7 +123,7 @@ class NoticeAdapter(val items: ArrayList<NoticeInfo>) :
         items.removeAt(position)
     }
 
-    fun addItem(NoticeInfo: NoticeInfo) {
-        items.add(NoticeInfo)
+    fun addItem(noticeInfo: NoticeInfo) {
+        items.add(noticeInfo)
     }
 }
