@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp">
     <TextView
-        android:id="@+id/item_title"
+        android:id="@+id/TodayItem_MediName"
         android:text="알람 제목"
         android:textColor="@android:color/black"
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
     <TextView
-        android:id="@+id/item_context"
+        android:id="@+id/TodayItem_SetTime"
         android:text="매일-오전8:00"
         android:textColor="@android:color/black"
         android:layout_width="wrap_content"
