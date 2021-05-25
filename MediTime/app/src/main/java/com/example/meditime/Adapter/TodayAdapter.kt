@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Model.TodayInfo
 import com.example.meditime.R
-
+import kotlinx.android.synthetic.main.alarm_set_dialog.view.*
 class TodayAdapter(val items: ArrayList<TodayInfo>) :
     RecyclerView.Adapter<TodayAdapter.MyViewHolder>() {
 
@@ -53,8 +54,18 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
         var name = items[position].medi_name
         var timeInfoList = items[position].time_list
 
-        for (i in 0 until timeInfoList.size){
-            val setdateTime = timeInfoList[i].set_date.split(" ")[1].split(":")
+        // 여러개의 복용시간 추가를 위한 RecyclerView
+
+        /**
+        val addTakeNumAdapter = TodayTakeNumAdapter(items[position].time_list)
+
+        mDialogView.rv_alarmsetdlg_cycle.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        mDialogView.rv_alarmsetdlg_cycle.adapter = addTakeNumAdapter
+ **/
+//        for (i in 0 until timeInfoList.size){
+
+            val setdateTime = timeInfoList[0].set_date.split(" ")[1].split(":")
             var am_pm = ""
             var hour = setdateTime[0].toInt()
             var min = setdateTime[1].toInt()
@@ -66,18 +77,20 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
                 am_pm = "오전"
             }
 
-            if(timeInfoList[i].set_check == 1){
+            if(timeInfoList[0].set_check == 1){
                 holder.takeCheck.text = "복용완료"
             }
-            else if(timeInfoList[i].set_check == -1){
+            else if(timeInfoList[0].set_check == -1){
+
                 holder.takeCheck.text = "복용안함"
             }
 
             holder.alarmTime.text = "${am_pm} ${hour}:${"%02d".format(min)}"
 
-        }
+
 
         holder.medi_name.text = name
+
 
     }
 
