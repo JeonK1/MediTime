@@ -54,9 +54,9 @@ class TodayFragment : Fragment() {
     }
 
     fun recyclerViewInit() {
-/*        alarmAdapter = TodayAdapter(dbCreater.get_noticeinfo2_all())
-        recyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = alarmAdapter*/
+//        alarmAdapter = TodayAdapter(dbCreater.get_noticeinfo2_all())
+//        recyclerView.layoutManager =
+//            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        recyclerView.adapter = alarmAdapter*/
     }
 }
