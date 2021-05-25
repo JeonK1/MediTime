@@ -14,18 +14,22 @@
         <LinearLayout
             android:id="@+id/tv_topMenu_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="180dp"
             android:layout_alignParentTop="true"
-            android:background="@android:color/holo_blue_dark"
+            android:gravity="center"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="10dp"
+            style="@style/style_nav_button"
+            >
 
             <TextView
                 android:id="@+id/tv_topMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:textColor="@android:color/white"
-                android:textSize="13dp"
+                android:text="오늘"
+                android:textSize="24dp"
                 android:textStyle="bold" />
         </LinearLayout>
 

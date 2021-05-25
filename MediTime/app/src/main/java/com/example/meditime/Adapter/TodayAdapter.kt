@@ -43,6 +43,8 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
     ): TodayAdapter.MyViewHolder {
         val v = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_today_alarm, parent, false)
+        v.apply { clipToOutline = true }
+
         return MyViewHolder(v)
     }
 
