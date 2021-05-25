@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.Model.TodayInfo
+import com.example.meditime.Model.TodayTimeInfo
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -144,9 +145,41 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         return noticeinfo2_list
     }
 
-/*    fun get_TodayInfo(): ArrayList<TodayInfo>{
-        
-    }*/
+    // '오늘'화면에 필요한 데이터들을 가져오기
+    fun get_TodayInfo_all(): ArrayList<TodayInfo>{
+        val todayInfoList = ArrayList<TodayInfo>()
+        val query = "SELECT * FROM table1"
+        val tb1_cursor = db.rawQuery(query, null)
+        tb1_cursor.moveToFirst()
+
+        do {
+            // medi_no 에 해당하는 모든 table2 데이터 가져오기
+            val todayTimeList = ArrayList<TodayTimeInfo>()
+            val query2 = "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
+            val tb2_cursor = db.rawQuery(query2, null)
+            tb2_cursor.moveToFirst()
+            do {
+                todayTimeList.add(
+                    TodayTimeInfo(
+                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
+                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
+                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
+                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
+                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+                    )
+                )
+            }while (tb2_cursor.moveToNext())
+
+            todayInfoList.add(
+                TodayInfo(
+                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
+                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
+                    time_list = todayTimeList
+                )
+            )
+        }while (tb1_cursor.moveToNext())
+        return todayInfoList
+    }
 
     //데이터 검색
     fun selectColumn(mytable: String, select:String, condition:String): Cursor {

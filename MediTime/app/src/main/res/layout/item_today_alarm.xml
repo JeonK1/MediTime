@@ -43,7 +43,7 @@
         android:background="#3F51B5"
         >
         <TextView
-            android:id="@+id/TodayItem_takeTime"
+            android:id="@+id/TodayItem_takeCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

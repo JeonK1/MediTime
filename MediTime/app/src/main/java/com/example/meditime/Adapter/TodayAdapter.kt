@@ -3,14 +3,10 @@ package com.example.meditime.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.Model.TodayInfo
 import com.example.meditime.R
-import com.example.meditime.Util.DowConverterFactory
 
 class TodayAdapter(val items: ArrayList<TodayInfo>) :
     RecyclerView.Adapter<TodayAdapter.MyViewHolder>() {
@@ -25,8 +21,8 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var medi_name: TextView = itemView.findViewById(R.id.TodayItem_mediName)
-        var AlarmTime: TextView = itemView.findViewById(R.id.TodayItem_setTime)
-
+        var alarmTime: TextView = itemView.findViewById(R.id.TodayItem_setTime)
+        var takeCheck: TextView = itemView.findViewById(R.id.TodayItem_takeCheck)
 //        init {
 //            medi_bell.setOnClickListener {
 //                itemClickListener?.OnBellBtnClick(this, it, adapterPosition)
@@ -54,11 +50,34 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
     }
 
     override fun onBindViewHolder(holder: TodayAdapter.MyViewHolder, position: Int) {
-        var name = items[position].medi_no
-        var set_date = items[position].set_date
+        var name = items[position].medi_name
+        var timeInfoList = items[position].time_list
 
-        holder.medi_name.text = name.toString()
-        holder.AlarmTime.text = set_date
+        for (i in 0 until timeInfoList.size){
+            val setdateTime = timeInfoList[i].set_date.split(" ")[1].split(":")
+            var am_pm = ""
+            var hour = setdateTime[0].toInt()
+            var min = setdateTime[1].toInt()
+
+            if(hour>12){
+                am_pm = "오후"
+                hour -= 12
+            } else {
+                am_pm = "오전"
+            }
+
+            if(timeInfoList[i].set_check == 1){
+                holder.takeCheck.text = "복용완료"
+            }
+            else if(timeInfoList[i].set_check == -1){
+                holder.takeCheck.text = "복용안함"
+            }
+
+            holder.alarmTime.text = "${am_pm} ${hour}:${"%02d".format(min)}"
+
+        }
+
+        holder.medi_name.text = name
 
     }
 
