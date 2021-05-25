@@ -27,10 +27,11 @@
                 <Button
                     android:id="@+id/add_medi_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="108dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="+약품추가" />
+                    android:background="#FFFFFF"
+                    android:drawableStart="@drawable/button_image" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
