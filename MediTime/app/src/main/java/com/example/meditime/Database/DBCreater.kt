@@ -2,10 +2,8 @@ package com.example.meditime.Database
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.example.meditime.Model.NoticeInfo
-import com.example.meditime.Model.NoticeAlarmInfo
-import com.example.meditime.Model.TodayInfo
-import com.example.meditime.Model.TodayTimeInfo
+import com.example.meditime.ManageInfo
+import com.example.meditime.Model.*
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -179,6 +177,41 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
             )
         }while (tb1_cursor.moveToNext())
         return todayInfoList
+    }
+
+    fun get_ManageInfo_all(): ArrayList<ManageInfo>{
+        val ManageInfoList = ArrayList<ManageInfo>()
+        val query = "SELECT * FROM table1"
+        val tb1_cursor = db.rawQuery(query, null)
+        tb1_cursor.moveToFirst()
+
+        do {
+            // medi_no 에 해당하는 모든 table2 데이터 가져오기
+            val ManageTimeList = ArrayList<ManageTimeInfo>()
+            val query2 = "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
+            val tb2_cursor = db.rawQuery(query2, null)
+            tb2_cursor.moveToFirst()
+            do {
+                ManageTimeList.add(
+                    ManageTimeInfo(
+                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
+                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
+                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
+                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
+                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+                    )
+                )
+            }while (tb2_cursor.moveToNext())
+
+            ManageInfoList.add(
+                ManageInfo(
+                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
+                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
+                    time_list = ManageTimeList
+                )
+            )
+        }while (tb1_cursor.moveToNext())
+        return ManageInfoList
     }
 
     //데이터 검색
