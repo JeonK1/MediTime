@@ -8,7 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
 import com.example.meditime.Model.NoticeAlarmInfo
+import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.R
+import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 import kotlinx.android.synthetic.main.activity_add_medicine_time_set.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,12 +25,19 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
     val MEDICINE_INTERVAL = 0.25 // 약 먹는 개수 증가 폭
     var medicine_count = 1.0;
     var before_text = "" // 복용량 이전 텍스트 저장용 변수
+    var cur_noticeInfo = NoticeInfo()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medicine_time_set)
+        getIntentData()
         listenerInit()
         spinnerInit()
+    }
+
+    private fun getIntentData() {
+        // AddMedicineTimeActivity로부터 받은 데이터 적용하기
+        cur_noticeInfo = intent.getSerializableExtra("noticeInfo2") as NoticeInfo
     }
 
     private fun spinnerInit() {
@@ -73,8 +82,12 @@ class AddMedicineTimeSetActivity : AppCompatActivity() {
         btn_addmeditime_set_ok.setOnClickListener {
             // 설정 버튼
             // set_date 설정
+            val start_date_split = cur_noticeInfo.start_date.split("-")
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val curDate = Date()
+            curDate.year = start_date_split[0].toInt()-1900 // 1900 을 뺴줘야 현재 년도
+            curDate.month = start_date_split[1].toInt()-1 // 1 을 뺴줘야 현재 달
+            curDate.date = start_date_split[2].toInt()
             curDate.hours = tp_addmeditime_set_timepicker.currentHour
             curDate.minutes = tp_addmeditime_set_timepicker.currentMinute
             curDate.seconds = 0

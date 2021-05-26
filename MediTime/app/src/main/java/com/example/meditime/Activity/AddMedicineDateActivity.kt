@@ -119,7 +119,7 @@ class AddMedicineDateActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
         }
         rl_addmedidate_startdate.setOnClickListener {
-            // 시작 일정 있는 구간 클릭 시
+            // 시작 날짜 클릭 시
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.custom_datepicker_dialog, null)
             val mBuilder = AlertDialog.Builder(this).setView(mDialogView)
             val mAlertDialog = mBuilder.show()
