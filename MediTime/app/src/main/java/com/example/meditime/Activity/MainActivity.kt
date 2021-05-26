@@ -11,6 +11,7 @@ import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         dbCreater.createTable()
         dbCreater.deleteAllColumns_table("table1") // example data 중복 삽입 방지
         dbCreater.deleteAllColumns_table("table2") // example data 중복 삽입 방지
-//        dbCreater.deleteAllColumns_table("alarm_table") // example data 중복 삽입 방지
+        dbCreater.deleteAllColumns_table("alarm_table") // example data 중복 삽입 방지
         dbCreater.putExample()
     }
 

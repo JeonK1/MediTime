@@ -311,6 +311,39 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         db.execSQL(query)
     }
 
+    fun get_noticeAlarmInfo_by_alarm_no(alarm_no: Int):NoticeAlarmInfo{
+        // alarm_no 에 해당하는 NoticeAlarmInfo 반환
+        var query_get_time_no = "select * from alarm_table where alarm_no=${alarm_no}"
+        val cursor = db.rawQuery(query_get_time_no, null)
+        cursor.moveToFirst()
+        val time_no = cursor.getInt(cursor.getColumnIndex("time_no"))
+        val query_get_alarm_info = "select * from table2 where time_no=${time_no}"
+        val cursor2 = db.rawQuery(query_get_alarm_info, null)
+        cursor2.moveToFirst()
+        return NoticeAlarmInfo(
+            time_no = cursor2.getInt(cursor2.getColumnIndex("time_no")),
+            medi_no = cursor2.getInt(cursor2.getColumnIndex("medi_no")),
+            set_amount = cursor2.getDouble(cursor2.getColumnIndex("set_amount")),
+            set_type = cursor2.getString(cursor2.getColumnIndex("set_type")),
+            set_date = cursor2.getString(cursor2.getColumnIndex("set_date")),
+            take_date = cursor2.getString(cursor2.getColumnIndex("take_date")),
+            set_check = cursor2.getInt(cursor2.getColumnIndex("set_check"))
+        )
+    }
 
-
+    fun get_noticeInfo_by_medi_no(medi_no: Int): NoticeInfo{
+        var query_get_noticeInfo = "select * from table1 where medi_no=${medi_no}"
+        val cursor = db.rawQuery(query_get_noticeInfo, null)
+        cursor.moveToFirst()
+        return NoticeInfo(
+            medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+            medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+            set_cycle = cursor.getInt(cursor.getColumnIndex("set_cycle")),
+            start_date = cursor.getString(cursor.getColumnIndex("start_date")),
+            re_type = cursor.getInt(cursor.getColumnIndex("re_type")),
+            re_cycle = cursor.getInt(cursor.getColumnIndex("re_cycle")),
+            call_alart = cursor.getInt(cursor.getColumnIndex("call_alart")),
+            normal_alart = cursor.getInt(cursor.getColumnIndex("normal_alart"))
+        )
+    }
 }
