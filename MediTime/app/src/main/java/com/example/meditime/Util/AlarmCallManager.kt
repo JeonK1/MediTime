@@ -37,6 +37,7 @@ class AlarmCallManager(val context: Context) {
                           start_millis:Long,
                           interval_millis:Long){
         // 알람 반복 등록
+        Log.e(TAG, start_millis.toString())
         var alarmIntent = Intent(context, AlarmReceiver::class.java)
         alarmIntent.putExtra("id", alarm_id)
         alarmIntent.putExtra("title", title)
@@ -57,6 +58,7 @@ class AlarmCallManager(val context: Context) {
                           start_date_str:String,
                           interval_millis:Long){
         // 알람 반복 등록 by String(2020-03-12 20:30:55)
+        Log.e(TAG, start_date_str)
         val start_date_split = start_date_str.split(" ")[0].split("-")
         val start_time_split = start_date_str.split(" ")[1].split(":")
         val start_date = Date()
@@ -75,6 +77,7 @@ class AlarmCallManager(val context: Context) {
                  content:String = "약 먹을 시간이에요!!",
                  start_millis:Long){
         // 알람 반복 등록
+        Log.e(TAG, start_millis.toString())
         var alarmIntent = Intent(context, AlarmReceiver::class.java)
         alarmIntent.putExtra("id", alarm_id)
         alarmIntent.putExtra("title", title)
@@ -93,7 +96,16 @@ class AlarmCallManager(val context: Context) {
                  content:String = "약 먹을 시간이에요!!",
                  start_date_str:String){
         // 알람 반복 등록 by String(2020-03-12 20:30:55)
-        val start_date = Date(start_date_str)
+        Log.e(TAG, start_date_str)
+        val start_date_split = start_date_str.split(" ")[0].split("-")
+        val start_time_split = start_date_str.split(" ")[1].split(":")
+        val start_date = Date()
+        start_date.year = start_date_split[0].toInt() - 1900 // 1900 을 빼야 현재의 년도
+        start_date.month = start_date_split[1].toInt() - 1 // 1을 빼야 현재의 달
+        start_date.date = start_date_split[2].toInt()
+        start_date.hours = start_time_split[0].toInt()
+        start_date.minutes = start_time_split[1].toInt()
+        start_date.seconds = 0
         setAlarm(alarm_id, title, content, start_date.time)
     }
 
@@ -106,5 +118,4 @@ class AlarmCallManager(val context: Context) {
             Log.e(TAG, "alarmManager cancel (id: ${alarm_id})")
         }
     }
-
 }

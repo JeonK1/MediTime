@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meditime.*
@@ -14,7 +15,9 @@ import com.example.meditime.Database.DBHelper
 import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.Util.AlarmCallManager
+import com.example.meditime.Util.DowConverterFactory
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
+import java.util.*
 import kotlin.collections.ArrayList
 
 /*********************************
@@ -156,7 +159,32 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
-                            // todo : 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            // Todo : 요일 반복 에러 발생, 수정 요망
+                            // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            val start_date_split = item.set_date.split(" ")[0].split("-")
+                            val start_time_split = item.set_date.split(" ")[1].split(":")
+                            var calendar = Calendar.getInstance()
+                            calendar.set(
+                                start_date_split[0].toInt(),
+                                start_date_split[1].toInt()-1,
+                                start_date_split[2].toInt(),
+                                start_time_split[0].toInt(),
+                                start_time_split[1].toInt(),
+                                start_time_split[2].toInt()
+                            )
+                            val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
+                            for (i in 0..6){
+                                if(dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]){
+                                    val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                                    alarmCallManager.setAlarmRepeating(
+                                        alarm_id = alarm_no.toInt(),
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+                                        interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
+                                    )
+                                }
+                                calendar.add(Calendar.DATE, 1)
+                            }
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==1 -> {
                             // N 일 반복, 반복 alarm 1개 필요
@@ -164,12 +192,11 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             alarmCallManager.setAlarmRepeating(
                                 alarm_id = alarm_no.toInt(),
                                 start_date_str = "${item.set_date}",
-                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // 매일 알람 맞추기
+                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // N일 반복 알람 맞추기
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==2 -> {
                             // 개월 반복, alarm 1개 필요, alarm 체크 마다 다음 알람 설정하기
-                            // Todo : alarm onReceive() 시 재 등록 하는 과정 구현하기
                             val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
                             alarmCallManager.setAlarm(
                                 alarm_id = alarm_no.toInt(),
@@ -236,7 +263,32 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
-                            // todo : 요일 반복, 반복 alarm 요일 개수 만큼 필요
+                            // Todo : 요일 반복 에러 발생, 수정 요망
+                            // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            val start_date_split = item.set_date.split(" ")[0].split("-")
+                            val start_time_split = item.set_date.split(" ")[1].split(":")
+                            var calendar = Calendar.getInstance()
+                            calendar.set(
+                                start_date_split[0].toInt(),
+                                start_date_split[1].toInt()-1,
+                                start_date_split[2].toInt(),
+                                start_time_split[0].toInt(),
+                                start_time_split[1].toInt(),
+                                start_time_split[2].toInt()
+                            )
+                            val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
+                            for (i in 0..6){
+                                if(dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]){
+                                    val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                                    alarmCallManager.setAlarmRepeating(
+                                        alarm_id = alarm_no.toInt(),
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+                                        interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
+                                    )
+                                }
+                                calendar.add(Calendar.DATE, 1)
+                            }
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==1 -> {
                             // N 일 반복, 반복 alarm 1개 필요
@@ -244,7 +296,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             alarmCallManager.setAlarmRepeating(
                                 alarm_id = alarm_no.toInt(),
                                 start_date_str = "${item.set_date}",
-                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // 매일 알람 맞추기
+                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // N일 반복 알람 맞추기
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==2 -> {
