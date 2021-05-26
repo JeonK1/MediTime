@@ -10,7 +10,8 @@
         style="@style/style_small_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="알람 시간" />
+        android:text="알람 시간"
+        android:textColor="#0070C0" />
 
     <RelativeLayout
         android:layout_width="match_parent"

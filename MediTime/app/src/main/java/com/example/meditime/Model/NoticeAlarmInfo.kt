@@ -1,5 +1,4 @@
 package com.example.meditime.Model
-
 import java.io.Serializable
 
 data class NoticeAlarmInfo(

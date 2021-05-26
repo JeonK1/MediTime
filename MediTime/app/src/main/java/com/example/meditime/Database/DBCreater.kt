@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.Model.NoticeAlarmInfo
+import com.example.meditime.Model.TodayInfo
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
 
@@ -162,6 +163,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
                         set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
                 ))
             }while (tb2_cursor.moveToNext())
+
             noticeinfo2_list.add(
                 NoticeInfo(
                     medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
@@ -178,6 +180,10 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase){
         }while (tb1_cursor.moveToNext())
         return noticeinfo2_list
     }
+
+/*    fun get_TodayInfo(): ArrayList<TodayInfo>{
+        
+    }*/
 
     //데이터 검색
     fun selectColumn(mytable: String, select:String, condition:String): Cursor {

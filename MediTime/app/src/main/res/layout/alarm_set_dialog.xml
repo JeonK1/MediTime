@@ -15,7 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:padding="10dp"
-            android:text="수정" />
+            android:text="수정"
+            android:textColor="#0070C0"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_name"
@@ -25,7 +28,10 @@
             android:layout_toRightOf="@id/tv_alarmsetdlg_modify"
             android:gravity="center"
             android:padding="10dp"
-            android:text="타이레놀" />
+            android:text="타이레놀"
+            android:textColor="#000000"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_delete"
@@ -33,7 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:padding="10dp"
-            android:text="삭제" />
+            android:text="삭제"
+            android:textColor="#F44336"
+            android:textSize="20dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <LinearLayout
@@ -47,6 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="20dp"
             tools:text="1회 2번 복용" />
 
         <TextView
@@ -55,6 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="20dp"
             tools:text="매일" />
     </LinearLayout>
 
@@ -99,6 +112,7 @@
 
     <Button
         android:id="@+id/btn_alarmsetdlg_save"
+        style="@style/style_bold_button_round"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="완료" />

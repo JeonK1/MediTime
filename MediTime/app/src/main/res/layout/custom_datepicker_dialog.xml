@@ -28,7 +28,7 @@
 
     <Button
         android:id="@+id/btn_datepickdig_ok"
-        style="@style/style_bold_button"
+        style="@style/style_bold_button_round"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="선택" />

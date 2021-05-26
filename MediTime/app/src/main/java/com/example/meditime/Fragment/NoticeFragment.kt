@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Activity.AddMedicineDateActivity
 import com.example.meditime.Adapter.AlarmSetDlgAdapter
 import com.example.meditime.Adapter.NoticeAdapter
+import com.example.meditime.Adapter.TodayAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
@@ -34,11 +35,11 @@ class NoticeFragment : Fragment() {
     val ADD_MEDICINE = 103
     val ADD_MEDICINE_MODIFY = 104
 
-    //알람 Fragment RecyclerView를 위한 변수들
+    // 알람 화면 RecyclerView를 위한 변수들
     lateinit var recyclerView: RecyclerView
     lateinit var mediAdapter: NoticeAdapter
 
-    //데이터 베이스 사용
+    // 데이터 베이스 사용
     lateinit var dbHelper: DBHelper
     lateinit var dbCreater: DBCreater
 
@@ -49,14 +50,15 @@ class NoticeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //Fragment 화면, RecyclerView 정의
+
+        // Fragment 화면, RecyclerView 정의
         var root = inflater.inflate(R.layout.fragment_notice, container, false)
         recyclerView = root.findViewById(R.id.notice_recyclerView)
         return root
     }
 
-    //View가 생성되고 나서 NoticeFragment를 위한 준비 부분
-    //DataBase에서 약품 알림에 대한 정보를 받아와 List를 만들어 화면에 뿌려주기
+    // View가 생성되고 나서 NoticeFragment를 위한 준비 부분
+    // DataBase에서 약품 알림에 대한 정보를 받아와 List를 만들어 화면에 뿌려주기
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         globalInit()
