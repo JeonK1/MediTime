@@ -20,6 +20,7 @@ import com.example.meditime.Adapter.TodayAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
+import com.example.meditime.Util.AlarmCallManager
 import com.example.meditime.Util.DowConverterFactory
 import kotlinx.android.synthetic.main.alarm_set_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_notice.*
@@ -42,6 +43,9 @@ class NoticeFragment : Fragment() {
     lateinit var dbHelper: DBHelper
     lateinit var dbCreater: DBCreater
 
+    //AlarmManager
+    lateinit var alarmCallManager: AlarmCallManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,17 +61,16 @@ class NoticeFragment : Fragment() {
     // DataBase에서 약품 알림에 대한 정보를 받아와 List를 만들어 화면에 뿌려주기
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dbHelperInit()
+        globalInit()
         fragment_init()
     }
 
-    fun fragment_init(){
-        recyclerViewInit()
-        clickListenerInit()
-    }
+    private fun globalInit() {
+        // AlarmCallManager
+        alarmCallManager = AlarmCallManager(context!!)
 
-    private fun dbHelperInit() {
-        dbHelper = DBHelper(getContext(), "MediDB.db", null, 1)
+        // Database
+        dbHelper = DBHelper(context, "MediDB.db", null, 1)
         dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
     }
 
@@ -76,6 +79,11 @@ class NoticeFragment : Fragment() {
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = mediAdapter
+    }
+
+    fun fragment_init(){
+        recyclerViewInit()
+        clickListenerInit()
     }
 
     private fun clickListenerInit() {
@@ -232,6 +240,12 @@ class NoticeFragment : Fragment() {
                     // 삭제 버튼 클릭 시
                     val medi_no = mediAdapter.items.get(position).medi_no
                     val medi_name = mediAdapter.items.get(position).medi_name
+                    for (cur_time_no in dbCreater.get_time_no_by_medi_no(medi_no)){
+                        for (cur_alarm_no in dbCreater.get_alarm_no_by_time_no(cur_time_no)){
+                            dbCreater.set_delete_alarm_by_alarm_no(cur_alarm_no)
+                            alarmCallManager.cancelAlarm_alarm_id(cur_alarm_no)
+                        }
+                    }
                     dbCreater.delete_medicine_by_id(medi_no)
                     Toast.makeText(context, "${medi_name} 알람이 제거되었습니다.", Toast.LENGTH_SHORT).show()
                     fragment_init()

@@ -1,9 +1,11 @@
 package com.example.meditime.Activity
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meditime.*
@@ -12,7 +14,10 @@ import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.Model.NoticeAlarmInfo
+import com.example.meditime.Util.AlarmCallManager
+import com.example.meditime.Util.DowConverterFactory
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
+import java.util.*
 import kotlin.collections.ArrayList
 
 /*********************************
@@ -35,19 +40,31 @@ class AddMedicineTimeActivity : AppCompatActivity() {
     lateinit var dbHelper: DBHelper
     lateinit var dbCreater: DBCreater
 
+    //AlarmManager
+    lateinit var alarmCallManager: AlarmCallManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medicine_time)
-        dbHelperInit()
+        globalInit()
         getIntentData()
         recyclerViewInit()
         okButtonInit()
         listenerInit()
     }
 
+    private fun globalInit() {
+        // AlarmCallManager
+        alarmCallManager = AlarmCallManager(this)
+
+        // Database
+        dbHelper = DBHelper(this, "MediDB.db", null, 1)
+        dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
+    }
+
     private fun okButtonInit() {
         // OK 버튼, 알람의 개수가 0개이면 비활성화하기
-        if(alarmAdapter.items.size==0) {
+        if (alarmAdapter.items.size == 0) {
             btn_addmeditime_ok.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.colorGrayDark2)
             btn_addmeditime_ok.isEnabled = false
@@ -58,27 +75,23 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         }
     }
 
-    private fun dbHelperInit() {
-        dbHelper = DBHelper(this, "MediDB.db", null, 1)
-        dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
-    }
-
     private fun getIntentData() {
         // AddMedicineDataActivity로부터 받은 데이터 적용하기
         type = intent.getStringExtra("type").toString()
         cur_noticeInfo = intent.getSerializableExtra("noticeInfo2") as NoticeInfo
         tv_addmeditime_name.text = cur_noticeInfo.medi_name
-        if(type=="modify") {
+        if (type == "modify") {
             // 수정 으로 넘어온 것일 때
             // 알람 정보 넘겨주기
-             alarmList = cur_noticeInfo.time_list
+            alarmList = cur_noticeInfo.time_list
         }
     }
 
     private fun recyclerViewInit() {
         // recyclerView 초기설정
         alarmAdapter = AlarmAdapter(alarmList)
-        rv_addmeditime_container.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_addmeditime_container.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         rv_addmeditime_container.adapter = alarmAdapter
     }
 
@@ -91,12 +104,12 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         }
         btn_addmeditime_ok.setOnClickListener {
             // 완료 버튼 클릭 시
-            if(type=="add"){
+            if (type == "add") {
                 // 데이터베이스에 추가
                 val start_date_split = cur_noticeInfo.start_date.split("-")
                 // table1 insert
-                if(cur_noticeInfo.set_cycle==0){
-                    dbCreater.insertColumn_table1(
+                if (cur_noticeInfo.set_cycle == 0) {
+                    cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
                         medi_name = cur_noticeInfo.medi_name,
                         set_cycle = cur_noticeInfo.set_cycle.toString(),
                         start_date = "${start_date_split[0]}-${start_date_split[1]}-${start_date_split[2]}",
@@ -104,9 +117,9 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         re_cycle = "null",
                         call_alart = cur_noticeInfo.call_alart.toString(),
                         normal_alart = cur_noticeInfo.normal_alart.toString()
-                    )
+                    ).toInt()
                 } else {
-                    dbCreater.insertColumn_table1(
+                    cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
                         medi_name = cur_noticeInfo.medi_name,
                         set_cycle = cur_noticeInfo.set_cycle.toString(),
                         start_date = "${start_date_split[0]}-${start_date_split[1]}-${start_date_split[2]}",
@@ -114,7 +127,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         re_cycle = cur_noticeInfo.re_cycle.toString(),
                         call_alart = cur_noticeInfo.call_alart.toString(),
                         normal_alart = cur_noticeInfo.normal_alart.toString()
-                    )
+                    ).toInt()
                 }
 
                 // get cursor for medi_no
@@ -123,23 +136,81 @@ class AddMedicineTimeActivity : AppCompatActivity() {
 
                 // table2 insert
                 val medi_no = cursor.getInt(cursor.getColumnIndex("medi_no"))
-                for (item in alarmAdapter.items){
-                    dbCreater.insertColumn_table2(
+                for (item in alarmAdapter.items) {
+                    // insert alarm info
+                    item.time_no = dbCreater.insertColumn_table2(
                         medi_no = medi_no.toString(),
                         set_amount = item.set_amount.toString(),
                         set_type = item.set_type,
                         set_date = item.set_date,
                         take_date = "null",
                         set_check = "0"
-                    )
-                }
-                // todo : bundle 로 보내는 방법 고민하기
+                    ).toInt()
 
-            } else if(type=="modify"){
+                    // insert alarm_table + set notification
+                    when{
+                        cur_noticeInfo.set_cycle==0 -> {
+                            // 매일 반복, 반복 alarm 1개 필요
+                            val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                            alarmCallManager.setAlarmRepeating(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}",
+                                interval_millis = AlarmManager.INTERVAL_DAY // 매일 알람 맞추기
+                            )
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
+                            // Todo : 요일 반복 에러 발생, 수정 요망
+                            // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            val start_date_split = item.set_date.split(" ")[0].split("-")
+                            val start_time_split = item.set_date.split(" ")[1].split(":")
+                            var calendar = Calendar.getInstance()
+                            calendar.set(
+                                start_date_split[0].toInt(),
+                                start_date_split[1].toInt()-1,
+                                start_date_split[2].toInt(),
+                                start_time_split[0].toInt(),
+                                start_time_split[1].toInt(),
+                                start_time_split[2].toInt()
+                            )
+                            val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
+                            for (i in 0..6){
+                                if(dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]){
+                                    val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                                    alarmCallManager.setAlarmRepeating(
+                                        alarm_id = alarm_no.toInt(),
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+                                        interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
+                                    )
+                                }
+                                calendar.add(Calendar.DATE, 1)
+                            }
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==1 -> {
+                            // N 일 반복, 반복 alarm 1개 필요
+                            val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                            alarmCallManager.setAlarmRepeating(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}",
+                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // N일 반복 알람 맞추기
+                            )
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==2 -> {
+                            // 개월 반복, alarm 1개 필요, alarm 체크 마다 다음 알람 설정하기
+                            val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                            alarmCallManager.setAlarm(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}"
+                            )
+                        }
+                    }
+                }
+            } else if (type == "modify") {
                 // 데이터베이스 수정
                 // table1 modify
-                if(cur_noticeInfo.set_cycle==0){
-                    dbCreater.updateColumn("table1",
+                if (cur_noticeInfo.set_cycle == 0) {
+                    dbCreater.updateColumn(
+                        "table1",
                         "medi_name=\"${cur_noticeInfo.medi_name}\", " +
                                 "set_cycle=${cur_noticeInfo.set_cycle}," +
                                 "start_date=\"${cur_noticeInfo.start_date}\"," +
@@ -148,7 +219,8 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         "medi_no=${cur_noticeInfo.medi_no}"
                     )
                 } else {
-                    dbCreater.updateColumn("table1",
+                    dbCreater.updateColumn(
+                        "table1",
                         "medi_name=\"${cur_noticeInfo.medi_name}\", " +
                                 "set_cycle=${cur_noticeInfo.set_cycle}," +
                                 "start_date=\"${cur_noticeInfo.start_date}\"," +
@@ -157,17 +229,85 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         "medi_no=${cur_noticeInfo.medi_no}"
                     )
                 }
+
                 // table2 modfiy
+                // medi_no와 연결된 알람 모두 지우기
+                for (cur_time_no in dbCreater.get_time_no_by_medi_no(cur_noticeInfo.medi_no)){
+                    for (cur_alarm_no in dbCreater.get_alarm_no_by_time_no(cur_time_no)){
+                        dbCreater.set_delete_alarm_by_alarm_no(cur_alarm_no)
+                        alarmCallManager.cancelAlarm_alarm_id(cur_alarm_no)
+                    }
+                }
+                // delete all of alarm info
                 dbCreater.delete_alarm_all_by_medi_no(cur_noticeInfo.medi_no)
-                for (item in alarmAdapter.items){
-                    dbCreater.insertColumn_table2(
+                for (item in alarmAdapter.items) {
+                    // insert alarm info
+                    val new_time_no = dbCreater.insertColumn_table2(
                         medi_no = cur_noticeInfo.medi_no.toString(),
                         set_amount = item.set_amount.toString(),
                         set_type = item.set_type,
                         set_date = item.set_date,
                         take_date = "null",
                         set_check = "0"
-                    )
+                    ).toInt()
+
+                    // insert alarm_table + set notification
+                    when{
+                        cur_noticeInfo.set_cycle==0 -> {
+                            // 매일 반복, 반복 alarm 1개 필요
+                            val alarm_no = dbCreater.insert_alarm(time_no = new_time_no)
+                            alarmCallManager.setAlarmRepeating(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}",
+                                interval_millis = AlarmManager.INTERVAL_DAY // 매일 알람 맞추기
+                            )
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
+                            // Todo : 요일 반복 에러 발생, 수정 요망
+                            // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            val start_date_split = item.set_date.split(" ")[0].split("-")
+                            val start_time_split = item.set_date.split(" ")[1].split(":")
+                            var calendar = Calendar.getInstance()
+                            calendar.set(
+                                start_date_split[0].toInt(),
+                                start_date_split[1].toInt()-1,
+                                start_date_split[2].toInt(),
+                                start_time_split[0].toInt(),
+                                start_time_split[1].toInt(),
+                                start_time_split[2].toInt()
+                            )
+                            val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
+                            for (i in 0..6){
+                                if(dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]){
+                                    val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                                    alarmCallManager.setAlarmRepeating(
+                                        alarm_id = alarm_no.toInt(),
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+                                        interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
+                                    )
+                                }
+                                calendar.add(Calendar.DATE, 1)
+                            }
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==1 -> {
+                            // N 일 반복, 반복 alarm 1개 필요
+                            val alarm_no = dbCreater.insert_alarm(time_no = new_time_no)
+                            alarmCallManager.setAlarmRepeating(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}",
+                                interval_millis = AlarmManager.INTERVAL_DAY * cur_noticeInfo.re_cycle // N일 반복 알람 맞추기
+                            )
+                        }
+                        cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==2 -> {
+                            // 개월 반복, alarm 1개 필요, alarm 체크 마다 다음 알람 설정하기
+                            val alarm_no = dbCreater.insert_alarm(time_no = new_time_no)
+                            alarmCallManager.setAlarm(
+                                alarm_id = alarm_no.toInt(),
+                                start_date_str = "${item.set_date}"
+                            )
+                        }
+                    }
                 }
             }
 
@@ -178,16 +318,19 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         tv_addmeditime_addbtn.setOnClickListener {
             // 추가 버튼 클릭 시
             val intent = Intent(this, AddMedicineTimeSetActivity::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable("noticeInfo2", cur_noticeInfo)
+            intent.putExtras(bundle)
             startActivityForResult(intent, ADD_MEDICINE_TIME_SET)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == ADD_MEDICINE_TIME_SET && resultCode == Activity.RESULT_OK){
+        if (requestCode == ADD_MEDICINE_TIME_SET && resultCode == Activity.RESULT_OK) {
             // AddMedicineTimeSetActivity 에서 call back
             val newAlarmInfo = data?.getSerializableExtra("noticeInfo3") as NoticeAlarmInfo
-            if(newAlarmInfo!=null){
+            if (newAlarmInfo != null) {
                 alarmAdapter.addItem(newAlarmInfo)
                 alarmAdapter.notifyAdapter()
                 okButtonInit()
