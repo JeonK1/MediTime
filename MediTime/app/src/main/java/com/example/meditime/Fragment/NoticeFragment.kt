@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Activity.AddMedicineDateActivity
 import com.example.meditime.Adapter.AlarmSetDlgAdapter
 import com.example.meditime.Adapter.NoticeAdapter
-import com.example.meditime.Adapter.TodayAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R

@@ -17,7 +17,6 @@ import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.Util.AlarmCallManager
 import com.example.meditime.Util.DowConverterFactory
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
-import java.time.DayOfWeek
 import java.util.*
 import kotlin.collections.ArrayList
 
