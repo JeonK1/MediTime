@@ -4,11 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="7dp"
+
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp">
 
         <TextView
             android:id="@+id/tv_name"
@@ -16,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold"
             tools:text="타이레놀" />
 
@@ -45,15 +50,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp">
 
         <TextView
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_marginTop="12dp"
             android:textColor="#555555"
-            android:textSize="18dp"
+            android:textSize="12dp"
             tools:text="1일 2회 복용" />
 
         <TextView
@@ -61,8 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginTop="12dp"
             android:textColor="#555555"
-            android:textSize="18dp"
+            android:textSize="14dp"
             tools:text="매일" />
     </RelativeLayout>
 

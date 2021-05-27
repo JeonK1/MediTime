@@ -4,11 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="7dp"
+
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/manageItem_mediName"
@@ -16,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="16dp"
             android:textStyle="bold"
             tools:text="영양제" />
 
@@ -25,7 +29,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="1dp">
 
         <TextView
             android:id="@+id/monday"
@@ -147,8 +151,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/thur_icon"
-            android:background="@drawable/ok_take"
- />
+            android:background="@drawable/ok_take" />
 
         <ImageView
             android:id="@+id/Sat_icon"
@@ -166,8 +169,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/Sat_icon"
-            android:background="@drawable/ok_take"
- />
+            android:background="@drawable/ok_take" />
 
     </RelativeLayout>
 

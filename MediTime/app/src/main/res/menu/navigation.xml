@@ -3,7 +3,8 @@
     <item
         android:id="@+id/navigation_first"
         android:icon="@android:drawable/ic_dialog_dialer"
-        android:title="관리" />
+        android:title="관리"
+        />
     <item
         android:id="@+id/navigation_second"
         android:icon="@android:drawable/ic_dialog_map"

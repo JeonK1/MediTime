@@ -107,6 +107,8 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             if (type == "add") {
                 // 데이터베이스에 추가
                 val start_date_split = cur_noticeInfo.start_date.split("-")
+
+
                 // table1 insert
                 if (cur_noticeInfo.set_cycle == 0) {
                     cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
@@ -118,6 +120,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         call_alart = cur_noticeInfo.call_alart.toString(),
                         normal_alart = cur_noticeInfo.normal_alart.toString()
                     ).toInt()
+
                 } else {
                     cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
                         medi_name = cur_noticeInfo.medi_name,
