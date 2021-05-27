@@ -14,7 +14,7 @@ data class NoticeInfo (
     var set_cycle: Int = 0,
     var start_date: String = simpleDateFormat.format(Date()),
     var re_type: Int = 0,
-    var re_cycle: Int = 1,
+    var re_cycle: Int = 0,
     var call_alart: Int = 0,
     var normal_alart: Int = 1,
     var time_list:ArrayList<NoticeAlarmInfo> = ArrayList<NoticeAlarmInfo>()

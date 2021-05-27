@@ -213,6 +213,10 @@ class AddMedicineDateActivity : AppCompatActivity() {
                 } else if (cur_re_type==1 && cur_re_cycle%7!=0) {
                     // 일에 한번 으로 변환
                     cur_re_type=0
+                } else if (cur_re_type==0) {
+                    // 요일에서 왔을 경우
+                    cur_re_type=0
+                    cur_re_cycle=1
                 }
 
                 // Dialog 생성

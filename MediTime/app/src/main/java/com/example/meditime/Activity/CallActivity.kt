@@ -3,12 +3,9 @@ package com.example.meditime.Activity
 import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Intent
-import android.media.AudioManager
-import android.media.SoundPool
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Vibrator
 import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageButton

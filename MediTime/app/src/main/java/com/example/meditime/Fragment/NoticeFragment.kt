@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Activity.AddMedicineDateActivity
 import com.example.meditime.Adapter.AlarmSetDlgAdapter
 import com.example.meditime.Adapter.NoticeAdapter
-import com.example.meditime.Adapter.TodayAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
@@ -161,8 +160,8 @@ class NoticeFragment : Fragment() {
                     // call 눌렀을 때
                     // 변환
                     cur_call_flag = !cur_call_flag
-                    if (cur_call_flag && cur_bell_flag) {
-                        // 둘다 선택되는 경우 방지
+                    if (cur_call_flag && !cur_bell_flag) {
+                        // call 이 선택되었는데, bell 이 선택되지 않는 경우 방지
                         cur_bell_flag = !cur_bell_flag
                     }
                     // 색상변환
@@ -187,8 +186,8 @@ class NoticeFragment : Fragment() {
                     // bell 눌렀을 때
                     // 변환
                     cur_bell_flag = !cur_bell_flag
-                    if (cur_call_flag && cur_bell_flag) {
-                        // 둘다 선택되는 경우 방지
+                    if (cur_call_flag && !cur_bell_flag) {
+                        // call 이 선택되었는데, bell 이 선택되지 않는 경우 방지
                         cur_call_flag = !cur_call_flag
                     }
                     // 색상변환
@@ -272,8 +271,8 @@ class NoticeFragment : Fragment() {
                 // 전화기 버튼 눌렀을 때
                 // 변환
                 holder.call_flag = !holder.call_flag
-                if (holder.call_flag && holder.bell_flag) {
-                    // 둘다 선택되는 경우 방지
+                if (holder.call_flag && !holder.bell_flag) {
+                    // call 이 선택되었는데, bell 이 선택되지 않는 경우 방지
                     holder.bell_flag = !holder.bell_flag
                 }
 
@@ -307,8 +306,8 @@ class NoticeFragment : Fragment() {
                 // 알람 버튼 눌렀을 때
                 // 변환
                 holder.bell_flag = !holder.bell_flag
-                if (holder.call_flag && holder.bell_flag) {
-                    // 둘다 선택되는 경우 방지
+                if (holder.call_flag && !holder.bell_flag) {
+                    // call 이 선택되었는데, bell 이 선택되지 않는 경우 방지
                     holder.call_flag = !holder.call_flag
                 }
 

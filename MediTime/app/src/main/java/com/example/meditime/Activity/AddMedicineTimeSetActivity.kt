@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter
 import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.Model.NoticeInfo
 import com.example.meditime.R
-import kotlinx.android.synthetic.main.activity_add_medicine_time.*
 import kotlinx.android.synthetic.main.activity_add_medicine_time_set.*
 import java.text.SimpleDateFormat
 import java.util.*

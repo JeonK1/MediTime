@@ -82,19 +82,34 @@ class JobIntentCallService : JobIntentService() {
         val mainPendingIntent = PendingIntent.getActivity(this, id, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val lockPendingIntent = PendingIntent.getActivity(this, id, lockIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        // Todo: 현재 alarm_id의 normal_alart, call_alart 상황에 따라 Notification 다르게 실행하도록 구현
-        // Todo: call_alart=1, normal_alart=1 >> setFullScreenIntent 까지
-        // Todo: call_alart=0, normal_alart=1 >> setFullScreenIntent 제외
-        // Todo: call_alart=0, normal_alart=0 >> Notification 출력 X
-        // Todo: 기타 상황은 존재하지 않도록 구현
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setFullScreenIntent(lockPendingIntent, true) // 화면이 꺼져있을 때 보여주는 pendingIntent
-            .setContentIntent(mainPendingIntent) // 탭 하면 이동하는 pendingIntent
-            .setAutoCancel(true) // 탭 하면 자동으로 제거
+        // 현재 alarm_id의 normal_alart, call_alart 상황에 따라 Notification 다르게 실행하도록 구현
+        var builder:NotificationCompat.Builder? = null
+        val noticeAlarmInfo = dbCreater.get_noticeAlarmInfo_by_alarm_no(id)
+        val noticeInfo = dbCreater.get_noticeInfo_by_medi_no(noticeAlarmInfo.medi_no)
+        when {
+            noticeInfo.call_alart==1 && noticeInfo.normal_alart==1 -> {
+                // call_alart=1, normal_alart=1 >> setFullScreenIntent 까지 등록
+                builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setFullScreenIntent(lockPendingIntent, true) // 화면이 꺼져있을 때 보여주는 pendingIntent
+                    .setContentIntent(mainPendingIntent) // 탭 하면 이동하는 pendingIntent
+                    .setAutoCancel(true) // 탭 하면 자동으로 제거
+            }
+            noticeInfo.call_alart==0 && noticeInfo.normal_alart==1 -> {
+                // call_alart=0, normal_alart=1 >> setFullScreenIntent 제외
+                builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle(title)
+                    .setContentText(content)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(mainPendingIntent) // 탭 하면 이동하는 pendingIntent
+                    .setAutoCancel(true) // 탭 하면 자동으로 제거
+            }
+            // 기타 상황에는 notificaiton 출력하지 않음
+        }
 
         // 알림 채널 만들기
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -106,7 +121,9 @@ class JobIntentCallService : JobIntentService() {
             // 채널 등록
             notificationManager.createNotificationChannel(channel)
         }
-        notificationManager.notify(id, builder.build())
+        if(builder!=null){
+            notificationManager.notify(id, builder.build())
+        }
     }
 
     override fun onDestroy() {
