@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -168,7 +167,6 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
                             // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
-                            Log.e("test", item.set_date)
                             val start_date_split = item.set_date.split(" ")[0].split("-")
                             val start_time_split = item.set_date.split(" ")[1].split(":")
                             var calendar = Calendar.getInstance()
