@@ -32,6 +32,7 @@ class CallAnswerActivity : AppCompatActivity() {
         Toast.makeText(this, "${id} and ${title} and ${content}", Toast.LENGTH_SHORT).show()
 
         clickListenerInit()
+        // Todo : TTS, STT 적용하기
     }
 
     private fun clickListenerInit() {

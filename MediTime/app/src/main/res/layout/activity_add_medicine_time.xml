@@ -59,15 +59,40 @@
                 android:text="약품 이름을 설정해주세요" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_addmeditime_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <FrameLayout
             android:layout_above="@id/ll_addmeditime_footer"
             android:layout_below="@id/ll_addmeditime_header"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_addmeditime_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
+            <LinearLayout
+                android:id="@+id/ll_addmeditime_no_element_view"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_meditime"
+                    android:backgroundTint="@color/colorGrayDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    style="@style/style_small_title_text"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/colorGrayDark"
+                    android:gravity="center"
+                    android:text="알람 정보를\n추가해주세요"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/ll_addmeditime_footer"

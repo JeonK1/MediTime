@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meditime.*
@@ -17,6 +18,7 @@ import com.example.meditime.Model.NoticeAlarmInfo
 import com.example.meditime.Util.AlarmCallManager
 import com.example.meditime.Util.DowConverterFactory
 import kotlinx.android.synthetic.main.activity_add_medicine_time.*
+import java.time.DayOfWeek
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -49,7 +51,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         globalInit()
         getIntentData()
         recyclerViewInit()
-        okButtonInit()
+        alarmCountCheck()
         listenerInit()
     }
 
@@ -62,16 +64,21 @@ class AddMedicineTimeActivity : AppCompatActivity() {
         dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
     }
 
-    private fun okButtonInit() {
-        // OK 버튼, 알람의 개수가 0개이면 비활성화하기
+    private fun alarmCountCheck() {
         if (alarmAdapter.items.size == 0) {
+            // OK 버튼, 알람의 개수가 0개이면 비활성화하기
             btn_addmeditime_ok.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.colorGrayDark2)
             btn_addmeditime_ok.isEnabled = false
+            // 알람의 개수가 0개이면, 가운데에 알람을 추가해주세요 문구 보여주기
+            ll_addmeditime_no_element_view.visibility = View.VISIBLE
         } else {
+            // OK 버튼, 알람의 개수가 0개가 아니면 활성화하기
             btn_addmeditime_ok.backgroundTintList =
                 ContextCompat.getColorStateList(this, R.color.colorBlue)
             btn_addmeditime_ok.isEnabled = true
+            // 알람의 개수가 0개가 아니면, 가운데에 알람을 추가해주세요 문구 제거`
+            ll_addmeditime_no_element_view.visibility = View.GONE
         }
     }
 
@@ -108,7 +115,6 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                 // 데이터베이스에 추가
                 val start_date_split = cur_noticeInfo.start_date.split("-")
 
-
                 // table1 insert
                 if (cur_noticeInfo.set_cycle == 0) {
                     cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
@@ -120,7 +126,6 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                         call_alart = cur_noticeInfo.call_alart.toString(),
                         normal_alart = cur_noticeInfo.normal_alart.toString()
                     ).toInt()
-
                 } else {
                     cur_noticeInfo.medi_no = dbCreater.insertColumn_table1(
                         medi_name = cur_noticeInfo.medi_name,
@@ -162,18 +167,18 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
-                            // Todo : 요일 반복 에러 발생, 수정 요망
                             // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
+                            Log.e("test", item.set_date)
                             val start_date_split = item.set_date.split(" ")[0].split("-")
                             val start_time_split = item.set_date.split(" ")[1].split(":")
                             var calendar = Calendar.getInstance()
                             calendar.set(
-                                start_date_split[0].toInt(),
-                                start_date_split[1].toInt()-1,
-                                start_date_split[2].toInt(),
-                                start_time_split[0].toInt(),
-                                start_time_split[1].toInt(),
-                                start_time_split[2].toInt()
+                                start_date_split[0].toInt(), // year
+                                start_date_split[1].toInt()-1, // month
+                                start_date_split[2].toInt(), // date
+                                start_time_split[0].toInt(), // hour
+                                start_time_split[1].toInt(), // minute
+                                start_time_split[2].toInt()  // second
                             )
                             val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
                             for (i in 0..6){
@@ -181,7 +186,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                                     val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
                                     alarmCallManager.setAlarmRepeating(
                                         alarm_id = alarm_no.toInt(),
-                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
                                                 "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
                                         interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
                                     )
@@ -266,18 +271,17 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             )
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==0 -> {
-                            // Todo : 요일 반복 에러 발생, 수정 요망
                             // 요일 반복, 반복 alarm 요일 개수 만큼 구현하기
                             val start_date_split = item.set_date.split(" ")[0].split("-")
                             val start_time_split = item.set_date.split(" ")[1].split(":")
                             var calendar = Calendar.getInstance()
                             calendar.set(
-                                start_date_split[0].toInt(),
-                                start_date_split[1].toInt()-1,
-                                start_date_split[2].toInt(),
-                                start_time_split[0].toInt(),
-                                start_time_split[1].toInt(),
-                                start_time_split[2].toInt()
+                                start_date_split[0].toInt(), // year
+                                start_date_split[1].toInt()-1, // month
+                                start_date_split[2].toInt(), // date
+                                start_time_split[0].toInt(), // hour
+                                start_time_split[1].toInt(), // minute
+                                start_time_split[2].toInt()  // second
                             )
                             val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(cur_noticeInfo.re_cycle)
                             for (i in 0..6){
@@ -285,7 +289,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                                     val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
                                     alarmCallManager.setAlarmRepeating(
                                         alarm_id = alarm_no.toInt(),
-                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DATE)} " +
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
                                                 "${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
                                         interval_millis = (AlarmManager.INTERVAL_DAY*7) // 주간 반복 알람 맞추기
                                     )
@@ -336,7 +340,7 @@ class AddMedicineTimeActivity : AppCompatActivity() {
             if (newAlarmInfo != null) {
                 alarmAdapter.addItem(newAlarmInfo)
                 alarmAdapter.notifyAdapter()
-                okButtonInit()
+                alarmCountCheck()
             }
         }
     }
