@@ -142,17 +142,17 @@ class NoticeFragment : Fragment() {
                 var cur_call_flag = holder.call_flag
                 var cur_bell_flag = holder.bell_flag
                 if (cur_call_flag) {
-                    mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                    mDialogView.ib_alarmsetdlg_call.imageTintList =
                         ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                 } else {
-                    mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                    mDialogView.ib_alarmsetdlg_call.imageTintList =
                         ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                 }
                 if (cur_bell_flag) {
-                    mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                    mDialogView.ib_alarmsetdlg_bell.imageTintList =
                         ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                 } else {
-                    mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                    mDialogView.ib_alarmsetdlg_bell.imageTintList =
                         ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                 }
 
@@ -166,17 +166,17 @@ class NoticeFragment : Fragment() {
                     }
                     // 색상변환
                     if (cur_call_flag) {
-                        mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_call.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                     } else {
-                        mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_call.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                     }
                     if (cur_bell_flag) {
-                        mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_bell.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                     } else {
-                        mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_bell.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                     }
 
@@ -192,17 +192,17 @@ class NoticeFragment : Fragment() {
                     }
                     // 색상변환
                     if (cur_call_flag) {
-                        mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_call.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                     } else {
-                        mDialogView.ib_alarmsetdlg_call.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_call.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                     }
                     if (cur_bell_flag) {
-                        mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_bell.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGreen)
                     } else {
-                        mDialogView.ib_alarmsetdlg_bell.backgroundTintList =
+                        mDialogView.ib_alarmsetdlg_bell.imageTintList =
                             ContextCompat.getColorStateList(holder.itemView.context, R.color.colorGray)
                     }
                 }

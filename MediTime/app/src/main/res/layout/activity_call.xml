@@ -4,27 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/grad_blue"
     tools:context=".Activity.CallActivity">
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="전화왔어요!!!" />
-    <ImageButton
-        android:id="@+id/ib_call_yes"
-        android:background="@drawable/ic_launcher_foreground"
-        android:backgroundTint="@android:color/holo_green_dark"
+        android:layout_above="@id/rl_call_footer"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="150dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semibold"
+            android:text="건덕이"
+            android:textColor="@color/colorWhite"
+            android:textSize="40dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/img_konduck" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_call_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <ImageButton
-        android:id="@+id/ib_call_no"
-        android:background="@drawable/ic_launcher_foreground"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp">
+
+        <ImageButton
+            android:id="@+id/ib_call_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/bg_circle"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_call"
+            android:tint="@color/colorGreen" />
+
+        <ImageButton
+            android:id="@+id/ib_call_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_circle"
+            android:src="@drawable/ic_end_call"
+            android:tint="@color/colorRed" />
+    </RelativeLayout>
 </RelativeLayout>

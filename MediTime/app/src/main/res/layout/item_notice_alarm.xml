@@ -3,26 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_item_layout_rounded"
+    android:elevation="4dp"
     android:orientation="vertical"
-    android:padding="7dp"
-
-    >
+    android:paddingLeft="10dp"
+    android:paddingTop="20dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="20dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
         android:layout_marginRight="5dp">
 
         <TextView
             android:id="@+id/tv_name"
+            style="@style/style_small_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textColor="#000000"
-            android:textSize="16dp"
-            android:textStyle="bold"
             tools:text="타이레놀" />
 
         <ImageButton
@@ -56,28 +61,20 @@
 
         <TextView
             android:id="@+id/tv_count"
+            style="@style/style_comment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="12dp"
-            android:textColor="#555555"
-            android:textSize="12dp"
             tools:text="1일 2회 복용" />
 
         <TextView
             android:id="@+id/tv_cycle"
+            style="@style/style_comment_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="12dp"
-            android:textColor="#555555"
-            android:textSize="14dp"
             tools:text="매일" />
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorGray" />
 </LinearLayout>
