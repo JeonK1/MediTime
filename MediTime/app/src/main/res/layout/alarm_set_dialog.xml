@@ -1,48 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/bg_item_layout_rounded"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_modify"
+            style="@style/style_small_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tv_alarmsetdlg_name"
+            android:layout_alignBottom="@id/tv_alarmsetdlg_name"
             android:layout_alignParentLeft="true"
+            android:gravity="center"
             android:padding="10dp"
             android:text="수정"
-            android:textColor="#0070C0"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textColor="#0070C0" />
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_name"
+            style="@style/style_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/tv_alarmsetdlg_delete"
             android:layout_toRightOf="@id/tv_alarmsetdlg_modify"
             android:gravity="center"
             android:padding="10dp"
-            android:text="타이레놀"
-            android:textColor="#000000"
-            android:textSize="30dp"
-            android:textStyle="bold" />
+            android:text="타이레놀" />
+
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_delete"
+            style="@style/style_small_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/tv_alarmsetdlg_name"
+            android:layout_alignBottom="@id/tv_alarmsetdlg_name"
             android:layout_alignParentRight="true"
+            android:gravity="center"
             android:padding="10dp"
             android:text="삭제"
-            android:textColor="#F44336"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textColor="#F44336" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,22 +60,20 @@
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_cycle_cnt"
+            style="@style/style_small_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="#000000"
-            android:textSize="20dp"
             tools:text="1회 2번 복용" />
 
         <TextView
             android:id="@+id/tv_alarmsetdlg_cycle_type"
+            style="@style/style_small_title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:gravity="center"
-            android:textColor="#000000"
-            android:textSize="20dp"
             tools:text="매일" />
     </LinearLayout>
 
@@ -79,6 +85,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -91,8 +99,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_call"
-                android:backgroundTint="@color/colorGray" />
+                android:background="@drawable/bg_circle_black_stroke_2"
+                android:padding="18dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_call"
+                android:tint="@color/colorGray" />
         </FrameLayout>
 
         <FrameLayout
@@ -105,14 +116,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_bell"
-                android:backgroundTint="@color/colorGray" />
+                android:background="@drawable/bg_circle_black_stroke_2"
+                android:padding="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_bell"
+                android:tint="@color/colorGray" />
         </FrameLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_alarmsetdlg_save"
         style="@style/style_bold_button_round"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="완료" />

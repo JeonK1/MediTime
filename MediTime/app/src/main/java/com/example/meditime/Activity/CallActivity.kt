@@ -49,7 +49,6 @@ class CallActivity : AppCompatActivity() {
                 Log.e(TAG, "no extra")
             }
 
-            Toast.makeText(this, "OK!!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, CallAnswerActivity::class.java)
             intent.putExtra("id", id)
             intent.putExtra("title", title)

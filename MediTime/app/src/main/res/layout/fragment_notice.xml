@@ -9,8 +9,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="30dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/notice_recyclerView_wrap"
@@ -19,19 +18,35 @@
                 android:layout_alignParentTop="true"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/notice_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/add_medi_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:background="#FFFFFF"
-                    android:drawableStart="@drawable/button_image" />
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/bg_item_layout_rounded"
+                    android:elevation="4dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="30dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="30dp"
+                    android:src="@drawable/ic_add" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
