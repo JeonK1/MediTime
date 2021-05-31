@@ -34,11 +34,11 @@ class JobIntentCallService : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
         Log.e(TAG, "onHandleWork")
         val CHANNEL_ID = "MEDITIME_CHANNEL";
-        val id = intent.getIntExtra("id", -1)
+        val alarm_id = intent.getIntExtra("id", -1)
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
-        if(title!=null && content!=null && id!=-1) {
-            Log.e(TAG, id.toString())
+        if(title!=null && content!=null && alarm_id!=-1) {
+            Log.e(TAG, alarm_id.toString())
             Log.e(TAG, title)
             Log.e(TAG, content)
         } else {
@@ -48,43 +48,70 @@ class JobIntentCallService : JobIntentService() {
         // 알람이 개월 단위일 때, 다음 개월 알람 설정
         val dbHelper = DBHelper(this, "MediDB.db", null, 1)
         val dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
-        val cur_noticeAlarmInfo = dbCreater.get_noticeAlarmInfo_by_alarm_no(id)
+        val cur_noticeAlarmInfo = dbCreater.get_noticeAlarmInfo_by_alarm_no(alarm_id)
         val cur_noticeInfo = dbCreater.get_noticeInfo_by_medi_no(cur_noticeAlarmInfo.medi_no)
-        if(cur_noticeInfo.re_type==2){
-            // 개월 단위 알람이면
-            val alarmCallManager = AlarmCallManager(this)
 
-            // N개월 뒤 구하기
-            val start_time_split = cur_noticeAlarmInfo.set_date.split(" ")[1].split(":")
-            val start_date = Date()
-            start_date.month += cur_noticeInfo.re_cycle // 1을 빼야 현재의 달, N개월 뒤로 재설정
-            start_date.hours = start_time_split[0].toInt()
-            start_date.minutes = start_time_split[1].toInt()
-            start_date.seconds = 0
+        val start_date_split = cur_noticeAlarmInfo.set_date.split(" ")[0].split("-")
+        val start_time_split = cur_noticeAlarmInfo.set_date.split(" ")[1].split(":")
 
-            // 알람 재설정
-            val alarm_no = dbCreater.insert_alarm(time_no = cur_noticeAlarmInfo.time_no)
-            alarmCallManager.setAlarm(
-                alarm_id = alarm_no.toInt(),
-                start_millis = start_date.time
-            )
+        val record_no = dbCreater.get_record_no(alarm_id)
+        if(dbCreater.get_record_is_last(record_no)){
+            dbCreater.set_record_is_last(record_no, 0)
+            if(cur_noticeInfo.re_type==2){
+                // 개월 반복
+                val alarmCallManager = AlarmCallManager(this)
+
+                // N개월 뒤 구하기
+                val start_date = Calendar.getInstance()
+                start_date.add(Calendar.MONTH, cur_noticeInfo.re_cycle)
+                start_date.set(Calendar.HOUR_OF_DAY, start_time_split[0].toInt())
+                start_date.set(Calendar.MINUTE, start_time_split[1].toInt())
+                start_date.set(Calendar.SECOND, 0)
+
+                // 알람 재설정
+                val alarm_no = dbCreater.insert_alarm(time_no = cur_noticeAlarmInfo.time_no)
+                val record_no = dbCreater.insertRecord(
+                    alarm_no = alarm_no.toInt(),
+                    time_no = cur_noticeAlarmInfo.time_no,
+                    alarm_datetime = "${start_date.get(Calendar.YEAR)}-${start_date.get(Calendar.MONTH)+1}-${start_date.get(Calendar.DATE)} " +
+                            "${start_date.get(Calendar.HOUR_OF_DAY)}:${start_date.get(Calendar.MINUTE)}:${start_date.get(Calendar.SECOND)}"
+                )
+                dbCreater.set_record_is_last(record_no.toInt(), 1)
+                alarmCallManager.setAlarm(
+                    alarm_id = alarm_no.toInt(),
+                    start_millis = start_date.time.time
+                )
+            } else {
+                // 매일 반복
+                // 요일 반복 (일주일마다 반복)
+                // N일 반복
+                val set_datetime = dbCreater.get_record_set_datetime(record_no)
+                dbCreater.insertRecordNextWeek(
+                    alarm_no = alarm_id,
+                    time_no = cur_noticeAlarmInfo.time_no,
+                    set_cycle = cur_noticeInfo.set_cycle,
+                    alarm_datetime = set_datetime,
+                    re_cycle = cur_noticeInfo.re_cycle,
+                    re_type = cur_noticeInfo.re_type
+                )
+            }
         }
 
         // 알림 만들기
         val mainIntent = Intent(this, MainActivity::class.java)
         val lockIntent = Intent(this, CallActivity::class.java)
-        mainIntent.putExtra("id", id)
+        mainIntent.putExtra("id", alarm_id)
         mainIntent.putExtra("title", title)
         mainIntent.putExtra("content", content)
-        lockIntent.putExtra("id", id)
+        lockIntent.putExtra("id", alarm_id)
         lockIntent.putExtra("title", title)
         lockIntent.putExtra("content", content)
-        val mainPendingIntent = PendingIntent.getActivity(this, id, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val lockPendingIntent = PendingIntent.getActivity(this, id, lockIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val mainPendingIntent = PendingIntent.getActivity(this, alarm_id, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val lockPendingIntent = PendingIntent.getActivity(this, alarm_id, lockIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         // 현재 alarm_id의 normal_alart, call_alart 상황에 따라 Notification 다르게 실행하도록 구현
         var builder:NotificationCompat.Builder? = null
-        val noticeAlarmInfo = dbCreater.get_noticeAlarmInfo_by_alarm_no(id)
+        val noticeAlarmInfo = dbCreater.get_noticeAlarmInfo_by_alarm_no(alarm_id)
         val noticeInfo = dbCreater.get_noticeInfo_by_medi_no(noticeAlarmInfo.medi_no)
         when {
             noticeInfo.call_alart==1 && noticeInfo.normal_alart==1 -> {
@@ -122,7 +149,7 @@ class JobIntentCallService : JobIntentService() {
             notificationManager.createNotificationChannel(channel)
         }
         if(builder!=null){
-            notificationManager.notify(id, builder.build())
+            notificationManager.notify(alarm_id, builder.build())
         }
     }
 
