@@ -241,7 +241,8 @@ class NoticeFragment : Fragment() {
                     val medi_name = mediAdapter.items.get(position).medi_name
                     for (cur_time_no in dbCreater.get_time_no_by_medi_no(medi_no)){
                         for (cur_alarm_no in dbCreater.get_alarm_no_by_time_no(cur_time_no)){
-                            dbCreater.set_delete_alarm_by_alarm_no(cur_alarm_no)
+                            dbCreater.delete_alarm_by_alarm_no(cur_alarm_no)
+                            dbCreater.delete_record_by_alarm_no(cur_alarm_no)
                             alarmCallManager.cancelAlarm_alarm_id(cur_alarm_no)
                         }
                     }

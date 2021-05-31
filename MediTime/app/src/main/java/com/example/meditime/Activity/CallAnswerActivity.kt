@@ -15,6 +15,8 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.meditime.Database.DBCreater
+import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
 import java.util.*
 
@@ -28,7 +30,7 @@ class CallAnswerActivity : AppCompatActivity() {
     val TAG = "CallAnswerActivity"
 
     // intent data
-    var id = -1
+    var alarm_id = -1
     var title = ""
     var content = ""
 
@@ -42,6 +44,10 @@ class CallAnswerActivity : AppCompatActivity() {
 
     // tts
     lateinit var tts: TextToSpeech
+
+    // 데이터 베이스 사용
+    lateinit var dbHelper: DBHelper
+    lateinit var dbCreater: DBCreater
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,16 +172,18 @@ class CallAnswerActivity : AppCompatActivity() {
                 Log.e(TAG, "결과: ${result_text}")
 
                 //regex 적용
-                val regex_no = """(아직|아니|안먹|안 먹)""".toRegex()
-                val regex_yes = """(응|어|먹었|예스)""".toRegex()
+                val regex_no = """(아직|아니|안먹|안 먹|no)""".toRegex()
+                val regex_yes = """(응|어|먹었|예스|yes)""".toRegex()
                 if(regex_no.containsMatchIn(result_text)){
-                    // yes
-                    // Todo : 약을 먹었다고 설정하기
-                    Toast.makeText(applicationContext, "안먹었군요", Toast.LENGTH_SHORT).show()
-                } else if(regex_yes.containsMatchIn(result_text)) {
                     // no
-                    // Todo : 약을 안먹었다고 설정하기
+                    Toast.makeText(applicationContext, "안먹었군요", Toast.LENGTH_SHORT).show()
+                    finish_activity(4000L) // 4초뒤 activity 종료
+                } else if(regex_yes.containsMatchIn(result_text)) {
+                    // yes
+                    val record_no = dbCreater.get_record_no(alarm_id)
+                    dbCreater.set_record_check(record_no)
                     Toast.makeText(applicationContext, "먹었군요", Toast.LENGTH_SHORT).show()
+                    finish_activity(4000L) // 4초뒤 activity 종료
                 } else {
                     // else
                     ttsStart("잘 모르겠어요. 다시 말씀해주세요.", 500L)
@@ -206,6 +214,9 @@ class CallAnswerActivity : AppCompatActivity() {
         } else {
             Log.e(TAG, "no extra")
         }
+        // Database
+        dbHelper = DBHelper(this, "MediDB.db", null, 1)
+        dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
     }
 
     private fun clickListenerInit() {
@@ -213,6 +224,14 @@ class CallAnswerActivity : AppCompatActivity() {
         exit_btn.setOnClickListener {
             finish()
         }
+    }
+
+    private fun finish_activity(delayMills:Long){
+        handler.postDelayed(object : Runnable{
+            override fun run() {
+                finish()
+            }
+        }, delayMills)
     }
 
 }

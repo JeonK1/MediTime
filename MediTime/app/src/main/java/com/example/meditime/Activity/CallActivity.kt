@@ -1,8 +1,10 @@
 package com.example.meditime.Activity
 
+import android.Manifest
 import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +12,8 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.meditime.R
 
 /*********************************
@@ -24,6 +28,7 @@ class CallActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
+        requestPermission()
         turnScreenOnAndKeyguardOff()
         clickListenerInit()
     }
@@ -31,6 +36,15 @@ class CallActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         turnScreenOffAndKeyguardOn()
+    }
+
+    private fun requestPermission() {
+        // RECORD_AUDIO permission 동적허가
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+        }
     }
 
     private fun clickListenerInit() {
