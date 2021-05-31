@@ -234,7 +234,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         return todayInfoList
     }
 
-    // '오늘'화면에 필요한 데이터들을 가져오기_ver2
+    //'오늘'화면에 필요한 데이터들을 가져오기_ver2
     /*fun get_TodayInfo_all2(): ArrayList<TodayInfo_ver2> {
         val todayInfoList = ArrayList<TodayInfo_ver2>()
         val query = "SELECT * FROM table1"
