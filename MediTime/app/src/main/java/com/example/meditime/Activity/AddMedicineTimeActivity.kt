@@ -202,27 +202,29 @@ class AddMedicineTimeActivity : AppCompatActivity() {
                             var calendar_end = calendar.clone() as Calendar
                             while (calendar_end.get(Calendar.DAY_OF_WEEK) != 1) {
                                 calendar_end.add(Calendar.DATE, 1)
-                                var last_record_no = 0
-                                while (calendar_end.compareTo(calendar) != -1) {
-                                    if (dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK) - 1]) {
-                                        val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
-                                        last_record_no = dbCreater.insertRecord(
-                                            alarm_no = alarm_no.toInt(),
-                                            time_no = item.time_no,
-                                            alarm_datetime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
-                                                    "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}"
-                                        ).toInt()
-                                        alarmCallManager.setAlarmRepeating(
-                                            alarm_id = alarm_no.toInt(),
-                                            start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
-                                                    "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
-                                            interval_millis = (AlarmManager.INTERVAL_DAY * 7) // 주간 반복 알람 맞추기
-                                        )
-                                    }
-                                    calendar.add(Calendar.DATE, 1)
-                                }
-                                dbCreater.set_record_is_last(last_record_no, 1)
                             }
+
+                            // 이번 주의 해당하는 (오늘 이후의) 요일들에 대해 반복 알람 설정
+                            var last_record_no = 0
+                            while (calendar_end.compareTo(calendar) != -1) {
+                                if (dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK) - 1]) {
+                                    val alarm_no = dbCreater.insert_alarm(time_no = item.time_no)
+                                    last_record_no = dbCreater.insertRecord(
+                                        alarm_no = alarm_no.toInt(),
+                                        time_no = item.time_no,
+                                        alarm_datetime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}"
+                                    ).toInt()
+                                    alarmCallManager.setAlarmRepeating(
+                                        alarm_id = alarm_no.toInt(),
+                                        start_date_str = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} " +
+                                                "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}",
+                                        interval_millis = (AlarmManager.INTERVAL_DAY * 7) // 주간 반복 알람 맞추기
+                                    )
+                                }
+                                calendar.add(Calendar.DATE, 1)
+                            }
+                            dbCreater.set_record_is_last(last_record_no, 1)
                         }
                         cur_noticeInfo.set_cycle==1 && cur_noticeInfo.re_type==1 -> {
                             // N 일 반복, 반복 alarm 1개 필요
