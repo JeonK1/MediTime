@@ -1,7 +1,8 @@
 # MediTime
 약 알림 어플리케이션, MediTime <br>
-개발기간 : 2021.04 ~ 2020.06 <br>
+개발기간 : 2021.04 ~ 2020.06 <br> <br>
 <img src="/readme_img/0.png" width=600 />
+<br><br>
 <h2>프로젝트 개요</h2>
 - 정해진 시간에 약 복용을 필요로 하는 사람들을 위한 전화알림 어플리케이션 <br>
 > 복용할 약을 종류, 시간대에 맞춰 추가 <br>
@@ -11,9 +12,9 @@
 <br><br>
 <h2>화면설계, 디자인, 개발일정</h2> 
 <h3>초안</h3>
-<img src="/readme_img/1.png" width=600 /> <br>
+<img src="/readme_img/1.png" width=600 />
 <h3>디자인(<a href="https://www.figma.com/file/samkPpkufA59y3akwKmjty/MediTime?node-id=0%3A1">figma 링크 이동</a>)</h3>
-<img src="/readme_img/2.png" width=600 /> <br>
+<img src="/readme_img/2.png" width=600 />
 <br><br>
 <h2>실행 화면</h2>
 ( 개발중 ) <br>
