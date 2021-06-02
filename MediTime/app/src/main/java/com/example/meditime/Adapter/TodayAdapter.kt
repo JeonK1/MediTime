@@ -4,21 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Model.TodayInfo
 import com.example.meditime.R
-import kotlinx.android.synthetic.main.alarm_set_dialog.view.*
+
 class TodayAdapter(val items: ArrayList<TodayInfo>) :
     RecyclerView.Adapter<TodayAdapter.MyViewHolder>() {
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun OnItemClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
         fun OnCallBtnClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
         fun OnBellBtnClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
     }
 
-    var itemClickListener: TodayAdapter.OnItemClickListener?=null // 버튼클릭 listener
+    var itemClickListener: TodayAdapter.OnItemClickListener? = null // 버튼클릭 listener
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var medi_name: TextView = itemView.findViewById(R.id.TodayItem_mediName)
@@ -54,46 +53,38 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
 
     override fun onBindViewHolder(holder: TodayAdapter.MyViewHolder, position: Int) {
         var name = items[position].medi_name
-        var timeInfoList = items[position].time_list
 
         // 여러개의 복용시간 추가를 위한 RecyclerView
-
         /**
         val addTakeNumAdapter = TodayTakeNumAdapter(items[position].time_list)
 
         mDialogView.rv_alarmsetdlg_cycle.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mDialogView.rv_alarmsetdlg_cycle.adapter = addTakeNumAdapter
- **/
-//        for (i in 0 until timeInfoList.size){
+         **/
+//      for (i in 0 until timeInfoList.size){
 
-            val setdateTime = timeInfoList[0].set_date.split(" ")[1].split(":")
-            var am_pm = ""
-            var hour = setdateTime[0].toInt()
-            var min = setdateTime[1].toInt()
+        val setdateTime = items[position].set_date.split(" ")[1].split(":")
+        var alarm_am_pm = ""
+        var alarm_hour = setdateTime[0].toInt()
+        var alarm_min = setdateTime[1].toInt()
 
-            if(hour>12){
-                am_pm = "오후"
-                hour -= 12
-            } else {
-                am_pm = "오전"
-            }
+        if (alarm_hour > 12) {
+            alarm_am_pm = "오후"
+            alarm_hour -= 12
+        } else {
+            alarm_am_pm = "오전"
+        }
 
-            if(timeInfoList[0].set_check == 1){
-                holder.takeCheck.text = "복용완료"
-            }
-            else if(timeInfoList[0].set_check == -1){
+        if (items[position].set_check == 1) {
+            holder.takeCheck.text = "복용완료"
+        } else if (items[position].set_check == -1) {
 
-                holder.takeCheck.text = "복용안함"
-            }
+            holder.takeCheck.text = "복용안함"
+        }
 
-            holder.alarmTime.text = "${am_pm} ${hour}:${"%02d".format(min)}"
-
-
-
+        holder.alarmTime.text = "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)}"
         holder.medi_name.text = name
-
-
     }
 
     fun getItems(position: Int): TodayInfo {

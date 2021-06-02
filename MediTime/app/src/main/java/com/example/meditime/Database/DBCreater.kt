@@ -3,7 +3,6 @@ package com.example.meditime.Database
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import com.example.meditime.ManageInfo
 import com.example.meditime.Model.*
 import com.example.meditime.Util.DowConverterFactory
@@ -160,11 +159,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         db.execSQL(query)
     }
 
-    //테이블1,2 join&Select
-    fun JoinAndSelectAll(): Cursor {
-        var query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
-        return db.rawQuery(query, null)
-    }
+
 
     fun get_noticeinfo2_all(): ArrayList<NoticeInfo> {
         val noticeinfo2_list = ArrayList<NoticeInfo>()
@@ -210,9 +205,38 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         return noticeinfo2_list
     }
 
-    // '오늘'화면에 필요한 데이터들을 가져오기
+    //테이블1,2 join&Select
+    fun JoinAndSelectAll(): Cursor {
+        var query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
+        return db.rawQuery(query, null)
+    }
+
+    // '오늘'화면에 필요한 데이터들을 가져오기_ver1
     fun get_TodayInfo_all(): ArrayList<TodayInfo> {
         val todayInfoList = ArrayList<TodayInfo>()
+        val query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
+        val cursor = db.rawQuery(query, null)
+        //cursor.moveToFirst()
+        while(cursor.moveToNext())
+        {
+            todayInfoList.add(
+                TodayInfo(
+                    medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+                    time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
+                    medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+                    set_date = cursor.getString(cursor.getColumnIndex("set_date")),
+                    take_date = cursor.getString(cursor.getColumnIndex("take_date")),
+                    set_check = cursor.getInt(cursor.getColumnIndex("set_check"))
+                )
+            )
+
+        }
+        return todayInfoList
+    }
+
+    //'오늘'화면에 필요한 데이터들을 가져오기_ver2
+    /*fun get_TodayInfo_all2(): ArrayList<TodayInfo_ver2> {
+        val todayInfoList = ArrayList<TodayInfo_ver2>()
         val query = "SELECT * FROM table1"
         val tb1_cursor = db.rawQuery(query, null)
         tb1_cursor.moveToFirst()
@@ -237,7 +261,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
             } while (tb2_cursor.moveToNext())
 
             todayInfoList.add(
-                TodayInfo(
+                TodayInfo_ver2(
                     medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
                     medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
                     time_list = todayTimeList
@@ -245,8 +269,9 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
             )
         } while (tb1_cursor.moveToNext())
         return todayInfoList
-    }
+    }*/
 
+    // '관리'화면에 필요한 데이터들을 가져오기
     fun get_ManageInfo_all(): ArrayList<ManageInfo> {
         val ManageInfoList = ArrayList<ManageInfo>()
         val query = "SELECT * FROM table1"
