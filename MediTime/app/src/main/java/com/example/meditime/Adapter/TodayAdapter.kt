@@ -1,40 +1,40 @@
 package com.example.meditime.Adapter
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.meditime.Activity.MainActivity
 import com.example.meditime.Model.TodayInfo
 import com.example.meditime.R
 
 class TodayAdapter(val items: ArrayList<TodayInfo>) :
     RecyclerView.Adapter<TodayAdapter.MyViewHolder>() {
 
+
     interface OnItemClickListener {
         fun OnItemClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
-        fun OnCallBtnClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
-        fun OnBellBtnClick(holder: TodayAdapter.MyViewHolder, view: View, position: Int)
     }
 
     var itemClickListener: TodayAdapter.OnItemClickListener? = null // 버튼클릭 listener
+    lateinit var activity : Activity
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var medi_name: TextView = itemView.findViewById(R.id.TodayItem_mediName)
         var alarmTime: TextView = itemView.findViewById(R.id.TodayItem_setTime)
-        var takeCheck: TextView = itemView.findViewById(R.id.TodayItem_takeCheck)
-//        init {
-//            medi_bell.setOnClickListener {
-//                itemClickListener?.OnBellBtnClick(this, it, adapterPosition)
-//            }
-//            medi_call.setOnClickListener {
-//                itemClickListener?.OnCallBtnClick(this, it, adapterPosition)
-//            }
-//            itemView.setOnClickListener {
-//                itemClickListener?.OnItemClick(this, it, adapterPosition)
-//            }
-//        }
+        //var takeCheck: TextView = itemView.findViewById(R.id.TodayItem_takeCheck)
+
+        init {
+            itemView.setOnClickListener {
+                itemClickListener?.OnItemClick(this, it, adapterPosition)
+            }
+        }
     }
+
+
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -55,13 +55,6 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
         var name = items[position].medi_name
 
         // 여러개의 복용시간 추가를 위한 RecyclerView
-        /**
-        val addTakeNumAdapter = TodayTakeNumAdapter(items[position].time_list)
-
-        mDialogView.rv_alarmsetdlg_cycle.layoutManager =
-        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        mDialogView.rv_alarmsetdlg_cycle.adapter = addTakeNumAdapter
-         **/
 //      for (i in 0 until timeInfoList.size){
 
         val setdateTime = items[position].set_date.split(" ")[1].split(":")
@@ -76,16 +69,21 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
             alarm_am_pm = "오전"
         }
 
-        if (items[position].set_check == 1) {
+/*        if (items[position].set_check == 1) {
             holder.takeCheck.text = "복용완료"
         } else if (items[position].set_check == -1) {
 
             holder.takeCheck.text = "복용안함"
-        }
+        }*/
 
         holder.alarmTime.text = "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)}"
         holder.medi_name.text = name
+
+
+
+
     }
+
 
     fun getItems(position: Int): TodayInfo {
         return items[position]

@@ -19,6 +19,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
                 "medi_name CHAR(50), " + //약 이름
                 "set_cycle INTEGER, " + //복용 주기 : 0, 1
                 "start_date DATE, " + //시작 날짜 : yy-mm-dd
+
                 "re_type INTEGER, " + //반복 타입 : 0(요일), 1(일), 2(개월)
                 "re_cycle INTEGER, " + //반복 주기 : 2진수 변환
                 "call_alart INTEGER, " + //전화 알람 : 0, 1
@@ -160,7 +161,6 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
     }
 
 
-
     fun get_noticeinfo2_all(): ArrayList<NoticeInfo> {
         val noticeinfo2_list = ArrayList<NoticeInfo>()
         val query = "SELECT * FROM table1"
@@ -217,8 +217,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         val query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
         val cursor = db.rawQuery(query, null)
         //cursor.moveToFirst()
-        while(cursor.moveToNext())
-        {
+        while (cursor.moveToNext()) {
             todayInfoList.add(
                 TodayInfo(
                     medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
@@ -425,7 +424,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
 
     fun delete_alarm_by_alarm_no(alarm_no: Int) {
         // alarm_table 해당하는거 지우기
-        var query = "DELETE FROM alarm_table WHERE alarm_no=$alarm_no"
+        var query = "DELETE FROM alarm_table WHERE alarm_no=${alarm_no}"
         db.execSQL(query)
     }
 
@@ -468,8 +467,13 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
     fun insertRecord(alarm_no: Int, time_no: Int, alarm_datetime: String): Long {
         val date_alarm_split = alarm_datetime.split(" ")[0].split("-")
         val time_alarm_split = alarm_datetime.split(" ")[1].split(":")
-        val alarm_date_time_2 = "${date_alarm_split[0].toInt()}-${"%02d".format(date_alarm_split[1].toInt())}-${"%02d".format(date_alarm_split[2].toInt())} " +
-                "${"%02d".format(time_alarm_split[0].toInt())}:${"%02d".format(time_alarm_split[1].toInt())}:${"%02d".format(time_alarm_split[2].toInt())}"
+        val alarm_date_time_2 =
+            "${date_alarm_split[0].toInt()}-${"%02d".format(date_alarm_split[1].toInt())}-${"%02d".format(
+                date_alarm_split[2].toInt()
+            )} " +
+                    "${"%02d".format(time_alarm_split[0].toInt())}:${"%02d".format(time_alarm_split[1].toInt())}:${"%02d".format(
+                        time_alarm_split[2].toInt()
+                    )}"
 
         // record_table 에 대한 insert 쿼리 문
         val values = ContentValues().apply {
@@ -487,13 +491,13 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         set_cycle: Int,
         re_type: Int,
         re_cycle: Int
-    ){
+    ) {
         val date_alarm_split = alarm_datetime.split(" ")[0].split("-")
         val time_alarm_split = alarm_datetime.split(" ")[1].split(":")
         val calendar = Calendar.getInstance()
         calendar.set(
             date_alarm_split[0].toInt(), // year
-            date_alarm_split[1].toInt()-1, // month
+            date_alarm_split[1].toInt() - 1, // month
             date_alarm_split[2].toInt(), // date
             time_alarm_split[0].toInt(), // hour
             time_alarm_split[1].toInt(), // minute
@@ -501,10 +505,10 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         )
 
         // 다음주의 첫번째 날로 이동
-        if(set_cycle==0){
+        if (set_cycle == 0) {
             // 매일
             calendar.add(Calendar.DATE, 1)
-        } else if(re_type==0){
+        } else if (re_type == 0) {
             // 요일 반복
             val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(re_cycle)
             for (i in 0..6) {
@@ -513,18 +517,22 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
                     break;
                 }
             }
-        } else if(re_type==1){
+        } else if (re_type == 1) {
             // N일 반복
             calendar.add(Calendar.DATE, re_cycle)
-        } else if(re_type==2){
+        } else if (re_type == 2) {
             // 월 반복
             // 은 사용하지 않음
         }
         insertRecordWeek(
             alarm_no,
             time_no,
-            "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)+1}-${calendar.get(Calendar.DATE)} "+
-                    "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)} ",
+            "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(
+                Calendar.DATE
+            )} " +
+                    "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(
+                        Calendar.SECOND
+                    )} ",
             set_cycle,
             re_type,
             re_cycle
@@ -558,25 +566,25 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
         }
-        if(set_cycle==0){
+        if (set_cycle == 0) {
             // 매일
-            while(calendar < today_calendar){
+            while (calendar < today_calendar) {
                 calendar.add(Calendar.DATE, 1)
             }
-        } else if(re_type==0){
+        } else if (re_type == 0) {
             // 요일반복 (하루씩 늘림 + 현재 요일이 해당되어야함)
             val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(re_cycle!!)
-            while(calendar < today_calendar && dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]){
+            while (calendar < today_calendar && dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK) - 1]) {
                 calendar.add(Calendar.DATE, 1)
             }
-        } else if(re_type==1){
+        } else if (re_type == 1) {
             // N일 반복
-            while(calendar < today_calendar){
+            while (calendar < today_calendar) {
                 calendar.add(Calendar.DATE, re_cycle)
             }
-        } else if(re_type==2){
+        } else if (re_type == 2) {
             // N개월 반복
-            while(calendar < today_calendar){
+            while (calendar < today_calendar) {
                 calendar.add(Calendar.MONTH, re_cycle)
             }
         }
@@ -588,86 +596,90 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         }
 
         var last_record_id = 0L // 새로 들어가는 record 중 마지막 record_no
-        if (set_cycle==0) {
+        if (set_cycle == 0) {
             // 매일 반복
-            while(calendar_end >= calendar){
-                last_record_id = insertRecord(alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
-                        "${calendar.get(Calendar.MONTH)+1}-" +
-                        "${calendar.get(Calendar.DATE)} " +
-                        "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
-                        "${calendar.get(Calendar.MINUTE)}:" +
-                        "${calendar.get(Calendar.SECOND)}"
+            while (calendar_end >= calendar) {
+                last_record_id = insertRecord(
+                    alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
+                            "${calendar.get(Calendar.MONTH) + 1}-" +
+                            "${calendar.get(Calendar.DATE)} " +
+                            "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
+                            "${calendar.get(Calendar.MINUTE)}:" +
+                            "${calendar.get(Calendar.SECOND)}"
                 )
                 calendar.add(Calendar.DATE, 1)
             }
         } else if (re_type == 0) {
             // 요일 반복
             val dow_arrayList = DowConverterFactory.convert_int_to_arrayList(re_cycle!!)
-            while(calendar_end.compareTo(calendar) != -1){
-                if(dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK)-1]) {
-                    last_record_id = insertRecord(alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
-                            "${calendar.get(Calendar.MONTH)+1}-" +
-                            "${calendar.get(Calendar.DATE)} " +
-                            "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
-                            "${calendar.get(Calendar.MINUTE)}:" +
-                            "${calendar.get(Calendar.SECOND)}"
+            while (calendar_end.compareTo(calendar) != -1) {
+                if (dow_arrayList[calendar.get(Calendar.DAY_OF_WEEK) - 1]) {
+                    last_record_id = insertRecord(
+                        alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
+                                "${calendar.get(Calendar.MONTH) + 1}-" +
+                                "${calendar.get(Calendar.DATE)} " +
+                                "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
+                                "${calendar.get(Calendar.MINUTE)}:" +
+                                "${calendar.get(Calendar.SECOND)}"
                     )
                 }
                 calendar.add(Calendar.DATE, 1)
             }
         } else if (re_type == 1) {
             // 일 반복
-            while(calendar_end.compareTo(calendar) != -1){
-                last_record_id = insertRecord(alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
-                        "${calendar.get(Calendar.MONTH)+1}-" +
-                        "${calendar.get(Calendar.DATE)} " +
-                        "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
-                        "${calendar.get(Calendar.MINUTE)}:" +
-                        "${calendar.get(Calendar.SECOND)}"
+            while (calendar_end.compareTo(calendar) != -1) {
+                last_record_id = insertRecord(
+                    alarm_no, time_no, "${calendar.get(Calendar.YEAR)}-" +
+                            "${calendar.get(Calendar.MONTH) + 1}-" +
+                            "${calendar.get(Calendar.DATE)} " +
+                            "${calendar.get(Calendar.HOUR_OF_DAY)}:" +
+                            "${calendar.get(Calendar.MINUTE)}:" +
+                            "${calendar.get(Calendar.SECOND)}"
                 )
                 calendar.add(Calendar.DATE, re_cycle!!)
             }
-        } else if(re_type==2){
+        } else if (re_type == 2) {
             // 월 반복은 setAlarmRepeat 가 아니기 때문에 지정하지 않음
         }
         set_record_is_last(last_record_id.toInt(), 1) // 마지막 값은 1로 설정
     }
 
-    fun set_record_is_last(record_no:Int, value:Int){
+    fun set_record_is_last(record_no: Int, value: Int) {
         var query = "UPDATE record_table SET is_last=${value} WHERE record_no=${record_no}"
         db.execSQL(query)
     }
 
-    fun get_record_is_last(record_no:Int):Boolean{
+    fun get_record_is_last(record_no: Int): Boolean {
         var query = "SELECT * FROM record_table WHERE record_no=${record_no}"
-        val cursor = db.rawQuery(query,null)
+        val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
         val is_last = cursor.getInt(cursor.getColumnIndex("is_last"))
-        return is_last==1
+        return is_last == 1
     }
 
-    fun get_record_no(alarm_no: Int):Int{
+    fun get_record_no(alarm_no: Int): Int {
         // Todo : 여기서 set_date와 현재 시간을 비교하여, 너무 많이 지났으면 -1을 출력하게 하는 방법 있음
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var query = "SELECT * FROM record_table WHERE set_date<=\"${simpleDateFormat.format(Date())}\" ORDER BY set_date desc"
-        val cursor = db.rawQuery(query,null)
+        var query =
+            "SELECT * FROM record_table WHERE set_date<=\"${simpleDateFormat.format(Date())}\" ORDER BY set_date desc"
+        val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
         return cursor.getInt(cursor.getColumnIndex("record_no"))
     }
 
-    fun get_record_set_datetime(record_no: Int):String{
+    fun get_record_set_datetime(record_no: Int): String {
         var query = "SELECT * FROM record_table WHERE record_no=${record_no}"
-        val cursor = db.rawQuery(query,null)
+        val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
         return cursor.getString(cursor.getColumnIndex("set_date"))
     }
 
-    fun set_record_check(record_no: Int){
+    fun set_record_check(record_no: Int) {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var query = "SELECT * FROM record_table WHERE record_no=${record_no}"
-        val cursor = db.rawQuery(query,null)
+        val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
-        if(cursor.isNull(cursor.getColumnIndex("check_date"))){
+        if (cursor.isNull(cursor.getColumnIndex("check_date"))) {
             var query_update =
                 "UPDATE record_table SET check_date=\"${simpleDateFormat.format(Date())}\" WHERE record_no=${record_no}"
             db.execSQL(query_update)

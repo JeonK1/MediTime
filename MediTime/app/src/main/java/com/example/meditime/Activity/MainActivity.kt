@@ -8,13 +8,16 @@ import androidx.fragment.app.Fragment
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
+import com.example.meditime_local.Fragment.TodayAlarmCheckFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item_today_alarm.*
 
 class MainActivity : AppCompatActivity() {
 
     val ManageFragment = com.example.meditime_local.Fragment.ManageFragment()
     val NoticeFragment = com.example.meditime_local.Fragment.NoticeFragment()
     val TodayFragment = com.example.meditime_local.Fragment.TodayFragment()
+    val TodayAlarmCheckFragment = com.example.meditime_local.Fragment.TodayAlarmCheckFragment()
 
     //DB 및 table 관련 변수
     lateinit var dbHelper : DBHelper
@@ -79,5 +82,16 @@ class MainActivity : AppCompatActivity() {
         setFragment(TodayFragment)
         setTopMenuBar("오늘")
     }
+
+
+//    fun onFragmentChange(idx : Int){
+//
+//        if(idx == 0){
+//            val fragment = supportFragmentManager.beginTransaction()
+//            fragment.addToBackStack(null)
+//            fragment.replace(R.id.today_alarm_fragment, TodayAlarmCheckFragment)
+//        }
+//    }
+
 
 }
