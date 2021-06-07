@@ -26,7 +26,6 @@
                 android:id="@+id/tv_topMenu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:textColor="@android:color/white"
                 android:text="오늘"
                 android:textSize="24dp"
@@ -46,8 +45,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:itemIconTint="@android:color/white"
-            app:itemTextColor="@android:color/white"
+            android:padding="10dp"
+            android:theme="@style/style_bottomNav_text"
+            app:backgroundTint="@color/colorGrayLight"
+            app:itemIconTint="@drawable/bottomnav_icon_color"
+            app:itemTextColor="@drawable/bottomnav_icon_color"
             app:menu="@menu/navigation" />
 
     </RelativeLayout>

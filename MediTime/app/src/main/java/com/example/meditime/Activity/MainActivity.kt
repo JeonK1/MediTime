@@ -43,17 +43,17 @@ class MainActivity : AppCompatActivity() {
     private fun navigatorInit() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.navigation_first -> {
+                R.id.navigation_manage -> {
                     setFragment(ManageFragment)
                     setTopMenuBar("관리")
                     true
                 }
-                R.id.navigation_second -> {
+                R.id.navigation_today -> {
                     setFragment(TodayFragment)
                     setTopMenuBar("오늘")
                     true
                 }
-                R.id.navigation_third -> {
+                R.id.navigation_notice -> {
                     setFragment(NoticeFragment)
                     setTopMenuBar("알림")
                     true
