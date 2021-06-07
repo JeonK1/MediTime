@@ -14,24 +14,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activity.ManageInfoDetailActivity"></activity>
-        <activity android:name=".Activity.CallAnswerActivity" />
-        <activity android:name=".Activity.CallActivity" />
+        <activity android:name=".activity.ManageInfoDetailActivity"></activity>
+        <activity android:name=".activity.CallAnswerActivity" />
+        <activity android:name=".activity.CallActivity" />
 
         <receiver
-            android:name=".Util.AlarmReceiver"
+            android:name=".util.AlarmReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name=".Util.JobIntentCallService"
+            android:name=".util.JobIntentCallService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity android:name=".Activity.AddMedicineTimeActivity" />
-        <activity android:name=".Activity.AddMedicineTimeSetActivity" />
-        <activity android:name=".Activity.AddMedicineDateActivity" />
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".activity.AddMedicineTimeActivity" />
+        <activity android:name=".activity.AddMedicineTimeSetActivity" />
+        <activity android:name=".activity.AddMedicineDateActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
