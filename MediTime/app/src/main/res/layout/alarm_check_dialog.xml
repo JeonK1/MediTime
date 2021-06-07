@@ -46,41 +46,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp"
-        >
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/alarmCheckDialog_setTime"
-            style="@style/style_small_title_text"
+            style="@style/style_medium_title_text"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:gravity="center"
-            tools:text="오후 1:30" />
+            tools:text="오후 1:30 복용예정" />
 
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/alarmCheckDialog_btnlayout_notake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/alarmCheckDialog_noTake"
-                style="@style/style_bold_button_round_ver2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="복용 건너띔" />
-
-        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -93,8 +79,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="복용 완료" />
+                android:text="예" />
         </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/alarmCheckDialog_noTake"
+                style="@style/style_bold_button_round_ver2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="아니오" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/alarmCheckDialog_btnlayout_take"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/alarmCheckDialog_ok"
+            style="@style/style_bold_button_round"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="확인" />
+
+    </LinearLayout>
 </LinearLayout>

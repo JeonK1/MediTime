@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,27 +9,44 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/today_recyclerView_noitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_meditime"
+                app:tint="@color/colorGrayDark" />
+
+            <TextView
+                style="@style/style_medium_title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="알람 정보를\n추가해주세요"
+                android:textColor="@color/colorGrayDark" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/today_recyclerView_wrap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:orientation="vertical"
-            >
-<!--            <Button-->
-<!--                android:id="@+id/todaybutton"-->
-<!--                android:layout_width="100dp"-->
-<!--                android:layout_height="100dp"-->
-<!--                android:text="check"-->
-<!--                />-->
+            android:orientation="vertical">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/today_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
-
-
-
     </RelativeLayout>
-
 </LinearLayout>

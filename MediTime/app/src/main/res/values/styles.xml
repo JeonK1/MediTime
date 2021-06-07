@@ -77,6 +77,11 @@
         <item name="android:textSize">17dp</item>
         <item name="android:textColor">@color/colorBlack</item>
     </style>
+    <style name="style_medium_title_text">
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
     <style name="style_context_text">
         <item name="fontFamily">@font/inter_medium</item>
         <item name="android:textSize">15dp</item>
@@ -86,5 +91,12 @@
         <item name="fontFamily">@font/inter_regular</item>
         <item name="android:textSize">13dp</item>
         <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <style name="style_bottomNav_text"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/inter_extrabold</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:textStyle">bold</item>
+
     </style>
 </resources>

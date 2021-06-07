@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/ll_manageInfoDetailItem_wrapper"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_manageInfoDetailItem_date"
+            style="@style/style_medium_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2021-04-11 (월)" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_manageInfoDetailItem_timeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_manageinfo_detail_time" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorGray" />
+    </LinearLayout>
+</LinearLayout>

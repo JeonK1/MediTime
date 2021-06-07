@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_first"
-        android:icon="@android:drawable/ic_dialog_dialer"
-        android:title="관리"
-        />
-    <item
-        android:id="@+id/navigation_second"
-        android:icon="@android:drawable/ic_dialog_map"
+        android:id="@+id/navigation_today"
+        android:icon="@drawable/ic_calendar_check"
         android:title="오늘" />
     <item
-        android:id="@+id/navigation_third"
-        android:icon="@android:drawable/ic_menu_search"
+        android:id="@+id/navigation_notice"
+        android:icon="@drawable/ic_meditime"
         android:title="알림" />
+    <item
+        android:id="@+id/navigation_manage"
+        android:icon="@drawable/ic_calendar"
+        android:title="관리" />
 </menu>
