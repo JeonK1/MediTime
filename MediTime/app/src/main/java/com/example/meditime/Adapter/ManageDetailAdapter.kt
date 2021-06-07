@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.ManageInfo
 import com.example.meditime.R
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 class ManageDetailAdapter(val items: ArrayList<ManageInfo>) :
@@ -46,7 +47,8 @@ class ManageDetailAdapter(val items: ArrayList<ManageInfo>) :
             // time_list recyclerView 적용
             holder.wrapper.visibility = View.VISIBLE
             val sdf = SimpleDateFormat("yyyy-MM-dd (E)")
-            holder.medi_date.text = sdf.format(sdf.parse(items[position].medi_date))
+            val sdf2 = SimpleDateFormat("yyyy-MM-dd (E)", Locale.KOREA)
+            holder.medi_date.text = sdf2.format(sdf.parse(items[position].medi_date))
             holder.rv_time.layoutManager = LinearLayoutManager(holder.itemView.context, LinearLayoutManager.VERTICAL, false)
             holder.rv_time.adapter = ManageDetailTimeAdapter(items[position].time_list)
         }

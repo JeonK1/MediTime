@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/iv_manageInfoTime_icon"
+        android:textStyle="bold"
         tools:text="오전 10:02 복용완료" />
 
     <ImageView

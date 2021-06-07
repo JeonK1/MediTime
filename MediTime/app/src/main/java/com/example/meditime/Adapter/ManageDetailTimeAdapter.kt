@@ -39,14 +39,16 @@ class ManageDetailTimeAdapter(val items: ArrayList<ManageTimeInfo>) :
     }
 
     override fun onBindViewHolder(holder: ManageDetailTimeAdapter.MyViewHolder, position: Int) {
-        val sdf = SimpleDateFormat("a hh:mm")
-        val sdf2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val sdf3 = SimpleDateFormat("yyyy-MM-dd")
+        val sdf = SimpleDateFormat("a hh:mm", Locale.KOREA)
+        val sdf2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+        val sdf3 = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
         holder.tv_time.text = sdf.format(sdf2.parse(items[position].record_date))
         if(items[position].take_date!=null){
             // 복용 완료
             holder.iv_icon.setImageResource(R.drawable.ic_check)
             holder.iv_icon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.colorGreen))
+            holder.tv_description.text = "${sdf.format(sdf2.parse(items[position].take_date))} 복용완료"
+            holder.tv_description.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.colorGreen))
         } else if(items[position].record_date.split(" ")[0] < sdf3.format(Calendar.getInstance().time)) {
             // 복용 시간 초과
             holder.iv_icon.setImageResource(R.drawable.ic_x)
