@@ -14,6 +14,7 @@ import com.example.meditime.database.DBCreater
 import com.example.meditime.database.DBHelper
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.alarm_check_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_today.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,7 +62,16 @@ class TodayFragment : Fragment() {
 
     private fun fragment_init() {
         recyclerViewInit()
+        itemCountCheck()
         clickListenerInit()
+    }
+
+    private fun itemCountCheck() {
+        if(todayAlarmAdapter.itemCount==0){
+            today_recyclerView_noitem.visibility = View.VISIBLE
+        } else {
+            today_recyclerView_noitem.visibility = View.INVISIBLE
+        }
     }
 
     private fun recyclerViewInit() {

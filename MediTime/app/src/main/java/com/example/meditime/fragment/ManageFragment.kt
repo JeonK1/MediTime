@@ -13,6 +13,7 @@ import com.example.meditime.adapter.ManageAdapter
 import com.example.meditime.database.DBCreater
 import com.example.meditime.database.DBHelper
 import com.example.meditime.R
+import kotlinx.android.synthetic.main.fragment_manage.*
 
 /*********************************
  * 화면 #2 관리
@@ -49,6 +50,7 @@ class ManageFragment : Fragment() {
     }
     private fun fragment_init(){
         recyclerViewInit()
+        itemCountCheck()
         clickListenerInit()
     }
 
@@ -62,6 +64,14 @@ class ManageFragment : Fragment() {
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = alarmAdapter
+    }
+
+    private fun itemCountCheck() {
+        if(alarmAdapter.itemCount==0){
+            manage_recyclerView_noitem.visibility = View.VISIBLE
+        } else {
+            manage_recyclerView_noitem.visibility = View.INVISIBLE
+        }
     }
 
     private fun clickListenerInit() {
