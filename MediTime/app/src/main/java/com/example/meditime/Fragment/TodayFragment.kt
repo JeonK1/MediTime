@@ -1,8 +1,10 @@
 package com.example.meditime_local.Fragment
 
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +19,8 @@ import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
 import kotlinx.android.synthetic.main.alarm_check_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_today.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /*********************************
  * 화면 #1 오늘
@@ -24,6 +28,9 @@ import kotlinx.android.synthetic.main.fragment_today.*
  *********************************/
 
 class TodayFragment : Fragment() {
+
+    val TIME_LIMIT_INTERVAL_FIVE_MIN = 300000L // 5분
+    val TIME_LIMIT_INTERVAL_ONE_MIN = 60000L // 1분
 
     lateinit var recyclerView: RecyclerView
     lateinit var TodayAlarmAdapter: TodayAdapter
@@ -61,7 +68,7 @@ class TodayFragment : Fragment() {
     }
 
     fun recyclerViewInit() {
-        TodayAlarmAdapter = TodayAdapter(dbCreater.get_TodayInfo_all())
+        TodayAlarmAdapter = TodayAdapter(dbCreater.get_today_info_record())
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = TodayAlarmAdapter
@@ -74,10 +81,10 @@ class TodayFragment : Fragment() {
                 view: View,
                 position: Int
             ) {
-                val medi_no = TodayAlarmAdapter.items.get(position).medi_no
                 val medi_name = TodayAlarmAdapter.items.get(position).medi_name
                 val set_date = TodayAlarmAdapter.items.get(position).set_date
-                val time_no = TodayAlarmAdapter.items.get(position).time_no
+                val take_date = TodayAlarmAdapter.items.get(position).take_date
+                val record_no = TodayAlarmAdapter.items.get(position).record_no
 
                 // dialogview 만들기
                 val mDialogView =
@@ -99,29 +106,52 @@ class TodayFragment : Fragment() {
                     alarm_am_pm = "오전"
                 }
 
-                mDialogView.alarmCheckDialog_setTime.text =
-                    "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)}"
                 mDialogView.alarmCheckDialog_mediName.text = medi_name
 
-                // db 적용
-                // 복용 완료
-                mDialogView.alarmCheckDialog_yesTake.setOnClickListener {
-                    dbCreater.insertRecord(
-                        alarm_no = medi_no,
-                        time_no = time_no,
-                        alarm_datetime = set_date
-                    )
-                    mAlertDialog.cancel()
+                if(take_date==null){
+                    mDialogView.alarmCheckDialog_btnlayout_notake.visibility = View.VISIBLE
+                    mDialogView.alarmCheckDialog_btnlayout_take.visibility = View.GONE
+                    mDialogView.alarmCheckDialog_msg.text = "복용을 완료하셨습니까?"
+
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    val alarm_time = Calendar.getInstance()
+                    alarm_time.time = simpleDateFormat.parse(set_date)
+                    if(Calendar.getInstance().time.time - alarm_time.time.time < TIME_LIMIT_INTERVAL_FIVE_MIN){
+                        mDialogView.alarmCheckDialog_setTime.text =
+                            "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)} 복용예정"
+                        mDialogView.alarmCheckDialog_setTime.setTextColor(resources.getColor(R.color.colorBlack))
+                    } else {
+                        mDialogView.alarmCheckDialog_setTime.text =
+                            "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)} 복용시간 초과"
+                        mDialogView.alarmCheckDialog_setTime.setTextColor(resources.getColor(R.color.colorRed))
+                    }
+                } else {
+                    mDialogView.alarmCheckDialog_btnlayout_notake.visibility = View.GONE
+                    mDialogView.alarmCheckDialog_btnlayout_take.visibility = View.VISIBLE
+                    mDialogView.alarmCheckDialog_msg.text = "복용을 완료하였습니다."
+                    mDialogView.alarmCheckDialog_setTime.text =
+                        "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)} 복용완료"
+                    mDialogView.alarmCheckDialog_setTime.setTextColor(resources.getColor(R.color.colorGreen))
                 }
 
-                // 복용 건너띔
+                // db 적용
+                // 복용 완료 버튼
+                mDialogView.alarmCheckDialog_yesTake.setOnClickListener {
+                    dbCreater.set_record_check(record_no)
+                    mAlertDialog.cancel()
+                    fragment_init() // 다시 초기화
+                }
+
+                // 복용 건너띔 버튼
                 mDialogView.alarmCheckDialog_noTake.setOnClickListener {
                     mAlertDialog.cancel()
+                }
 
+                // 확인 버튼
+                mDialogView.alarmCheckDialog_ok.setOnClickListener {
+                    mAlertDialog.cancel()
                 }
             }
-
-
         }
     }
 }

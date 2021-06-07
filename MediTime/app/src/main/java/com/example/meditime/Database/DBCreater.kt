@@ -3,6 +3,7 @@ package com.example.meditime.Database
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.example.meditime.ManageInfo
 import com.example.meditime.Model.*
 import com.example.meditime.Util.DowConverterFactory
@@ -166,14 +167,14 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         val query = "SELECT * FROM table1"
         val tb1_cursor = db.rawQuery(query, null)
         tb1_cursor.moveToFirst()
-        do {
+        while (tb1_cursor.isLast) {
             // medi_no 에 해당하는 모든 table2 데이터 가져오기
             val time_list = ArrayList<NoticeAlarmInfo>()
             val query2 =
                 "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
             val tb2_cursor = db.rawQuery(query2, null)
             tb2_cursor.moveToFirst()
-            do {
+            while(tb2_cursor.isLast){
                 time_list.add(
                     NoticeAlarmInfo(
                         time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
@@ -185,7 +186,8 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
                         set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
                     )
                 )
-            } while (tb2_cursor.moveToNext())
+                tb2_cursor.moveToNext()
+            }
 
             noticeinfo2_list.add(
                 NoticeInfo(
@@ -201,7 +203,8 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
 
                 )
             )
-        } while (tb1_cursor.moveToNext())
+            tb1_cursor.moveToNext()
+        }
         return noticeinfo2_list
     }
 
@@ -212,26 +215,26 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
     }
 
     // '오늘'화면에 필요한 데이터들을 가져오기_ver1
-    fun get_TodayInfo_all(): ArrayList<TodayInfo> {
-        val todayInfoList = ArrayList<TodayInfo>()
-        val query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
-        val cursor = db.rawQuery(query, null)
-        //cursor.moveToFirst()
-        while (cursor.moveToNext()) {
-            todayInfoList.add(
-                TodayInfo(
-                    medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
-                    time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
-                    medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
-                    set_date = cursor.getString(cursor.getColumnIndex("set_date")),
-                    take_date = cursor.getString(cursor.getColumnIndex("take_date")),
-                    set_check = cursor.getInt(cursor.getColumnIndex("set_check"))
-                )
-            )
-
-        }
-        return todayInfoList
-    }
+//    fun get_TodayInfo_all(): ArrayList<TodayInfo> {
+//        val todayInfoList = ArrayList<TodayInfo>()
+//        val query = "SELECT * FROM table1 INNER JOIN table2 on table1.medi_no = table2.medi_no"
+//        val cursor = db.rawQuery(query, null)
+//        //cursor.moveToFirst()
+//        while (cursor.moveToNext()) {
+//            todayInfoList.add(
+//                TodayInfo(
+//                    medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+//                    time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
+//                    medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+//                    set_date = cursor.getString(cursor.getColumnIndex("set_date")),
+//                    take_date = cursor.getString(cursor.getColumnIndex("take_date")),
+//                    set_check = cursor.getInt(cursor.getColumnIndex("set_check"))
+//                )
+//            )
+//
+//        }
+//        return todayInfoList
+//    }
 
     //'오늘'화면에 필요한 데이터들을 가져오기_ver2
     /*fun get_TodayInfo_all2(): ArrayList<TodayInfo_ver2> {
@@ -690,5 +693,30 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         // alarm_table 해당하는거 지우기
         var query = "DELETE FROM record_table WHERE alarm_no=$alarm_no"
         db.execSQL(query)
+    }
+
+    fun get_today_info_record(): ArrayList<TodayInfo> {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        var query = "SELECT * FROM record_table INNER JOIN table2 ON record_table.time_no = table2.time_no " +
+                "INNER JOIN table1 ON table2.medi_no = table1.medi_no " +
+                "WHERE substr(record_table.set_date, 1, 10)=\"${simpleDateFormat.format(Date())}\""
+        val cursor = db.rawQuery(query, null)
+        cursor.moveToFirst()
+        val todayInfo_list = ArrayList<TodayInfo>()
+        while(cursor.isLast){
+            todayInfo_list.add(
+                TodayInfo(
+                    medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+                    time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
+                    medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+                    take_date = cursor.getString(cursor.getColumnIndex("check_date")),
+                    set_date = cursor.getString(cursor.getColumnIndex("set_date")),
+                    record_no = cursor.getInt(cursor.getColumnIndex("record_no")),
+                    set_check = 0  // 사용하지 않음
+                )
+            )
+            cursor.moveToNext()
+        }
+        return todayInfo_list
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Activity.MainActivity
@@ -24,7 +25,8 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var medi_name: TextView = itemView.findViewById(R.id.TodayItem_mediName)
         var alarmTime: TextView = itemView.findViewById(R.id.TodayItem_setTime)
-        //var takeCheck: TextView = itemView.findViewById(R.id.TodayItem_takeCheck)
+        var takeCheck: TextView = itemView.findViewById(R.id.TodayItem_takeCheck)
+        var medicine_color: FrameLayout = itemView.findViewById(R.id.TodayItem_mediColor)
 
         init {
             itemView.setOnClickListener {
@@ -32,9 +34,6 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
             }
         }
     }
-
-
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -69,6 +68,14 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
             alarm_am_pm = "오전"
         }
 
+        if(items[position].take_date==null){
+            holder.takeCheck.text = "복용예정"
+            holder.medicine_color.setBackgroundResource(R.color.colorGrayDark2)
+        } else {
+            holder.takeCheck.text = "복용완료"
+            holder.medicine_color.setBackgroundResource(R.color.colorGreen)
+        }
+
 /*        if (items[position].set_check == 1) {
             holder.takeCheck.text = "복용완료"
         } else if (items[position].set_check == -1) {
@@ -78,9 +85,6 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
 
         holder.alarmTime.text = "${alarm_am_pm} ${alarm_hour}:${"%02d".format(alarm_min)}"
         holder.medi_name.text = name
-
-
-
 
     }
 

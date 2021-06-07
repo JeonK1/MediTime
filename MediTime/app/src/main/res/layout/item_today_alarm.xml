@@ -4,61 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:orientation="horizontal"
-    android:background="@drawable/round_shape"
-    android:layout_marginTop="15dp"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="15dp"
     android:layout_marginRight="10dp"
-    >
+    android:background="@drawable/round_shape"
+    android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/TodayItem_mediName"
+            style="@style/style_context_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:text="알람 제목"
+            android:textColor="#0720A6"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TodayItem_setTime"
+            style="@style/style_context_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="매일-오전8:00"
+            android:textColor="#131313" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/TodayItem_mediColor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/colorGrayDark2">
+
+        <TextView
+            android:id="@+id/TodayItem_takeCheck"
+            style="@style/style_context_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            >
-
-            <TextView
-                android:id="@+id/TodayItem_mediName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:text="알람 제목"
-                android:textSize="14dp"
-                android:textStyle="bold"
-                android:textColor="#0720A6"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints" />
-            <TextView
-                android:id="@+id/TodayItem_setTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|bottom"
-                android:layout_marginLeft="30dp"
-                android:layout_marginBottom="10dp"
-                android:text="매일-오전8:00"
-                android:textSize="12dp"
-                android:textColor="#131313" />
-
-        </FrameLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#56B6FF"
-            >
-            <TextView
-                android:id="@+id/TodayItem_takeCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:text="복용확인"
-                android:textSize="14dp"
-                android:textColor="#ffffff" />
-        </FrameLayout>
+            android:text="복용확인"
+            android:textColor="#ffffff" />
+    </FrameLayout>
 
 </LinearLayout>

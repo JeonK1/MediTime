@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
-import com.example.meditime_local.Fragment.TodayAlarmCheckFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_today_alarm.*
 
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     val ManageFragment = com.example.meditime_local.Fragment.ManageFragment()
     val NoticeFragment = com.example.meditime_local.Fragment.NoticeFragment()
     val TodayFragment = com.example.meditime_local.Fragment.TodayFragment()
-    val TodayAlarmCheckFragment = com.example.meditime_local.Fragment.TodayAlarmCheckFragment()
 
     //DB 및 table 관련 변수
     lateinit var dbHelper : DBHelper
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         dbCreater.deleteAllColumns_table("table2") // example data 중복 삽입 방지
         dbCreater.deleteAllColumns_table("alarm_table") // example data 중복 삽입 방지
         dbCreater.deleteAllColumns_table("record_table") // example data 중복 삽입 방지
-        dbCreater.putExample()
+        // dbCreater.putExample()
     }
 
     private fun navigatorInit() {
