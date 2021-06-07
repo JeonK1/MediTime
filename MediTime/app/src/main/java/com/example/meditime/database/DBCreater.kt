@@ -688,51 +688,55 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
             val cursor = db.rawQuery(query, null)
             cursor.moveToFirst()
 
-            val manageInfo_week = ArrayList<ManageInfo>()
-            val tmp_date = first_date.clone() as Calendar
-            val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd (E)")
-            // 일단 비어있는 7개의 값 넣기 (월화..토일)
-            for(i in 0..6){
-                manageInfo_week.add(
-                    ManageInfo(
-                        medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
-                        medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
-                        medi_date = simpleDateFormat2.format(tmp_date.time),
-                        time_list = ArrayList(),
-                        status = 0
-                    )
-                )
-                tmp_date.add(Calendar.DATE, 1)
-            }
-            // 해당되는 일주일 치 모든 record 넣어주기
             if(cursor.count!=0) {
-                do {
-                    val record_date = cursor.getString(cursor.getColumnIndex("record_date")).split(" ")[0]
-                    val diff_date = ceil((simpleDateFormat.parse(record_date).time - first_date.time.time) / (24 * 60 * 60 * 1000).toDouble()).toInt()
-                    manageInfo_week[diff_date].time_list.add(
-                        ManageTimeInfo(
-                            record_no = cursor.getInt(cursor.getColumnIndex("record_no")),
-                            record_date = cursor.getString(cursor.getColumnIndex("record_date")),
-                            take_date = cursor.getString(cursor.getColumnIndex("check_date"))
+                val manageInfo_week = ArrayList<ManageInfo>()
+                val tmp_date = first_date.clone() as Calendar
+                val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd (E)")
+                // 일단 비어있는 7개의 값 넣기 (월화..토일)
+                for (i in 0..6) {
+                    manageInfo_week.add(
+                        ManageInfo(
+                            medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+                            medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+                            medi_date = simpleDateFormat2.format(tmp_date.time),
+                            time_list = ArrayList(),
+                            status = 0
                         )
                     )
-                } while (cursor.moveToNext())
-            }
-            // 모든 일정을 완료 했으면 ManageInfo status를 1로 바꾸기
-            for(i in 0..6){
-                if(manageInfo_week[i].time_list.size>0){
-                    var status_flag = true // 모든 알람을 완료했는지 flag
-                    for (timeInfo in manageInfo_week[i].time_list){
-                        if(timeInfo.take_date==null) {
-                            status_flag = false
-                            break
-                        }
-                    }
-                    if(status_flag)
-                        manageInfo_week[i].status = 1
+                    tmp_date.add(Calendar.DATE, 1)
                 }
+                // 해당되는 일주일 치 모든 record 넣어주기
+                if (cursor.count != 0) {
+                    do {
+                        val record_date =
+                            cursor.getString(cursor.getColumnIndex("record_date")).split(" ")[0]
+                        val diff_date =
+                            ceil((simpleDateFormat.parse(record_date).time - first_date.time.time) / (24 * 60 * 60 * 1000).toDouble()).toInt()
+                        manageInfo_week[diff_date].time_list.add(
+                            ManageTimeInfo(
+                                record_no = cursor.getInt(cursor.getColumnIndex("record_no")),
+                                record_date = cursor.getString(cursor.getColumnIndex("record_date")),
+                                take_date = cursor.getString(cursor.getColumnIndex("check_date"))
+                            )
+                        )
+                    } while (cursor.moveToNext())
+                }
+                // 모든 일정을 완료 했으면 ManageInfo status를 1로 바꾸기
+                for (i in 0..6) {
+                    if (manageInfo_week[i].time_list.size > 0) {
+                        var status_flag = true // 모든 알람을 완료했는지 flag
+                        for (timeInfo in manageInfo_week[i].time_list) {
+                            if (timeInfo.take_date == null) {
+                                status_flag = false
+                                break
+                            }
+                        }
+                        if (status_flag)
+                            manageInfo_week[i].status = 1
+                    }
+                }
+                manageInfo_week_list.add(manageInfo_week)
             }
-            manageInfo_week_list.add(manageInfo_week)
             cursor.close()
         }
         return manageInfo_week_list
