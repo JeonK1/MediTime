@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.meditime.Activity.ManageInfoDetailActivity
 import com.example.meditime.Adapter.ManageAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
@@ -64,6 +65,19 @@ class ManageFragment : Fragment() {
     }
 
     private fun clickListenerInit() {
-
+        alarmAdapter.itemClickListener = object : ManageAdapter.OnItemClickListener{
+            override fun OnItemClick(
+                holder: ManageAdapter.MyViewHolder,
+                view: View,
+                position: Int
+            ) {
+                // item click
+                val bundle = Bundle()
+                bundle.putSerializable("manageInfo_week_list", alarmAdapter.items[position])
+                val intent = Intent(context, ManageInfoDetailActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
+        }
     }
 }
