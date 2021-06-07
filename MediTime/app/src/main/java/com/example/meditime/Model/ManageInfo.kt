@@ -7,5 +7,7 @@ import java.io.Serializable
 data class ManageInfo(
     val medi_no: Int,
     val medi_name: String,
-    var time_list:ArrayList<ManageTimeInfo> = ArrayList<ManageTimeInfo>()
+    val medi_date: String,
+    var time_list:ArrayList<ManageTimeInfo> = ArrayList<ManageTimeInfo>(),
+    var status: Int
 ): Serializable

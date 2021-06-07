@@ -56,7 +56,7 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
         // 여러개의 복용시간 추가를 위한 RecyclerView
 //      for (i in 0 until timeInfoList.size){
 
-        val setdateTime = items[position].set_date.split(" ")[1].split(":")
+        val setdateTime = items[position].record_date.split(" ")[1].split(":")
         var alarm_am_pm = ""
         var alarm_hour = setdateTime[0].toInt()
         var alarm_min = setdateTime[1].toInt()

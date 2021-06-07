@@ -10,6 +10,7 @@ import com.example.meditime.Util.DowConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.ceil
 
 class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
 
@@ -20,7 +21,6 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
                 "medi_name CHAR(50), " + //약 이름
                 "set_cycle INTEGER, " + //복용 주기 : 0, 1
                 "start_date DATE, " + //시작 날짜 : yy-mm-dd
-
                 "re_type INTEGER, " + //반복 타입 : 0(요일), 1(일), 2(개월)
                 "re_cycle INTEGER, " + //반복 주기 : 2진수 변환
                 "call_alart INTEGER, " + //전화 알람 : 0, 1
@@ -78,7 +78,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
                 "record_no INTEGER PRIMARY KEY, " + //시간 인덱스
                 "alarm_no INTEGER, " + //alarm_talbe과 비교해서 사용
                 "time_no INTEGER, " + //alarm_talbe과 비교해서 사용
-                "set_date DATETIME, " + // 복용 해야하는 시간
+                "record_date DATETIME, " + // 복용 해야하는 시간
                 "check_date DATETIME DEFAULT NULL, " + // 실 복용 시간
                 "is_last INTEGER DEFAULT 0" + // record의 마지막인가?
                 " );"
@@ -167,43 +167,50 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         val query = "SELECT * FROM table1"
         val tb1_cursor = db.rawQuery(query, null)
         tb1_cursor.moveToFirst()
-        while (tb1_cursor.isLast) {
-            // medi_no 에 해당하는 모든 table2 데이터 가져오기
-            val time_list = ArrayList<NoticeAlarmInfo>()
-            val query2 =
-                "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
-            val tb2_cursor = db.rawQuery(query2, null)
-            tb2_cursor.moveToFirst()
-            while(tb2_cursor.isLast){
-                time_list.add(
-                    NoticeAlarmInfo(
-                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
-                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
-                        set_amount = tb2_cursor.getDouble(tb2_cursor.getColumnIndex("set_amount")),
-                        set_type = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_type")),
-                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
-                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
-                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+        if(tb1_cursor.count != 0) {
+            do {
+                // medi_no 에 해당하는 모든 table2 데이터 가져오기
+                val time_list = ArrayList<NoticeAlarmInfo>()
+                val query2 =
+                    "SELECT * FROM table2 WHERE medi_no=${
+                        tb1_cursor.getInt(
+                            tb1_cursor.getColumnIndex(
+                                "medi_no"
+                            )
+                        )
+                    }"
+                val tb2_cursor = db.rawQuery(query2, null)
+                tb2_cursor.moveToFirst()
+                if (tb2_cursor.count != 0) {
+                    do {
+                        time_list.add(
+                            NoticeAlarmInfo(
+                                time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
+                                medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
+                                set_amount = tb2_cursor.getDouble(tb2_cursor.getColumnIndex("set_amount")),
+                                set_type = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_type")),
+                                set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
+                                take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
+                                set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+                            )
+                        )
+                    } while (tb2_cursor.moveToNext())
+                }
+                noticeinfo2_list.add(
+                    NoticeInfo(
+                        medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
+                        medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
+                        set_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("set_cycle")),
+                        start_date = tb1_cursor.getString(tb1_cursor.getColumnIndex("start_date")),
+                        re_type = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_type")),
+                        re_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_cycle")),
+                        call_alart = tb1_cursor.getInt(tb1_cursor.getColumnIndex("call_alart")),
+                        normal_alart = tb1_cursor.getInt(tb1_cursor.getColumnIndex("normal_alart")),
+                        time_list = time_list
+
                     )
                 )
-                tb2_cursor.moveToNext()
-            }
-
-            noticeinfo2_list.add(
-                NoticeInfo(
-                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
-                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
-                    set_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("set_cycle")),
-                    start_date = tb1_cursor.getString(tb1_cursor.getColumnIndex("start_date")),
-                    re_type = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_type")),
-                    re_cycle = tb1_cursor.getInt(tb1_cursor.getColumnIndex("re_cycle")),
-                    call_alart = tb1_cursor.getInt(tb1_cursor.getColumnIndex("call_alart")),
-                    normal_alart = tb1_cursor.getInt(tb1_cursor.getColumnIndex("normal_alart")),
-                    time_list = time_list
-
-                )
-            )
-            tb1_cursor.moveToNext()
+            } while (tb1_cursor.moveToNext())
         }
         return noticeinfo2_list
     }
@@ -276,37 +283,37 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
     // '관리'화면에 필요한 데이터들을 가져오기
     fun get_ManageInfo_all(): ArrayList<ManageInfo> {
         val ManageInfoList = ArrayList<ManageInfo>()
-        val query = "SELECT * FROM table1"
-        val tb1_cursor = db.rawQuery(query, null)
-        tb1_cursor.moveToFirst()
-
-        do {
-            // medi_no 에 해당하는 모든 table2 데이터 가져오기
-            val ManageTimeList = ArrayList<ManageTimeInfo>()
-            val query2 =
-                "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
-            val tb2_cursor = db.rawQuery(query2, null)
-            tb2_cursor.moveToFirst()
-            do {
-                ManageTimeList.add(
-                    ManageTimeInfo(
-                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
-                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
-                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
-                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
-                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
-                    )
-                )
-            } while (tb2_cursor.moveToNext())
-
-            ManageInfoList.add(
-                ManageInfo(
-                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
-                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
-                    time_list = ManageTimeList
-                )
-            )
-        } while (tb1_cursor.moveToNext())
+//        val query = "SELECT * FROM table1"
+//        val tb1_cursor = db.rawQuery(query, null)
+//        tb1_cursor.moveToFirst()
+//
+//        do {
+//            // medi_no 에 해당하는 모든 table2 데이터 가져오기
+//            val ManageTimeList = ArrayList<ManageTimeInfo>()
+//            val query2 =
+//                "SELECT * FROM table2 WHERE medi_no=${tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no"))}"
+//            val tb2_cursor = db.rawQuery(query2, null)
+//            tb2_cursor.moveToFirst()
+//            do {
+//                ManageTimeList.add(
+//                    ManageTimeInfo(
+//                        medi_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("medi_no")),
+//                        time_no = tb2_cursor.getInt(tb2_cursor.getColumnIndex("time_no")),
+//                        set_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("set_date")),
+//                        take_date = tb2_cursor.getString(tb2_cursor.getColumnIndex("take_date")),
+//                        set_check = tb2_cursor.getInt(tb2_cursor.getColumnIndex("set_check"))
+//                    )
+//                )
+//            } while (tb2_cursor.moveToNext())
+//
+//            ManageInfoList.add(
+//                ManageInfo(
+//                    medi_no = tb1_cursor.getInt(tb1_cursor.getColumnIndex("medi_no")),
+//                    medi_name = tb1_cursor.getString(tb1_cursor.getColumnIndex("medi_name")),
+//                    time_list = ManageTimeList
+//                )
+//            )
+//        } while (tb1_cursor.moveToNext())
         return ManageInfoList
     }
 
@@ -482,7 +489,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         val values = ContentValues().apply {
             put("alarm_no", alarm_no)
             put("time_no", time_no)
-            put("set_date", alarm_date_time_2)
+            put("record_date", alarm_date_time_2)
         }
         return db.insert("record_table", null, values)
     }
@@ -661,10 +668,9 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
     }
 
     fun get_record_no(alarm_no: Int): Int {
-        // Todo : 여기서 set_date와 현재 시간을 비교하여, 너무 많이 지났으면 -1을 출력하게 하는 방법 있음
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var query =
-            "SELECT * FROM record_table WHERE set_date<=\"${simpleDateFormat.format(Date())}\" ORDER BY set_date desc"
+            "SELECT * FROM record_table WHERE record_date<=\"${simpleDateFormat.format(Date())}\" ORDER BY record_date desc"
         val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
         return cursor.getInt(cursor.getColumnIndex("record_no"))
@@ -674,7 +680,7 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         var query = "SELECT * FROM record_table WHERE record_no=${record_no}"
         val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
-        return cursor.getString(cursor.getColumnIndex("set_date"))
+        return cursor.getString(cursor.getColumnIndex("record_date"))
     }
 
     fun set_record_check(record_no: Int) {
@@ -699,24 +705,109 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
         var query = "SELECT * FROM record_table INNER JOIN table2 ON record_table.time_no = table2.time_no " +
                 "INNER JOIN table1 ON table2.medi_no = table1.medi_no " +
-                "WHERE substr(record_table.set_date, 1, 10)=\"${simpleDateFormat.format(Date())}\""
+                "WHERE substr(record_table.record_date, 1, 10)=\"${simpleDateFormat.format(Date())}\""
         val cursor = db.rawQuery(query, null)
         cursor.moveToFirst()
         val todayInfo_list = ArrayList<TodayInfo>()
-        while(cursor.isLast){
-            todayInfo_list.add(
-                TodayInfo(
-                    medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
-                    time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
-                    medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
-                    take_date = cursor.getString(cursor.getColumnIndex("check_date")),
-                    set_date = cursor.getString(cursor.getColumnIndex("set_date")),
-                    record_no = cursor.getInt(cursor.getColumnIndex("record_no")),
-                    set_check = 0  // 사용하지 않음
+        if(cursor.count!=0) {
+            do {
+                todayInfo_list.add(
+                    TodayInfo(
+                        medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+                        time_no = cursor.getInt(cursor.getColumnIndex("time_no")),
+                        medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+                        take_date = cursor.getString(cursor.getColumnIndex("check_date")),
+                        record_date = cursor.getString(cursor.getColumnIndex("record_date")),
+                        record_no = cursor.getInt(cursor.getColumnIndex("record_no")),
+                        set_check = 0  // 사용하지 않음
+                    )
                 )
-            )
-            cursor.moveToNext()
+
+            } while (cursor.moveToNext())
         }
         return todayInfo_list
+    }
+
+    fun get_manageInfo_week(): ArrayList<ArrayList<ManageInfo>> {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+        // 이번 주 월요일
+        val first_date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+        while(first_date.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+            first_date.add(Calendar.DATE, -1)
+
+        // 다음 주 월요일
+        val last_date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+        do {
+            last_date.add(Calendar.DATE, 1)
+        }while(last_date.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+        // manageInfo_week_list에 넣기
+        val manageInfo_week_list = ArrayList<ArrayList<ManageInfo>>()
+        val noticeInfoList = get_noticeinfo2_all()
+        for(noticeInfo in noticeInfoList){
+            var query = "SELECT * FROM record_table INNER JOIN table2 ON record_table.time_no = table2.time_no " +
+                    "INNER JOIN table1 ON table2.medi_no = table1.medi_no " +
+                    "WHERE substr(record_table.record_date, 1, 10)>=\"${simpleDateFormat.format(first_date.time)}\" and " +
+                    "substr(record_table.record_date, 1, 10)<\"${simpleDateFormat.format(last_date.time)}\" and " +
+                    "table2.medi_no = ${noticeInfo.medi_no}"
+            val cursor = db.rawQuery(query, null)
+            cursor.moveToFirst()
+
+            val manageInfo_week = ArrayList<ManageInfo>()
+            val tmp_date = first_date.clone() as Calendar
+            val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd (E)")
+            // 일단 비어있는 7개의 값 넣기 (월화..토일)
+            for(i in 0..6){
+                manageInfo_week.add(
+                    ManageInfo(
+                        medi_no = cursor.getInt(cursor.getColumnIndex("medi_no")),
+                        medi_name = cursor.getString(cursor.getColumnIndex("medi_name")),
+                        medi_date = simpleDateFormat2.format(tmp_date.time),
+                        time_list = ArrayList(),
+                        status = 0
+                    )
+                )
+                tmp_date.add(Calendar.DATE, 1)
+            }
+            // 해당되는 일주일 치 모든 record 넣어주기
+            if(cursor.count!=0) {
+                do {
+                    val record_date = cursor.getString(cursor.getColumnIndex("record_date")).split(" ")[0]
+                    val diff_date = ceil((simpleDateFormat.parse(record_date).time - first_date.time.time) / (24 * 60 * 60 * 1000).toDouble()).toInt()
+                    manageInfo_week[diff_date].time_list.add(
+                        ManageTimeInfo(
+                            recrod_no = cursor.getInt(cursor.getColumnIndex("record_no")),
+                            record_date = cursor.getString(cursor.getColumnIndex("record_date")),
+                            take_date = cursor.getString(cursor.getColumnIndex("check_date"))
+                        )
+                    )
+
+                } while (cursor.moveToNext())
+            }
+            // 모든 일정을 완료 했으면 ManageInfo status를 1로 바꾸기
+            for(i in 0..6){
+                if(manageInfo_week[i].time_list.size>0){
+                    var status_flag = true // 모든 알람을 완료했는지 flag
+                    for (timeInfo in manageInfo_week[i].time_list){
+                        if(timeInfo.take_date==null) {
+                            status_flag = false
+                            break
+                        }
+                    }
+                    if(status_flag)
+                        manageInfo_week[i].status = 1
+                }
+            }
+            manageInfo_week_list.add(manageInfo_week)
+        }
+        return manageInfo_week_list
     }
 }

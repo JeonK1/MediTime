@@ -1,6 +1,5 @@
 package com.example.meditime_local.Fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meditime.Adapter.ManageAdapter
-import com.example.meditime.Adapter.NoticeAdapter
 import com.example.meditime.Database.DBCreater
 import com.example.meditime.Database.DBHelper
 import com.example.meditime.R
@@ -50,18 +48,22 @@ class ManageFragment : Fragment() {
     }
     fun fragment_init(){
         recyclerViewInit()
-        //clickListenerInit()
+        clickListenerInit()
     }
+
     private fun dbHelperInit() {
         dbHelper = DBHelper(getContext(), "MediDB.db", null, 1)
         dbCreater = DBCreater(dbHelper, dbHelper.writableDatabase)
     }
 
     fun recyclerViewInit() {
-        alarmAdapter = ManageAdapter(dbCreater.get_ManageInfo_all())
+        alarmAdapter = ManageAdapter(dbCreater.get_manageInfo_week())
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = alarmAdapter
     }
 
+    private fun clickListenerInit() {
+
+    }
 }

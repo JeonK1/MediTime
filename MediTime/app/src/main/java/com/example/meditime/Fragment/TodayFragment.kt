@@ -82,7 +82,7 @@ class TodayFragment : Fragment() {
                 position: Int
             ) {
                 val medi_name = TodayAlarmAdapter.items.get(position).medi_name
-                val set_date = TodayAlarmAdapter.items.get(position).set_date
+                val set_date = TodayAlarmAdapter.items.get(position).record_date
                 val take_date = TodayAlarmAdapter.items.get(position).take_date
                 val record_no = TodayAlarmAdapter.items.get(position).record_no
 
