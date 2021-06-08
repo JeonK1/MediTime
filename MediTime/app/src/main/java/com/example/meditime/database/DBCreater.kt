@@ -3,7 +3,6 @@ package com.example.meditime.database
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.example.meditime.model.ManageInfo
 import com.example.meditime.model.*
 import com.example.meditime.util.DowConverterFactory
 import java.text.SimpleDateFormat
@@ -740,5 +739,19 @@ class DBCreater(dbHelper: DBHelper, private val db: SQLiteDatabase) {
             cursor.close()
         }
         return manageInfo_week_list
+    }
+
+    // GrowPlant
+    var cnt_total = 0
+    var cnt_state = 0
+    fun gettotal(): Int {
+        val cursor = db.rawQuery("SELECT (time_no) FROM table2", null)
+        cnt_total = cursor.count
+        return cnt_total
+    }
+    fun getstate(): Int {
+        val cursor = db.rawQuery("SELECT (set_check) FROM table2 WHERE set_check == 1", null)
+        cnt_state = cursor.count
+        return cnt_state
     }
 }

@@ -37,7 +37,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottomNavigationView"
-            android:layout_below="@id/tv_topMenu_wrapper" />
+            android:layout_below="@id/tv_topMenu_wrapper" >
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="109dp"
+                android:layout_height="163dp"
+                android:layout_gravity="bottom|right"
+                app:srcCompat="@drawable/lv1" />
+        </FrameLayout>
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -50,7 +58,9 @@
             app:backgroundTint="@color/colorGrayLight"
             app:itemIconTint="@drawable/bottomnav_icon_color"
             app:itemTextColor="@drawable/bottomnav_icon_color"
-            app:menu="@menu/navigation" />
+            app:menu="@menu/navigation" >
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     </RelativeLayout>
 

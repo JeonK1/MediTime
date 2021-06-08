@@ -32,6 +32,18 @@ class MainActivity : AppCompatActivity() {
         var dbCreater: DBCreater
         dbCreater = DBCreater(dbHelper, database)
         dbCreater.createTable()
+
+        //GrowPlant
+        var total = dbCreater.gettotal()
+        var state = dbCreater.getstate()
+
+        var percentage = ( total / state ).toDouble()
+
+        if(percentage > 0.8) imageView.setImageResource(R.drawable.lv5)
+        else if(percentage > 0.6 && percentage <= 0.8) imageView.setImageResource(R.drawable.lv4)
+        else if(percentage > 0.4 && percentage <= 0.6) imageView.setImageResource(R.drawable.lv3)
+        else if(percentage > 0.2 && percentage <= 0.4) imageView.setImageResource(R.drawable.lv2)
+        else imageView.setImageResource(R.drawable.lv1)
     }
 
     private fun navigatorInit() {
