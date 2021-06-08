@@ -19,6 +19,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp"
+
             style="@style/style_nav_button"
             >
 

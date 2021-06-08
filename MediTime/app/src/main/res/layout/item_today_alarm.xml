@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="15dp"
-    android:layout_marginRight="10dp"
-    android:background="@drawable/round_shape"
+    android:layout_height="85dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/today_alarm_shape"
+    android:elevation="4dp"
     android:orientation="horizontal">
 
     <FrameLayout

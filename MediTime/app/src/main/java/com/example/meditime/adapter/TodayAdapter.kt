@@ -65,10 +65,10 @@ class TodayAdapter(val items: ArrayList<TodayInfo>) :
 
         if (items[position].take_date == null) {
             holder.takeCheck.text = "복용예정"
-            holder.medicine_color.setBackgroundResource(R.color.colorGrayDark2)
+            holder.medicine_color.setBackgroundResource(R.drawable.btn_today_alarm_base)
         } else {
             holder.takeCheck.text = "복용완료"
-            holder.medicine_color.setBackgroundResource(R.color.colorGreen)
+            holder.medicine_color.setBackgroundResource(R.drawable.btn_today_alarm_ok)
         }
 
         holder.alarmTime.text = "$alarm_am_pm ${alarm_hour}:${"%02d".format(alarm_min)}"

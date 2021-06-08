@@ -4,13 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="@drawable/manage_alarm_shape"
+    android:elevation="4dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="3dp">
 
         <TextView
             android:id="@+id/manageItem_mediName"
@@ -22,15 +29,22 @@
             tools:text="영양제" />
 
     </RelativeLayout>
+    <View
+        android:layout_marginLeft="12dp"
+        android:layout_width="330dp"
+        android:layout_height="0.8dp"
+        android:background="@color/colorGray" />
 
     <LinearLayout
+
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/monday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,7 +53,7 @@
 
         <TextView
             android:id="@+id/tuesday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -48,7 +62,7 @@
 
         <TextView
             android:id="@+id/wednesday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,7 +71,7 @@
 
         <TextView
             android:id="@+id/thursday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,7 +80,7 @@
 
         <TextView
             android:id="@+id/Friday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -75,7 +89,7 @@
 
         <TextView
             android:id="@+id/saturday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_sat_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -84,7 +98,7 @@
 
         <TextView
             android:id="@+id/sunday"
-            style="@style/style_small_title_text"
+            style="@style/style_small_title_manage_sun_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -97,6 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -152,13 +167,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/ic_x"
-            tools:tint="@color/colorRed" />
+            tools:tint="@color/colorRed"
+
+            />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorGray" />
 
 </LinearLayout>

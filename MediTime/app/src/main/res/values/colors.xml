@@ -13,6 +13,7 @@
     <color name="colorBlue">#0070C0</color>
     <color name="colorBlue2">#0D47CB</color>
     <color name="colorBlueLight">#7BC3F9</color>
+    <color name="colorTodayAlarmBase">#0E8FF2</color>
     <color name="colorBlueDark">#0F4E7A</color>
     <color name="colorGreen">#5DB075</color>
     <color name="colorRed">#DD0000</color>
