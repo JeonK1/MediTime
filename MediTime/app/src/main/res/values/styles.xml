@@ -110,7 +110,7 @@
     <style name="style_bottomNav_text"
         parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/inter_extrabold</item>
-        <item name="android:textSize">13dp</item>
+        <item name="android:textSize">12dp</item>
         <item name="android:textStyle">bold</item>
 
     </style>

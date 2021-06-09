@@ -7,7 +7,7 @@
     android:padding="10dp"
     android:background="@drawable/manage_alarm_shape"
     android:elevation="4dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="17dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/manageItem_mediName"
-            style="@style/style_medium_title_text"
+            style="@style/style_small_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
