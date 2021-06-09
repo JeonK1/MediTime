@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        bottomNavigationView.selectedItemId = R.id.navigation_today
     }
 
     private fun setFragment(curFragment: Fragment){
