@@ -17,7 +17,9 @@
 <img src="/readme_img/2.png" width=600 />
 <br><br>
 <h2>실행 화면</h2>
-( 개발중 ) <br>
+<img src="/readme_img/3.png" width=800 />
+<img src="/readme_img/4.png" width=800 />
+<img src="/readme_img/5.png" width=800 />
 <br><br>
 <h2>기술 스택</h2>
 - Android Kotlin <br>
